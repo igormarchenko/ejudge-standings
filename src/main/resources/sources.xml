@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
     <login>admin</login>
-    <password>pass</password>
+    <password>serg_pet</password>
     <tables>
-        <file value="http://essuir.sumdu.edu.ua/north.xml" contest="1" final="false"/>
-        <file value="C:\south.xml" contest="2" final="false"/>
+        <file value="http://ejudge.sumdu.edu.ua/external.xml" contest="2" final="true"/>
     </tables>
     <team-university-file value = "C:\teams.xml"/>
     <university-type-file value = "C:\university.xml"/>
+    <baylor-teams-file value = "C:\baylor.xml"/>
 </data>

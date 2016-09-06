@@ -1,43 +1,47 @@
 package org.ssu.standings.parser;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Parser {
-    private DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    protected Document document;
+    private Document document;
 
-    public Parser(File file) throws ParserConfigurationException, FileNotFoundException {
+    public Parser(File file) {
         try {
-            document = dBuilder.parse(file);
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
             document.getDocumentElement().normalize();
-        } catch (SAXException | IOException e) {
+        } catch (SAXException | IOException | ParserConfigurationException e) {
             e.printStackTrace();
         }
     }
 
-    public Parser(String uri) throws ParserConfigurationException {
+    public Parser(String uri) {
         try {
-            document = dBuilder.parse(uri);
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(uri);
             document.getDocumentElement().normalize();
-        } catch (SAXException | IOException e) {
+        } catch (SAXException | IOException | ParserConfigurationException e) {
             e.printStackTrace();
         }
     }
 
-    public NodeList getNodeList(String tag) {
+    protected NodeList getCurrentNode(String tag) {
         return document.getElementsByTagName(tag);
     }
 
-    protected NodeList getSingleNode(String tag) {
-        return getNodeList(tag).item(0).getChildNodes();
+    protected NodeList getChildNodes(String tag) {
+        return getCurrentNode(tag).item(0).getChildNodes();
+    }
+
+    public String getAttributeValue(Node node, String attributeName) {
+        return node.getAttributes()
+                .getNamedItem(attributeName)
+                .getNodeValue();
     }
 }

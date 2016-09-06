@@ -1,11 +1,9 @@
 package org.ssu.standings.entity;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Contest {
     private Long id;
@@ -21,6 +19,8 @@ public class Contest {
     private LocalDateTime frozenTime;
     private LocalDateTime unfrozenTime;
     private Boolean isFinalResults;
+
+    private transient List<Submission> frozenSubmits;
 
     public Long getId() {
         return id;
@@ -107,9 +107,9 @@ public class Contest {
     }
 
     public Boolean inFrozenTime(LocalDateTime time) {
-        return !(time.compareTo(unfrozenTime) >= 0 || time.compareTo(frozenTime) <= 0);
-
+        return time.compareTo(frozenTime) > 0 && time.compareTo(endTime) <= 0;
     }
+
     public Boolean isFrozen() {
         return inFrozenTime(LocalDateTime.now());
     }
@@ -141,12 +141,29 @@ public class Contest {
         return this;
     }
 
+    public Boolean getIsFinalResults() {
+        return isFinalResults;
+    }
+
     public Contest setIsFinalResults(Boolean isFinalResults) {
         this.isFinalResults = isFinalResults;
         return this;
     }
 
-    public Boolean getIsFinalResults() {
-        return isFinalResults;
+    public Optional<Team> getTeamId(String teamName) {
+        return teams.stream().filter(team -> team.getName().equals(teamName)).findAny();
+    }
+
+    public List<Submission> getTeamSubmissions(Team team) {
+        return submissions.stream().filter(submission -> submission.getUserId().equals(team.getId())).collect(Collectors.toList());
+    }
+
+    public List<Submission> getFrozenSubmits() {
+        return frozenSubmits;
+    }
+
+    public Contest setFrozenSubmits(List<Submission> frozenSubmits) {
+        this.frozenSubmits = frozenSubmits;
+        return this;
     }
 }

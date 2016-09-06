@@ -1,5 +1,7 @@
 package org.ssu.standings.entity;
 
+import org.ssu.standings.utils.TeamInUniversityList;
+
 public class Team {
     private Long id;
     private String name;
@@ -7,8 +9,8 @@ public class Team {
 
     public Team(Long id, String name) {
         this.id = id;
-        this.name = name;
-        this.university = TeamInUniversityList.teamUniversity(name);
+        this.name = name.trim();
+        this.university = TeamInUniversityList.universityForTeam(name);
     }
 
     public Long getId() {
@@ -25,7 +27,7 @@ public class Team {
     }
 
     public Team setName(String name) {
-        this.name = name;
+        this.name = name.trim();
         return this;
     }
 

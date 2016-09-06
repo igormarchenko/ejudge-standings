@@ -21,6 +21,7 @@
     "jquery.floatThead": "floatThead#^1.4.3",
     "select2": "^4.0.3",
     "angular-ui-select": "^0.19.1",
-    "angular-cookies": "^1.5.8"
+    "angular-cookies": "^1.5.8",
+    "underscore": "^1.8.3"
   }
 }
