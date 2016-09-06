@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tables>
+    <file value="C:\north.xml" region = "North"/>
+    <file value="C:\south.xml" region = "South"/>
+</tables>
