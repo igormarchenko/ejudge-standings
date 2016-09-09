@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tables>
-    <file value="C:\north.xml" region = "North"/>
-    <file value="C:\south.xml" region = "South"/>
-</tables>
+<data>
+    <login>admin</login>
+    <password>pass</password>
+    <tables>
+        <file value="C:\north.xml" region="North" final="false"/>
+        <file value="C:\south.xml" region="South" final="false"/>
+    </tables>
+</data>

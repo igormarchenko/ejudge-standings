@@ -1,8 +1,11 @@
 package org.ssu.standings.entity;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Contest {
     private List<Submission> submissions;
@@ -16,6 +19,7 @@ public class Contest {
     private LocalDateTime endTime;
     private LocalDateTime frozenTime;
     private LocalDateTime unfrozenTime;
+    private Boolean isFinalResults;
 
     public List<Submission> getSubmissions() {
         return submissions.stream().filter(item -> !"CE".equals(item.getStatus())).collect(Collectors.toList());
@@ -117,5 +121,14 @@ public class Contest {
     public Contest setRegion(String region) {
         this.region = region;
         return this;
+    }
+
+    public Contest setIsFinalResults(Boolean isFinalResults) {
+        this.isFinalResults = isFinalResults;
+        return this;
+    }
+
+    public Boolean getIsFinalResults() {
+        return isFinalResults;
     }
 }

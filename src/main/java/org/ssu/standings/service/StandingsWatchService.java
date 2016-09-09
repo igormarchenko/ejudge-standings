@@ -26,19 +26,33 @@ import java.util.stream.Collectors;
 @EnableScheduling
 public class StandingsWatchService {
     private Map<String, FileWatcher> watchers = new HashMap<>();
+    private Document document;
 
     @PostConstruct
     public void init() throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document document = builder.parse(new File(getClass().getClassLoader().getResource("sources.xml").getFile()));
+        document = builder.parse(new File(getClass().getClassLoader().getResource("sources.xml").getFile()));
         NodeList files = document.getElementsByTagName("file");
         for (int pos = 0; pos < files.getLength(); pos++) {
             FileWatcher watcher = new FileWatcher(((Element) files.item(pos)).getAttribute("value"));
             String region = ((Element) files.item(pos)).getAttribute("region");
             watcher.setRegion(region);
+            watcher.setIsFinalResults(Boolean.parseBoolean(((Element) files.item(pos)).getAttribute("final")));
             watchers.put(region, watcher);
         }
+    }
+
+    public String getLogin() {
+        return getDataStringFromXML("login");
+    }
+
+    public String getPassword() {
+        return getDataStringFromXML("password");
+    }
+
+    private String getDataStringFromXML(String attribute) {
+        return document.getElementsByTagName(attribute).item(0).getChildNodes().item(0).getNodeValue();
     }
 
     @Scheduled(fixedDelay = 500)
@@ -60,5 +74,9 @@ public class StandingsWatchService {
 
     public List<String> getRegionList() {
         return watchers.keySet().stream().collect(Collectors.toList());
+    }
+
+    public Map<String, List<Submission>> getFrozenResults() {
+        return  watchers.keySet().stream().collect(Collectors.toMap(item -> item, item -> watchers.get(item).getFrozenSubmissions()));
     }
 }

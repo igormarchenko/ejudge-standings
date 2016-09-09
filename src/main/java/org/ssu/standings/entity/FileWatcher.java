@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Scope("prototype")
@@ -17,6 +18,7 @@ public class FileWatcher {
     private Long lastModified;
     private File standingsFile;
     private Contest contest = new Contest();
+    private String isFinalResults;
 
 
     public FileWatcher(String path) {
@@ -25,15 +27,19 @@ public class FileWatcher {
         updateChanges();
     }
 
+    public List<Submission> getFrozenSubmissions() {
+        updateChanges();
+        if (!contest.isFrozen())
+            return contest.getSubmissions().stream().filter(item -> contest.inFrozenTime(contest.getSubmissionTime(item.getTime()))).collect(Collectors.toList());
+        else
+            return new ArrayList<>();
+    }
+
     public Boolean isChanged() {
         Boolean modified = lastModified != standingsFile.lastModified();
-//        List<Submission> temp = new ArrayList<>();
         if (modified) {
             updateChanges();
-//            if (contest.isFrozen())
-            {
-                contest.getSubmissions().stream().filter(item -> contest.inFrozenTime(contest.getSubmissionTime(item.getTime()))).forEach(item -> item.setStatus("UNKNOWN"));
-            }
+            frozeSubmissions();
         }
 
         lastModified = standingsFile.lastModified();
@@ -57,7 +63,16 @@ public class FileWatcher {
         }
     }
 
+    private void frozeSubmissions() {
+        if (!contest.getIsFinalResults() || contest.isFrozen())
+        {
+            contest.getSubmissions().stream()
+                    .filter(item -> contest.inFrozenTime(contest.getSubmissionTime(item.getTime())))
+                    .forEach(item -> item.setStatus("UNKNOWN"));
+        }
+    }
     public Contest getContest() {
+        frozeSubmissions();
         return contest;
     }
 
@@ -75,5 +90,14 @@ public class FileWatcher {
 
     public void setRegion(String region) {
         contest.setRegion(region);
+    }
+
+    public Boolean getIsFinalResults() {
+        return contest.getIsFinalResults();
+    }
+
+    public FileWatcher setIsFinalResults(Boolean isFinalResults) {
+        contest.setIsFinalResults(isFinalResults);
+        return this;
     }
 }

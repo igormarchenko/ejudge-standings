@@ -10,7 +10,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.ssu.standings.service.StandingsWatchService;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +26,28 @@ public class SiteController {
 
     @Resource
     private StandingsWatchService standingsWatchService;
+
+    private String authorizeCookie(String login, String password) {
+        MessageDigest messageDigest = null;
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        if (messageDigest != null) {
+            messageDigest.update((login+password+login).getBytes());
+            BigInteger bigInt = new BigInteger(1, messageDigest.digest());
+            String md5Hex = bigInt.toString(16);
+
+            while( md5Hex.length() < 32 ){
+                md5Hex = "0" + md5Hex;
+            }
+
+            return md5Hex;
+        }
+        return (login+password+login);
+    }
+
     @RequestMapping("/")
     public ModelAndView homePage(ModelAndView model) {
         model.setViewName("home");
@@ -60,5 +87,32 @@ public class SiteController {
             e.printStackTrace();
         }
         return "{}";
+    }
+
+
+    @RequestMapping(value = "/api/frozen-results",method = RequestMethod.GET)
+    @ResponseBody
+    public String getFrozenResults(@CookieValue("authorize") String authorizeCookie) {
+        if(authorizeCookie(standingsWatchService.getLogin(), standingsWatchService.getPassword()).equals(authorizeCookie)) {
+            try {
+                return new ObjectMapper()
+                        .writeValueAsString(standingsWatchService.getFrozenResults());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+        return "{}";
+    }
+
+    @RequestMapping(value = "/authorize", method = RequestMethod.GET)
+    public ModelAndView authorize(HttpServletResponse response, @RequestParam(value = "login") String login, @RequestParam(value = "password") String password) {
+        if(login.equals(standingsWatchService.getLogin()) && password.equals(standingsWatchService.getPassword())) {
+            response.addCookie(new Cookie("authorize", authorizeCookie(standingsWatchService.getLogin(), standingsWatchService.getPassword())));
+        }
+
+        ModelAndView model = new ModelAndView();
+        model.setViewName("home");
+        model.addObject("regions", standingsWatchService.getRegionList());
+        return model;
     }
 }

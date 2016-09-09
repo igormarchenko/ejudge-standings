@@ -28,6 +28,20 @@
             width: auto !important;
         }
     </style>
+    <script>
+        $(document).ready(function() {
+            $( "body" ).keydown(function( event ) {
+                if ( event.which == 13 ) {
+                    event.preventDefault();
+                }
+
+                if(event.which == 78) {
+                    angular.element('body').scope().unFreezeNextSubmit();
+                }
+            });
+        });
+
+    </script>
 </head>
 <body ng-app="standingsPage"
       ng-controller="standingsController"
@@ -58,7 +72,11 @@
             </ui-select-choices>
         </ui-select>
     </div>
+    <div ng-show="isUserAuthorized()">
+        <button type="button" class="btn btn-info" ng-click="unFreezeResults()">Unfreeze</button>
+    </div>
 </div>
+
 <table class="table table-bordered" id="results_table">
     <thead>
     <tr>
