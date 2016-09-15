@@ -1,5 +1,8 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.parser;
 
+import org.ssu.standings.entity.Submission;
+import org.ssu.standings.entity.Task;
+import org.ssu.standings.entity.Team;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -9,16 +12,13 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XmlParser {
-
-
+public class SubmissionsParser extends Parser{
     private static final String DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
     private static final String USERS_TAG = "users";
     private static final String RUN_TAG = "runs";
@@ -30,34 +30,21 @@ public class XmlParser {
     private static final String TASKS_TAG = "problems";
     private static final String UNFOG_TIME = "unfog_time";
     private static final String NAME_TAG = "name";
-    private File file;
-    private DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    private Document document;
 
-    public XmlParser(File file) throws ParserConfigurationException {
-        this.file = file;
-        reopenDocument();
+    public SubmissionsParser(File file) throws ParserConfigurationException, FileNotFoundException {
+        super(file);
     }
 
-    private void reopenDocument() {
-        try {
-            document = dBuilder.parse(file);
-            document.getDocumentElement().normalize();
-        } catch (SAXException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private NodeList getNodeList(String tag) {
-        return document.getElementsByTagName(tag).item(0).getChildNodes();
+    public SubmissionsParser(String uri) throws ParserConfigurationException {
+        super(uri);
     }
 
     private String getAttributeFromRunLogTag(String attribute) {
-        return document.getElementsByTagName(RUNLOG_TAG).item(0).getAttributes().getNamedItem(attribute).getNodeValue();
+        return getNodeList(RUNLOG_TAG).item(0).getAttributes().getNamedItem(attribute).getNodeValue();
     }
 
     public String getContestName() {
-        return document.getElementsByTagName(NAME_TAG).item(0).getChildNodes().item(0).getNodeValue();
+        return getNodeList(NAME_TAG).item(0).getChildNodes().item(0).getNodeValue();
     }
     public LocalDateTime getFrozenTime() {
         Long fogSeconds = Long.parseLong(getAttributeFromRunLogTag(FOG_TIME));
@@ -71,7 +58,7 @@ public class XmlParser {
     
     public List<Task> parseTaskList() {
         List<Task> result = new ArrayList<>();
-        NodeList tasks = getNodeList(TASKS_TAG);
+        NodeList tasks = getSingleNode(TASKS_TAG);
 
         for (int pos = 0; pos < tasks.getLength(); pos++) {
             Node currentNode = tasks.item(pos);
@@ -89,7 +76,7 @@ public class XmlParser {
 
     public List<Team> parseTeamList() {
         List<Team> result = new ArrayList<>();
-        NodeList users = getNodeList(USERS_TAG);
+        NodeList users = getSingleNode(USERS_TAG);
 
         for (int pos = 0; pos < users.getLength(); pos++) {
             Node currentNode = users.item(pos);
@@ -103,7 +90,7 @@ public class XmlParser {
 
     public List<Submission> parseSubmissionList() {
         List<Submission> result = new ArrayList<>();
-        NodeList runs = getNodeList(RUN_TAG);
+        NodeList runs = getSingleNode(RUN_TAG);
         for (int pos = 0; pos < runs.getLength(); pos++) {
             Node currentNode = runs.item(pos);
             if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
