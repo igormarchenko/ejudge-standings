@@ -3,9 +3,9 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
         var data = {};
         var unfreezed = false;
         var freezedSumbiossions = {};
-        var frozenSubmitsOrder = [];
         var frozenSubmits = [];
-        var lastUnfrozenSubmitInRegion = {};
+        var universityNames = [];
+        var universityTypes = [];
         $scope.results = [];
         $scope.regionSelector = {};
         $scope.regions = {};
@@ -13,6 +13,8 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
         $scope.lastSubmit = {};
         $scope.tasks = {};
         $scope.regionList = [];
+        $scope.selectedUniversities = {};
+        $scope.selectedUniversitiesTypes = {};
         var lastSubmit = {};
 
         $scope.contest = {};
@@ -32,10 +34,19 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
                     fillRegionData(region);
                 });
 
+                $scope.universityNames = universityNames.filter(onlyUnique);
+                $scope.selectedUniversities.data = $scope.universityNames;
+
+                $scope.universityTypes = universityTypes.filter(onlyUnique);
+                $scope.selectedUniversitiesTypes.data = $scope.universityTypes;
+
                 $scope.fillDisplayData();
                 $scope.updatePage();
             });
         };
+        function onlyUnique(value, index, self) {
+            return self.indexOf(value) === index;
+        }
 
         $scope.updatePage = function () {
             $(".taskHead").remove();
@@ -76,13 +87,16 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
 
             var taskObject = filltasksData(response.tasks);
             angular.forEach(response.teams, function (team, index) {
+                universityTypes.push(team.university.type);
+                universityNames.push(team.university.name);
                 data[generateGlobalTeamId(team.id, response.region)] = {
                     'id': generateGlobalTeamId(team.id, response.region),
                     'name': team.name,
                     'region': response.region,
                     'result': angular.copy(taskObject),
                     'solved_tasks': 0,
-                    'penalty': 0
+                    'penalty': 0,
+                    'university': team.university
                 };
             });
 
@@ -160,6 +174,7 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
         var newSolvedTask = function (submission, region) {
             var teamId = generateGlobalTeamId(submission.userId, region);
             data[teamId].solved_tasks++;
+            data[teamId].result[submission.problemId].time = submission.time;
             data[teamId].result[submission.problemId].result = submission.status;
             data[teamId].result[submission.problemId].tries += (submission.tries == undefined) ? 1 : submission.tries;
             data[teamId].penalty += Math.ceil(submission.time / 60.0) +
@@ -171,7 +186,7 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
             return userId + 100000 * $scope.regions[region];
         }
 
-        function pushSubmitOnline(submit, region, followTask) {
+        function pushSubmitOnline(submit, region) {
             var teamId = generateGlobalTeamId(submit.userId, region);
             var teamPosInResultsArray = findTeamPositionInResultArray(teamId, $scope.results);
             var teamPositionOnDisplay = getTeamPositionOnDisplayedTable(teamId, $scope.results);
@@ -183,7 +198,7 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
                 if (!canSlideUp(teamId)) {
                     clearInterval(interval);
                 } else {
-                    swapTeams(teamId, followTask);
+                    swapTeams(teamId);
                 }
             }, 1000);
         }
@@ -193,7 +208,7 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
             return previousTeamPos >= 0 && compareTeams($scope.results[findTeamPositionInResultArray(teamId, $scope.results)], $scope.results[previousTeamPos]) < 0;
         };
 
-        var swapTeams = function (teamId, followTask) {
+        var swapTeams = function (teamId) {
             var teamPos = findTeamPositionInResultArray(teamId, $scope.results);
             var temp = $scope.results[teamPos];
             var previousPos = findPreviousDisplayedTeamPositionInArray(teamId, $scope.results);
@@ -213,8 +228,6 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
             $("#team" + previousTeam + "pos").text(prevPos);
             previousElement.after($("#team" + currentTeam));
             previousElement.fadeIn();
-            if (followTask)
-                scrollToTeam($scope.results[teamPos].id);
         };
 
         var updateResults = function () {
@@ -225,7 +238,7 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
             }).success(function (data) {
                 angular.forEach(data, function (region, ind) {
                     angular.forEach(region, function (submission, index) {
-                        pushSubmitOnline(submission, ind, false);
+                        pushSubmitOnline(submission, ind);
                     });
                 });
             });
@@ -241,11 +254,23 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
             return $scope.regionSelector.data.indexOf(region) >= 0;
         };
 
+        var isUniversityTypeSelected = function (type) {
+            return $scope.selectedUniversitiesTypes.data.indexOf(type) >= 0;
+        };
+
+        var isUniversitySelected = function (name) {
+            return $scope.selectedUniversities.data.indexOf(name) >= 0;
+        };
+
+        var isTeamDisplayed = function (team) {
+            return isRegionSelected(team.region) && isUniversityTypeSelected(team.university.type);
+        };
+
         var renderTable = function (results) {
             var content = "";
             var pos = 0;
             angular.forEach(results, function (team, index) {
-                if (isRegionSelected(team.region))
+                if (isTeamDisplayed(team))
                     content += renderTeam(team, pos++);
             });
             $("#results_body").append(content);
@@ -255,6 +280,10 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
             var css = "empty-cell";
             var digit = "";
             var sign = "";
+            var date = new Date(null);
+            date.setSeconds(result.time);
+            date = date.toISOString().substr(14, 5);
+
             if (result.result === "OK") {
                 css = 'OK-cell';
                 sign = "+";
@@ -270,7 +299,10 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
                 sign = "?";
                 digit = freezedSumbiossions[team.id][result.id].tries;
             }
-            return "<td class = '" + css + "' align = 'center'>" + sign + digit + "</td>"
+            if (result.tries == 0) {
+                date = "";
+            }
+            return "<td class = '" + css + "' align = 'center'><div class = 'row'>" + sign + digit + "</div><div class = 'row' style='font-size:10px'>" + date + "</div></td>"
         };
 
         var renderTeam = function (team, index) {
@@ -278,9 +310,15 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
             angular.forEach(team.result, function (result, ind) {
                 row += renderCell(result, team);
             });
-            return "<tr id = 'team" + team.id + "'><td id = 'team" + team.id + "pos'>" + (index + 1) + "</td><td>" + team.name + "</td><td>" + team.region + "</td>" +
-                row +
-                "<td>" + team.solved_tasks + "</td><td>" + team.penalty + "</td></tr>";
+            var teamIdCol = "<td id = 'team" + team.id + "pos'>" + (index + 1) + "</td>";
+            var universityNameCol = "[" + team.university.name + "]";
+            var teamNameCol = "<td>" + team.name + " " + universityNameCol + "</td>";
+            var universityNameCol = "<td>" + team.university.name + "</td>";
+            var universityTypeCol = "<td>" + team.university.type + "</td>";
+            var regionCol = "<td>" + team.region + "</td>";
+            var solvedTaskCol = "<td>" + team.solved_tasks + "</td>";
+            var penaltyCol = "<td>" + team.penalty + "</td>";
+            return "<tr id = 'team" + team.id + "'>" + teamIdCol + teamNameCol + row + solvedTaskCol + penaltyCol + "</tr>"
         };
 
         var renderTaskList = function (tasks) {
@@ -288,11 +326,11 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
             angular.forEach(tasks, function (task, index) {
                 content += "<th class='taskHead'>" + task.shortName + "</th>";
             });
-            $("#regionCol").after(content);
+            $("#solvedTasks").before(content);
         };
 
         var scrollToTeam = function (teamId) {
-            $('html, body').animate({
+            return $('html, body').animate({
                 scrollTop: $("#team" + teamId).offset().top - 100
             }, 1000);
         };
@@ -301,75 +339,16 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
             return $cookies.get('authorize') != null;
         };
 
-        var getUnsolvedTasksForTeam = function (teamId) {
-            var unsolved = [];
-            angular.forEach(data[teamId].result, function (task, index) {
-                if (task.result == "UNKNOWN") {
-                    unsolved.push(task.id);
-                }
-            });
-            return unsolved;
-        };
-
-        var getUnknownTasks = function () {
-            var unknownTasks = [];
-            angular.forEach($scope.results, function (team, index) {
-                var unsolved = getUnsolvedTasksForTeam(team.id);
-                if (unsolved.length > 0)
-                    unknownTasks.push({
-                        'id': team.id,
-                        'tasks': unsolved
-                    });
-            });
-            return unknownTasks;
-        };
-
-        var parseUnfrozenResults = function (response) {
-            var result = {};
-            angular.forEach(response, function (submissions, region) {
-                    var unfrozenResults = {};
-                    angular.forEach(submissions, function (submit, index) {
-                        var pos = generateGlobalTeamId(submit.userId, region);
-                        if (unfrozenResults[pos] == undefined)
-                            unfrozenResults[pos] = {'tasks': {}};
-                        if (unfrozenResults[pos].tasks[submit.problemId] == undefined)
-                            unfrozenResults[pos].tasks[submit.problemId] = [];
-
-                        var tasks = unfrozenResults[pos].tasks[submit.problemId];
-                        if (tasks.length > 0 && tasks[tasks.length - 1].status == "OK")
-                            return;
-
-                        submit.tries = tasks.length + 1;
-                        unfrozenResults[pos].tasks[submit.problemId].push(submit);
-                    });
-                    result[region] = unfrozenResults;
-                }
-            );
-            return result;
-        };
-
-
-        var getNextSubmitToUnfog = function () {
-            var result = null;
-            angular.forEach(frozenSubmitsOrder, function (submit, index) {
-                if (result != null) return;
-                if (!submit.unfrozen && isRegionSelected(data[submit.team].region)) {
-                    frozenSubmitsOrder[index].unfrozen = true;
-                    result = submit.id;
-                }
-            });
-            return result;
-        };
-
         $scope.unFreezeNextSubmit = function () {
-            var id = getNextSubmitToUnfog();
-            if (unfreezed && id != null) {
-                var submit = frozenSubmits[id];
-                scrollToTeam(submit.team);
-                pushSubmitOnline(submit.submit, data[submit.team].region, true);
+            if (unfreezed) {
+                var nextSubmit = getNextFrozenResult($scope.results);
+                if (nextSubmit) {
+                    scrollToTeam(nextSubmit.team).promise().then(function () {
+                        pushSubmitOnline(frozenSubmits[nextSubmit.team][nextSubmit.task], data[nextSubmit.team].region);
+                    });
+                }
             }
         };
-
 
         $scope.unFreezeResults = function () {
             if (!unfreezed) {
@@ -380,26 +359,17 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
                     params: {}
                 }).success(function (response) {
                     $interval.cancel(interval);
-                    var res = parseUnfrozenResults(response);
-                    angular.forEach(res, function (results, ind) {
-                        frozenSubmits[ind] = [];
-                        lastUnfrozenSubmitInRegion[ind] = -1;
-                    });
-                    var id = 0;
-                    angular.forEach(getUnknownTasks().reverse(), function (team, index) {
-                        angular.forEach(team.tasks, function (task, index) {
-                            var tasks = res[data[team.id].region][team.id].tasks[task];
-                            frozenSubmits.push({
-                                'team': team.id,
-                                'submit': tasks[tasks.length - 1],
-                                'id': id
-                            });
-                            frozenSubmitsOrder.push({
-                                'id': id,
-                                'team': team.id,
-                                'unfrozen': false
-                            });
-                            id++;
+                    angular.forEach(response, function (regionResults, region) {
+                        angular.forEach(regionResults, function (teamResult, index) {
+                            var teamId = generateGlobalTeamId(teamResult.userId, region);
+                            if (frozenSubmits[teamId] == undefined)
+                                frozenSubmits[teamId] = {};
+                            var tries = 0;
+                            if (frozenSubmits[teamId][teamResult.problemId] != undefined && frozenSubmits[teamId][teamResult.problemId].status != "OK") {
+                                tries = frozenSubmits[teamId][teamResult.problemId].tries;
+                            }
+                            frozenSubmits[teamId][teamResult.problemId] = teamResult;
+                            frozenSubmits[teamId][teamResult.problemId].tries = tries + 1;
                         });
                     });
                 });
@@ -408,13 +378,46 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
 
         var interval = $interval(updateResults, 1000);
 
+        function getFirstFrozenTaskForTeam(tasks) {
+            var keepGoing = true,
+                result = null;
+            angular.forEach(tasks, function (task) {
+                if (keepGoing) {
+                    if (task.result == "UNKNOWN") {
+                        result = angular.copy(task);
+                        keepGoing = false;
+                    }
+                }
+            });
+            return result;
+        }
+
+        function getNextFrozenResult(results) {
+            var keepGoing = true,
+                result = null;
+            var reversed = angular.copy(results).reverse();
+            angular.forEach(reversed, function (team) {
+                if (keepGoing && isTeamDisplayed(team)) {
+                    var res = getFirstFrozenTaskForTeam(team.result);
+                    if (res != null) {
+                        result = {
+                            'team': team.id,
+                            'task': res.id
+                        };
+                        keepGoing = false;
+                    }
+                }
+            });
+            return result;
+        }
+
         function getTeamPositionOnDisplayedTable(teamId, results) {
             var keepGoing = true,
                 position = 0;
-            angular.forEach(results, function(team) {
-                if(keepGoing) {
-                    if(team.id == teamId) keepGoing = false;
-                    else if(isRegionSelected(team.region)) position++;
+            angular.forEach(results, function (team) {
+                if (keepGoing) {
+                    if (team.id == teamId) keepGoing = false;
+                    else if (isTeamDisplayed(team)) position++;
                 }
             });
             return position;
@@ -436,7 +439,7 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
 
         function findPreviousDisplayedTeamPositionInArray(teamId, results) {
             var teamPositionInArray = findTeamPositionInResultArray(teamId, results) - 1;
-            while (teamPositionInArray > 0 && !isRegionSelected(results[teamPositionInArray].region)) {
+            while (teamPositionInArray >= 0 && !isTeamDisplayed(results[teamPositionInArray])) {
                 teamPositionInArray--;
             }
             return teamPositionInArray;

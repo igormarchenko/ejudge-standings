@@ -3,7 +3,9 @@
     <login>admin</login>
     <password>pass</password>
     <tables>
-        <file value="C:\north.xml" region="North" final="false"/>
+        <file value="http://essuir.sumdu.edu.ua/north.xml" region="Center" final="false"/>
         <file value="C:\south.xml" region="South" final="false"/>
     </tables>
+    <team-university-file value = "C:\teams.xml"/>
+    <university-type-file value = "C:\university.xml"/>
 </data>

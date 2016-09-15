@@ -3,9 +3,10 @@ package org.ssu.standings.service;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.ssu.standings.entity.Contest;
-import org.ssu.standings.entity.FileWatcher;
-import org.ssu.standings.entity.Submission;
+import org.ssu.standings.entity.*;
+import org.ssu.standings.parser.Parser;
+import org.ssu.standings.parser.TeamParser;
+import org.ssu.standings.parser.UniversityParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -26,20 +27,35 @@ import java.util.stream.Collectors;
 @EnableScheduling
 public class StandingsWatchService {
     private Map<String, FileWatcher> watchers = new HashMap<>();
-    private Document document;
+    private Parser parser;
 
     @PostConstruct
     public void init() throws ParserConfigurationException, IOException, SAXException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        document = builder.parse(new File(getClass().getClassLoader().getResource("sources.xml").getFile()));
-        NodeList files = document.getElementsByTagName("file");
+        parser = new Parser(new File(getClass().getClassLoader().getResource("sources.xml").getFile()));
+        NodeList files = parser.getNodeList("file");
+        parseUniversities();
         for (int pos = 0; pos < files.getLength(); pos++) {
             FileWatcher watcher = new FileWatcher(((Element) files.item(pos)).getAttribute("value"));
             String region = ((Element) files.item(pos)).getAttribute("region");
             watcher.setRegion(region);
             watcher.setIsFinalResults(Boolean.parseBoolean(((Element) files.item(pos)).getAttribute("final")));
             watchers.put(region, watcher);
+        }
+
+    }
+
+    private void parseUniversities() {
+        String teamToUniversity = parser.getNodeList("team-university-file").item(0).getAttributes().item(0).getNodeValue();
+        String universityType = parser.getNodeList("university-type-file").item(0).getAttributes().item(0).getNodeValue();
+
+        try {
+            UniversityParser universityParser = new UniversityParser(universityType);
+            TeamParser teamsParser = new TeamParser(teamToUniversity);
+            Map<String, University> universityList = universityParser.universityInfo();
+            Map<String, String> teamList = teamsParser.teamList();
+            TeamInUniversityList.setTeamUniversity(teamList.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> universityList.get(item.getValue()))));
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
         }
     }
 
@@ -52,7 +68,7 @@ public class StandingsWatchService {
     }
 
     private String getDataStringFromXML(String attribute) {
-        return document.getElementsByTagName(attribute).item(0).getChildNodes().item(0).getNodeValue();
+        return parser.getNodeList(attribute).item(0).getChildNodes().item(0).getNodeValue();
     }
 
     @Scheduled(fixedDelay = 500)
