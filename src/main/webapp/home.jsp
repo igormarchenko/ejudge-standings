@@ -5,6 +5,9 @@
     <script src="static/StandingsController.js"></script>
     <link rel="stylesheet" href="static/styles.min.css"/>
     <style>
+        body {
+            padding: 15px;
+        }
         .OK-cell {
             background-color: #4cae4c;
         }
@@ -53,7 +56,7 @@
 <h1>Contest: {{contest.name}}</h1>
 <div style="z-index: 2000; position: relative;">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             Last Success:
             {{getLastSuccess().team}} on problem {{getLastSuccess().problem}} at time {{getLastSuccess().time |
             secondsToDateTime | date:'HH:mm:ss'}}
@@ -62,48 +65,32 @@
             {{getLastSubmit().team}} on problem {{getLastSubmit().problem}} at time {{getLastSubmit().time |
             secondsToDateTime | date:'HH:mm:ss'}}
         </div>
-        <div class="col-md-5">
 
-            <ui-select multiple
-                       id="regionSelector"
-                       ng-model="regionSelector.data"
-                       on-select="updatePage()"
-                       on-remove="updatePage()"
-                       theme="bootstrap">
-                <ui-select-match allow-clear="true" placeholder="">
-                    {{$item}}
-                </ui-select-match>
-                <ui-select-choices
-                        repeat="region in regionList | filter: $select.search">
-                    {{region}}
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div ng-show="isUserAuthorized()">
+        <div ng-show="isUserAuthorized()" class="col-md-offset-10">
             <button type="button" class="btn btn-info" ng-click="unFreezeResults()">Unfreeze</button>
         </div>
     </div>
 
         <form class="form-horizontal" style = "margin-top:20px;">
-            <%--<div class="form-group">--%>
-                <%--<label for="universitySelector" class="col-sm-2 control-label">University</label>--%>
-                <%--<div class="col-sm-10">--%>
-                    <%--<ui-select multiple--%>
-                               <%--id="universitySelector"--%>
-                               <%--ng-model="selectedUniversities.data"--%>
-                               <%--on-select="updatePage()"--%>
-                               <%--on-remove="updatePage()"--%>
-                               <%--theme="bootstrap">--%>
-                        <%--<ui-select-match allow-clear="true" placeholder="">--%>
-                            <%--{{$item}}--%>
-                        <%--</ui-select-match>--%>
-                        <%--<ui-select-choices--%>
-                                <%--repeat="university in universityNames | filter: $select.search">--%>
-                            <%--{{university}}--%>
-                        <%--</ui-select-choices>--%>
-                    <%--</ui-select>--%>
-                <%--</div>--%>
-            <%--</div>--%>
+                <div class="form-group">
+                    <label for="regionSelector" class="col-sm-2 control-label">Region</label>
+                    <div class="col-sm-10">
+                        <ui-select multiple
+                                   id="regionSelector"
+                                   ng-model="regionSelector.data"
+                                   on-select="updatePage()"
+                                   on-remove="updatePage()"
+                                   theme="bootstrap">
+                            <ui-select-match allow-clear="true" placeholder="">
+                                {{$item}}
+                            </ui-select-match>
+                            <ui-select-choices
+                                    repeat="region in regionList | filter: $select.search">
+                                {{region}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
 
 
             <div class="form-group">
