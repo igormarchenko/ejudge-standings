@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @EnableScheduling
 public class StandingsWatchService {
-    private Map<String, FileWatcher> watchers = new HashMap<>();
+    private Map<Long, FileWatcher> watchers = new HashMap<>();
     private Parser parser;
 
     @PostConstruct
@@ -36,10 +36,10 @@ public class StandingsWatchService {
         parseUniversities();
         for (int pos = 0; pos < files.getLength(); pos++) {
             FileWatcher watcher = new FileWatcher(((Element) files.item(pos)).getAttribute("value"));
-            String region = ((Element) files.item(pos)).getAttribute("region");
-            watcher.setRegion(region);
+            String contestId = ((Element) files.item(pos)).getAttribute("contest");
+            watcher.setContestId(Long.parseLong(contestId));
             watcher.setIsFinalResults(Boolean.parseBoolean(((Element) files.item(pos)).getAttribute("final")));
-            watchers.put(region, watcher);
+            watchers.put(watcher.getContestId(), watcher);
         }
 
     }
@@ -76,23 +76,23 @@ public class StandingsWatchService {
         watchers.values().forEach(FileWatcher::isChanged);
     }
 
-    public Map<String, List<Submission>> getLastSubmissions(Map<String, Long> lastSubmits) {
+    public Map<Long, List<Submission>> getLastSubmissions(Map<Long, Long> lastSubmits) {
         return lastSubmits.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, item -> watchers.get(item.getKey()).getLastChanged(item.getValue())));
     }
 
-    public Boolean isContestChanged(Map<String, Long> lastSubmit) {
+    public Boolean isContestChanged(Map<Long, Long> lastSubmit) {
         return !getLastSubmissions(lastSubmit).isEmpty();
     }
     public List<Contest> getContestData() {
         return watchers.values().stream().map(FileWatcher::getContest).collect(Collectors.toList());
     }
 
-    public List<String> getRegionList() {
-        return watchers.keySet().stream().collect(Collectors.toList());
-    }
+//    public List<String> getRegionList() {
+//        return watchers.keySet().stream().collect(Collectors.toList());
+//    }
 
-    public Map<String, List<Submission>> getFrozenResults() {
+    public Map<Long, List<Submission>> getFrozenResults() {
         return  watchers.keySet().stream().collect(Collectors.toMap(item -> item, item -> watchers.get(item).getFrozenSubmissions()));
     }
 }

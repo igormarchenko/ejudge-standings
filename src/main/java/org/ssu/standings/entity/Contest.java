@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Contest {
+    private Long id;
     private List<Submission> submissions;
     private List<Team> teams;
     private List<Task> tasks;
@@ -20,6 +21,23 @@ public class Contest {
     private LocalDateTime frozenTime;
     private LocalDateTime unfrozenTime;
     private Boolean isFinalResults;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Contest setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public Boolean getFinalResults() {
+        return isFinalResults;
+    }
+
+    public void setFinalResults(Boolean finalResults) {
+        isFinalResults = finalResults;
+    }
 
     public List<Submission> getSubmissions() {
         return submissions.stream().filter(item -> !"CE".equals(item.getStatus())).collect(Collectors.toList());

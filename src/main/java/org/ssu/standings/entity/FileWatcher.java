@@ -88,10 +88,14 @@ public class FileWatcher {
         return contest.getSubmissions().stream().filter(item -> item.getRunId() > fromId).collect(Collectors.toList());
     }
 
-    public void setRegion(String region) {
-        contest.setRegion(region);
+    public FileWatcher setContestId(Long id) {
+        contest.setId(id);
+        return this;
     }
 
+    public Long getContestId() {
+        return contest.getId();
+    }
     public FileWatcher setIsFinalResults(Boolean isFinalResults) {
         contest.setIsFinalResults(isFinalResults);
         return this;

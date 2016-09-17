@@ -51,17 +51,17 @@ public class SiteController {
     @RequestMapping("/")
     public ModelAndView homePage(ModelAndView model) {
         model.setViewName("home");
-        model.addObject("regions", standingsWatchService.getRegionList());
+//        model.addObject("regions", standingsWatchService.getRegionList());
         return model;
     }
 
     @RequestMapping(value = "/api/results",method = RequestMethod.GET)
     @ResponseBody
     public String getResults(@RequestParam(value = "last_submit") String lastSubmit) {
-        Map<String, Long> map = new HashMap<>();
+        Map<Long, Long> map = new HashMap<>();
 
         try {
-            map = new ObjectMapper().readValue(lastSubmit, new TypeReference<Map<String, Long>>(){});
+            map = new ObjectMapper().readValue(lastSubmit, new TypeReference<Map<Long, Long>>(){});
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -112,7 +112,7 @@ public class SiteController {
 
         ModelAndView model = new ModelAndView();
         model.setViewName("home");
-        model.addObject("regions", standingsWatchService.getRegionList());
+//        model.addObject("regions", standingsWatchService.getRegionList());
         return model;
     }
 }

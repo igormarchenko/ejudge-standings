@@ -123,7 +123,7 @@
         <th>Team</th>
         <%--<th>Universtiy</th>--%>
         <%--<th>University Type</th>--%>
-        <%--<th>Region</th>--%>
+        <th>Region</th>
         <th id="solvedTasks">Solved</th>
         <th>Penalty</th>
     </tr>

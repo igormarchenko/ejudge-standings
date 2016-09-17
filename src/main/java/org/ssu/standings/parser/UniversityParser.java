@@ -26,7 +26,8 @@ public class UniversityParser extends Parser{
             NamedNodeMap attributes = universities.item(i).getAttributes();
             String name = attributes.getNamedItem("name").getNodeValue();
             String type = attributes.getNamedItem("type").getNodeValue();
-            result.put(name, new University().setName(name).setType(type));
+            String region = attributes.getNamedItem("region").getNodeValue();
+            result.put(name, new University().setName(name).setType(type).setRegion(region));
         }
         return result;
     }
