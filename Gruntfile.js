@@ -10,7 +10,9 @@ module.exports = function (grunt) {
                     'bower_components/angular-animate/angular-animate.js',
                     'bower_components/jquery.floatThead/dist/jquery.floatThead.js',
                     'bower_components/angular-ui-select/dist/select.js',
-                    'bower_components/angular-cookies/angular-cookies.js'
+                    'bower_components/underscore/underscore.js',
+                    'bower_components/angular-cookies/angular-cookies.js',
+                    'bower_components/bootstrap/js/modal.js'
                 ],
                 dest: "src/main/webapp/static/scripts.js"
             },

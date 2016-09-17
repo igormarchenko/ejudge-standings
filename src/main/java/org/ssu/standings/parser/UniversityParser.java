@@ -1,34 +1,36 @@
 package org.ssu.standings.parser;
 
 import org.ssu.standings.entity.University;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
+import org.ssu.standings.utils.XmlStream;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class UniversityParser extends Parser{
-    public UniversityParser(File file) throws ParserConfigurationException, FileNotFoundException {
+public class UniversityParser extends Parser {
+
+    private static final String UNIVERSITY_TAG = "university";
+    private static final String UNIVERSITY_NAME_ATTRIBUTE = "name";
+    private static final String UNIVERSITY_TYPE_ATTRIBUTE = "type";
+    private static final String UNIVERSITY_REGION_ATTRIBUTE = "region";
+
+    public UniversityParser(File file) {
         super(file);
     }
 
-    public UniversityParser(String uri) throws ParserConfigurationException {
+    public UniversityParser(String uri) {
         super(uri);
     }
 
     public Map<String, University> universityInfo() {
-        NodeList universities = getNodeList("university");
-        Map<String, University> result = new HashMap<>();
-        for(int i = 0; i < universities.getLength(); i++) {
-            NamedNodeMap attributes = universities.item(i).getAttributes();
-            String name = attributes.getNamedItem("name").getNodeValue();
-            String type = attributes.getNamedItem("type").getNodeValue();
-            result.put(name, new University().setName(name).setType(type));
-        }
-        return result;
+        return XmlStream.of(getCurrentNode(UNIVERSITY_TAG))
+                .map(university -> new University()
+                        .setName(getAttributeValue(university, UNIVERSITY_NAME_ATTRIBUTE))
+                        .setType(getAttributeValue(university, UNIVERSITY_TYPE_ATTRIBUTE))
+                        .setRegion(getAttributeValue(university, UNIVERSITY_REGION_ATTRIBUTE)))
+                .collect(Collectors.toMap(University::getName,
+                        item -> item,
+                        (university1, university2) -> university2));
     }
 
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDateTime;
 
 public class HTTPFileHandler implements FileHandler {
     private URL url;
@@ -16,12 +17,14 @@ public class HTTPFileHandler implements FileHandler {
     @Override
     public long lastModified() {
         HttpURLConnection connection = null;
+
         try {
             connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(100);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return connection.getLastModified();
+        return connection != null ? connection.getLastModified() : 0;
     }
 
     @Override
