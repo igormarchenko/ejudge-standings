@@ -83,17 +83,21 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
         $scope.getLastSuccess = function () {
             var result = null;
             angular.forEach($scope.lastSuccess, function (submit, ind) {
-                if (isRegionSelected(ind) && (result == null || result.time < submit.time))
-                    result = angular.copy(submit);
+                result = angular.copy(submit);
+                // if (isRegionSelected(ind) && (result == null || result.time < submit.time))
+                //     result = angular.copy(submit);
             });
             return result;
         };
 
         $scope.getLastSubmit = function () {
+
             var result = null;
             angular.forEach($scope.lastSubmit, function (submit, ind) {
-                if (isRegionSelected(ind) && (result == null || result.time < submit.time))
-                    result = angular.copy(submit);
+                // console.log(submit);
+                result = angular.copy(submit);
+                // if (isRegionSelected(ind) && (result == null || result.time < submit.time))
+                //     result = angular.copy(submit);
             });
             return result;
         };
