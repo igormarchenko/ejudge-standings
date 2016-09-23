@@ -6,9 +6,9 @@ Interactive standings table for [Ejudge](http://ejudge.ru).
 sudo apt-get install tomcat7
 
 ###Gradle
-sudo add-apt-repository ppa:cwchien/gradle
-sudo apt-get update
-sudo apt-get install gradle
+sudo add-apt-repository ppa:cwchien/gradle<br/>
+sudo apt-get update<br/>
+sudo apt-get install gradle<br/>
 
 ###NodeJS
 sudo apt-get install nodejs
