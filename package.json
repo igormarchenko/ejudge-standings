@@ -1,10 +1,25 @@
 {
-  "name": "Ejudge Standings",
-  "version": "0.0.1",
+  "name": "ejudge-standings",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igormarchenko/ejudge-standings.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/igormarchenko/ejudge-standings/issues"
+  },
+  "homepage": "https://github.com/igormarchenko/ejudge-standings#readme",
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-cssmin": "^1.0.2",
     "grunt-contrib-uglify": "^2.0.0"
   }
 }
