@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+	<university name = "Borys Grinchenko Kyiv University" type = "Humanitarian" region="North"/>
+	<university name = "Chernihiv State Technological University" type = "Natural" region="North"/>
+	<university name = "Zhytomyr State University named after Ivan Franko" type = "Classic" region="North"/>
+	
+	<university name = "Kiev National Trade and Economics University" type = "Economical" region="North"/>
+	<university name = "Kiev National University of Culture and Arts" type = "Humanitarian" region="North"/>
+	<university name = "Kyiv National University of Construction and Architecture" type = "Natural" region="North"/>
+	<university name = "National Academy of Management" type = "Economical" region="North"/>
+	<university name = "National Aviation University" type = "Natural" region="North"/>
+	<university name = "National Pedagogical University named after M.P. Dragomanov" type = "Pedagogical" region="North"/>
+	<university name = "National Technical University of Ukraine 'Kiev Polytechnic Institute'" type = "Technical" region="North"/>
+	<university name = "National University of Food Technologies" type = "Natural" region="North"/>
+	<university name = "National University of Life and Environmental Sciences" type = "Natural" region="North"/>
+	<university name = "National University of State Tax Service of Ukraine" type = "Economical" region="North"/>
+	<university name = "Nizhyn Gogol State University" type = "Classic" region="North"/>
+	<university name = "Rzhyschiv Industrial Teacher-Training Technical Secondary School" type = "Humanitarian" region="North"/>
+	<university name = "State University of Telecommunications" type = "Technical" region="North"/>
+	<university name = "Sumy State University" type = "Classic" region="North"/>
+	<university name = "Taras Shevchenko National University of Kyiv" type = "Classic" region="North"/>
+	<university name = "Vadym Getman Kiev National Economic University" type = "Economical" region="North"/>
+	<university name = "Zhytomyr Institute of Engineering and Technology" type = "Classic" region="North"/>
+	<university name = "National Aerospace University 'KhAI'" type = "Technical" region="East"/>
+	<university name = "Kharkiv National University of Radio Electronics" type = "Technical" region="East"/>
+	<university name = "Donetsk National Technical University" type = "Technical" region="East"/>
+	<university name = "Luhansk Taras Shevchenko National University" type = "Classic" region="East"/>
+	<university name = "Kharkiv Institute of Banking of University of Banking of the National Bank of Ukraine" type = "Economical" region="East"/>
+	<university name = "Kharkiv National Pedagogical University G.S.Scovoroda" type = "Pedagogical" region="East"/>
+	<university name = "Kharkiv National Automobile and Highway University" type = "Technical" region="East"/>
+	<university name = "Kharkiv National University of Civil Engineering and Architecture" type = "Technical" region="East"/>
+	<university name = "Ukrainian Engineering and Pedagogical Academy (UEPA)" type = "Pedagogical" region="East"/>
+	<university name = "V.N. Karazin Kharkiv National University" type = "Classic" region="East"/>
+	<university name = "Kharkiv National University of Economics" type = "Economical" region="East"/>
+	<university name = "National Technical University 'Kharkiv Polytechnic Institute'" type = "Technical" region="East"/>
+	<university name = "Volodymyr Dahl East Ukrainian National University" type = "Classic" region="East"/>
+	<university name = "Mariupol  State University" type = "Classic" region="East"/>
+	<university name = "Donbass State Engineering Academy" type = "Technical" region="East"/>
+	<university name = "Dnipropetrovsk National University of Railway Transport Named After Academician V. Lazaryan" type = "Technical" region="Center"/>
+	<university name = "Dnipropetrovsk National University of Railway Transport Named After Academician V. Lazaryan" type = "Technical" region="Center"/>
+	<university name = "National Metallurgical Academy of Ukraine" type = "Economical" region="Center"/>
+	<university name = "Dniprodzerzhinsk State Technical University" type = "Technical" region="Center"/>
+	<university name = "Ukrainian State University of Chemical Engineering" type = "Technical" region="Center"/>
+	<university name = "Cherkasy National University named after Bogdan Khmelnitsky" type = "Classic" region="Center"/>
+	<university name = "Poltava National Technical University named after Yuri Kondratyuk" type = "Technical" region="Center"/>
+	<university name = "Dnipropetrovsk National University" type = "Classic" region="Center"/>
+	<university name = "Kirovograd National Technical University" type = "Technical" region="Center"/>
+	<university name = "National Metallurgical Academy of Ukraine" type = "Economical" region="Center"/>
+	<university name = "V. Vinnijchenko Kirovograd State Pedagogical University" type = "Pedagogical" region="Center"/>
+	<university name = "V. Vinnijchenko Kirovograd State Pedagogical University" type = "Pedagogical" region="Center"/>
+	<university name = "Kiev National University of Technologies and Design" type = "Technical" region="Center"/>
+	<university name = "Kiev National University of Technologies and Design" type = "Technical" region="Center"/>
+	<university name = "Poltava National Technical University named after Yuri Kondratyuk" type = "Technical" region="Center"/>
+	<university name = "Kirovograd National Technical University" type = "Technical" region="Center"/>
+	<university name = "Dniprodzerzhinsk State Technical University" type = "Technical" region="Center"/>
+	<university name = "Poltava University of Economics and Trade" type = "Economical" region="Center"/>
+	<university name = "Poltava University of Economics and Trade" type = "Economical" region="Center"/>
+	<university name = "Cherkasy National University named after Bogdan Khmelnitsky" type = "Classic" region="Center"/>
+	<university name = "National Mining University" type = "Technical" region="Center"/>
+	<university name = "National Mining University" type = "Technical" region="Center"/>
+	<university name = "Kryvyi Rih National University" type = "Classic" region="Center"/>
+	<university name = "Kryvyi Rih National University" type = "Classic" region="Center"/>
+	<university name = "Kryvyi Rih Economic Institute of State institution of Higher Education 'Kryvyi Rih National University'" type = "Economical" region="Center"/>
+	<university name = "Cherkasy State Technological University" type = "Technical" region="Center"/>
+	<university name = "Cherkasy State Technological University" type = "Technical" region="Center"/>
+	<university name = "V. Vinnijchenko Kirovograd State Pedagogical University" type = "Pedagogical" region="Center"/>
+	<university name = "Berdyansk State Pedagogical University" type = "Pedagogical" region="South"/>
+	<university name = "Melitopol State Pedagogical University" type = "Pedagogical" region="South"/>
+	<university name = "National University of Shipbuilding named after Admiral Makarov" type = "Technical" region="South"/>
+	<university name = "Odessa National Academy of Food Technologies" type = "Technical" region="South"/>
+	<university name = "Odessa National Academy of Telecommunications named after O.S. Popov" type = "Technical" region="South"/>
+	<university name = "Odessa National Mechnikov University" type = "Classic" region="South"/>
+	<university name = "Odessa National Polytechnic University" type = "Technical" region="South"/>
+	<university name = "Odessa National Academy of Food Technologies" type = "Technical" region="South"/>
+	<university name = "Tavria State Agrotechnological University" type = "Agrarian" region="South"/>
+	<university name = "Zaporizhzhia Classical Private University" type = "Classic" region="South"/>
+	<university name = "Zaporizhzhia National University" type = "Classic" region="South"/>
+	<university name = "Zaporizhzhia State Engineering Academy" type = "Technical" region="South"/>
+	<university name = "Zaporizhzhya National Technical University" type = "Technical" region="South"/>
+	<university name = "Rivne State Humanities University" type = "Humanitarian" region="West"/>
+	<university name = "Danylo Halytskyi Lviv National Medical University" type = "Humanitarian" region="West"/>
+	<university name = "Drohobych Ivan Franko State Teacher Training University" type = "Pedagogical" region="West"/>
+	<university name = "Ivano-Frankivsk National Technical University of Oil and Gas" type = "Technical" region="West"/>
+	<university name = "Lutsk National Technical University" type = "Technical" region="West"/>
+	<university name = "Lviv National University" type = "Classic" region="West"/>
+	<university name = "Lviv Polytechnic National University" type = "Technical" region="West"/>
+	<university name = "Lviv State University of Vital Activity Safety" type = "Technical" region="West"/>
+	<university name = "National Forestry University of Ukraine" type = "Natural" region="West"/>
+	<university name = "National Transport University" type = "Technical" region="West"/>
+	<university name = "National University of Water Management and Natural Resources Application" type = "Natural" region="West"/>
+	<university name = "Ukrainian Catholic University" type = "Humanitarian" region="West"/>
+	<university name = "Uzhgorod National University" type = "Classic" region="West"/>
+	<university name = "Vasyl Stefanyk Precarpathian National University" type = "Classic" region="West"/>
+	<university name = "Volyn University named after Lesya Ukrainka" type = "Classic" region="West"/>
+	<university name = "National University of Life and Environmental Sciences of Ukraine Berezhany Agrotechnical Institute" type = "Natural" region="SouthWest"/>
+	<university name = "Yuriy Fed'kovijch Chernivtsi National University" type = "Classic" region="SouthWest"/>
+	<university name = "Donetsk National University" type = "Classic" region="SouthWest"/>
+	<university name = "Khmelnitsky Polytechnic College" type = "School" region="SouthWest"/>
+	<university name = "Khmelnitsky National University" type = "Classic" region="SouthWest"/>
+	<university name = "Ivan Ogienko Kamyanets-Podilski National University" type = "Classic" region="SouthWest"/>
+	<university name = "Ternopil Academy of National Economics" type = "Economical" region="SouthWest"/>
+	<university name = "Ternopil Volodymyr Hnatyuk National Pedagogy University" type = "Pedagogical" region="SouthWest"/>
+	<university name = "Ternopil Ivan Pul'uj National Technical University" type = "Technical" region="SouthWest"/>
+	<university name = "Husiatyn College of Ternopil Ivan Pul'uj National Technical University" type = "School" region="SouthWest"/>
+	<university name = "Vyacheslav Chornovil Halytskyi Institute" type = "School" region="SouthWest"/>
+	<university name = "Vinnytsia Institute of Trade and Economics of Kyiv National University of Trade and Economics" type = "Economical" region="SouthWest"/>
+	<university name = "Vinnytsia National Technical University" type = "Technical" region="SouthWest"/>
+	<university name = "Vinnytsia State Pedagogical University named after Mykhailo Kotsubinsky" type = "Pedagogical" region="SouthWest"/>
+	<university name = "Zboriv College of Ternopil Ivan Pul'uj National Technical University" type = "School" region="SouthWest"/>
+</data>
