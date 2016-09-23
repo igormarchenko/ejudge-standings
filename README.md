@@ -39,7 +39,7 @@ sudo apt-get install npm
 *team-university-file* &ndash;	file with mapping from team to university.<br />
 *university-type-file* &ndash; file with mapping university to its region.<br />
 *baylor-teams-file* &ndash; file which exported from baylor web-site. Using for upload results to baylor servers.<br />
-	
+Examples of files provided in "examples" directory.
 
 ###Useful URL
 To authorize user go to link */authorize?login=<b>LOGIN</b>&password=<b>PASSWORD</b>* where *<b>LOGIN</b>* and *<b>PASSWORD</b>* - values, specified in file sources.xml.
