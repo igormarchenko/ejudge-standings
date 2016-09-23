@@ -17,7 +17,7 @@ sudo apt-get install nodejs
 sudo apt-get install npm
 
 ##Install
-*git clone https://github.com/igormarchenko/ejudge-standings.git*
+*git clone https://github.com/igormarchenko/ejudge-standings.git*<br/>
 *cd ejudge-standings*<br /> 
 *npm install*<br />
 *bower install*<br />
