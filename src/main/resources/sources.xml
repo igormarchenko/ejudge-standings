@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<data>
-    <login>admin</login>
-    <password>serg_pet</password>
-    <tables>
-        <file value="http://ejudge.sumdu.edu.ua/external.xml" contest="2" final="true"/>
-    </tables>
-    <baylor-teams-file value = "C:/baylor.xml"/>
-</data>

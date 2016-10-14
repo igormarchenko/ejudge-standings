@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.ssu.standings.entity.Contest;
 import org.ssu.standings.entity.Submission;
-import org.ssu.standings.entity.TeamEntity;
 import org.ssu.standings.file.FileHandler;
 import org.ssu.standings.file.HTTPFileHandler;
 import org.ssu.standings.file.LocalFileHandler;

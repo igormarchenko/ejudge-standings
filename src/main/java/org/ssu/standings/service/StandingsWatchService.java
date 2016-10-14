@@ -5,10 +5,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.ssu.standings.entity.Contest;
 import org.ssu.standings.entity.Submission;
-import org.ssu.standings.entity.TeamEntity;
+import org.ssu.standings.entity.Team;
+import org.ssu.standings.repository.ExternalFilesRepository;
 import org.ssu.standings.repository.TeamRepository;
 import org.ssu.standings.utils.FileWatcher;
-import org.ssu.standings.utils.Settings;
 import org.ssu.standings.utils.TeamInUniversityList;
 import org.xml.sax.SAXException;
 
@@ -16,7 +16,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,13 +26,16 @@ public class StandingsWatchService {
     @Resource
     private TeamRepository teamRepository;
 
+    @Resource
+    private ExternalFilesRepository externalFilesRepository;
+
     private Map<Long, FileWatcher> watchers;
 
     @PostConstruct
     public void init() throws ParserConfigurationException, IOException, SAXException {
-        TeamInUniversityList.setTeamUniversity(teamRepository.findAll().stream().collect(Collectors.toMap(item -> item.getName().trim(), TeamEntity::getUniversityEntity)));
+        TeamInUniversityList.setTeamUniversity(teamRepository.findAll().stream().collect(Collectors.toMap(item -> item.getName().trim(), Team::getUniversityEntity)));
 
-        watchers = Settings.getStandingsFiles()
+        watchers = externalFilesRepository.findAll()
                 .stream()
                 .map(item -> new FileWatcher(item.getLink())
                         .setContestId(item.getContestId())

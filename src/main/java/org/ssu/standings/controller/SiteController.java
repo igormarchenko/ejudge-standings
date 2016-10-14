@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.ssu.standings.service.BaylorExportService;
+import org.ssu.standings.service.PropertiesService;
 import org.ssu.standings.service.StandingsWatchService;
-import org.ssu.standings.utils.Settings;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -32,6 +32,8 @@ public class SiteController {
     private StandingsWatchService standingsWatchService;
     @Resource
     private BaylorExportService baylorExportService;
+    @Resource
+    private PropertiesService propertiesService;
 
     private String authorizeCookie(String login, String password) {
         MessageDigest messageDigest = null;
@@ -99,7 +101,7 @@ public class SiteController {
     @RequestMapping(value = "/api/frozen-results", method = RequestMethod.GET)
     @ResponseBody
     public String getFrozenResults(@CookieValue("authorize") String authorizeCookie) {
-        if (authorizeCookie(Settings.getLogin(), Settings.getPassword()).equals(authorizeCookie)) {
+        if (authorizeCookie(propertiesService.getLogin(), propertiesService.getPassword()).equals(authorizeCookie)) {
             try {
                 return new ObjectMapper()
                         .writeValueAsString(standingsWatchService.getFrozenResults());
@@ -115,8 +117,8 @@ public class SiteController {
     public ModelAndView authorize(HttpServletResponse response,
                                   @RequestParam(value = "login") String login,
                                   @RequestParam(value = "password") String password) {
-        if (login.equals(Settings.getLogin()) && password.equals(Settings.getPassword())) {
-            response.addCookie(new Cookie("authorize", authorizeCookie(Settings.getLogin(), Settings.getPassword())));
+        if (login.equals(propertiesService.getLogin()) && password.equals(propertiesService.getPassword())) {
+            response.addCookie(new Cookie("authorize", authorizeCookie(propertiesService.getLogin(), propertiesService.getPassword())));
         }
 
         ModelAndView model = new ModelAndView();

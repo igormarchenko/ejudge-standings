@@ -2,7 +2,7 @@ package org.ssu.standings.parser;
 
 import org.ssu.standings.entity.Submission;
 import org.ssu.standings.entity.Task;
-import org.ssu.standings.entity.TeamEntity;
+import org.ssu.standings.entity.Team;
 import org.ssu.standings.utils.TeamInUniversityList;
 import org.ssu.standings.utils.XmlStream;
 import org.w3c.dom.Node;
@@ -75,10 +75,10 @@ public class SubmissionsParser extends Parser {
                 .collect(Collectors.toList());
     }
 
-    public List<TeamEntity> parseTeamList() {
+    public List<Team> parseTeamList() {
         return XmlStream.of(getChildNodes(USERS_TAG))
                 .filter(node -> node.getNodeType() == Node.ELEMENT_NODE)
-                .map(item -> new TeamEntity().setTeamIdInContest(Long.parseLong(getAttributeValue(item, TEAM_ID_ATTRIBUTE)))
+                .map(item -> new Team().setTeamIdInContest(Long.parseLong(getAttributeValue(item, TEAM_ID_ATTRIBUTE)))
                         .setName(getAttributeValue(item, TEAM_NAME_ATTRIBUTE))
                         .setUniversityEntity(TeamInUniversityList.universityForTeam(getAttributeValue(item, TEAM_NAME_ATTRIBUTE)))
                 )
