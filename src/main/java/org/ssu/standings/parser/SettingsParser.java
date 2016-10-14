@@ -8,8 +8,6 @@ public class SettingsParser extends Parser {
     private static final String STANDINGS_FILES = "file";
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
-    private static final String TEAM_UNIVERSITY_FILE = "team-university-file";
-    private static final String UNIVERSITY_TYPE_FILE = "university-type-file";
     private static final String BAYLOR_TEAMS_FILE = "baylor-teams-file";
 
     public SettingsParser(File file) {
@@ -30,14 +28,6 @@ public class SettingsParser extends Parser {
 
     public String getPassword() {
         return getDataStringFromXML(PASSWORD);
-    }
-
-    public String getTeamToUniversityMappingFile() {
-        return getCurrentNode(TEAM_UNIVERSITY_FILE).item(0).getAttributes().item(0).getNodeValue();
-    }
-
-    public String getUniversityTypeFile() {
-        return getCurrentNode(UNIVERSITY_TYPE_FILE).item(0).getAttributes().item(0).getNodeValue();
     }
 
     public String getBaylorTeamsFile() {

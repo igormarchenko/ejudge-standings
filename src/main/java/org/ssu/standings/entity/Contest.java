@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class Contest {
     private Long id;
     private List<Submission> submissions;
-    private List<Team> teams;
+    private List<TeamEntity> teams;
     private List<Task> tasks;
     private Long contestId;
 
@@ -48,11 +48,11 @@ public class Contest {
         return this;
     }
 
-    public List<Team> getTeams() {
+    public List<TeamEntity> getTeams() {
         return teams;
     }
 
-    public Contest setTeams(List<Team> teams) {
+    public Contest setTeams(List<TeamEntity> teams) {
         this.teams = teams;
         return this;
     }
@@ -150,11 +150,11 @@ public class Contest {
         return this;
     }
 
-    public Optional<Team> getTeamId(String teamName) {
+    public Optional<TeamEntity> getTeamId(String teamName) {
         return teams.stream().filter(team -> team.getName().equals(teamName)).findAny();
     }
 
-    public List<Submission> getTeamSubmissions(Team team) {
+    public List<Submission> getTeamSubmissions(TeamEntity team) {
         return submissions.stream().filter(submission -> submission.getUserId().equals(team.getId())).collect(Collectors.toList());
     }
 

@@ -5,7 +5,5 @@
     <tables>
         <file value="http://ejudge.sumdu.edu.ua/external.xml" contest="2" final="true"/>
     </tables>
-    <team-university-file value = "C:\teams.xml"/>
-    <university-type-file value = "C:\university.xml"/>
-    <baylor-teams-file value = "C:\baylor.xml"/>
+    <baylor-teams-file value = "C:/baylor.xml"/>
 </data>

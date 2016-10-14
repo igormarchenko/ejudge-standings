@@ -10,12 +10,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
-import org.springframework.web.servlet.view.tiles3.TilesView;
-import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
 @Configuration
-@ComponentScan({"org.ssu.standings"})
+@ComponentScan({"org.ssu.standings", "org.ssu.standings.utils"})
 @EnableWebMvc
 public class MvcConfig extends WebMvcConfigurerAdapter {
     @Override

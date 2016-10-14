@@ -1,0 +1,107 @@
+university_id; university_name; type; region
+1;Borys Grinchenko Kyiv University;Humanitarian;North
+2;Chernihiv State Technological University;Natural;North
+3;Zhytomyr State University named after Ivan Franko;Classic;North
+4;Kiev National Trade and Economics University;Economical;North
+5;Kiev National University of Culture and Arts;Humanitarian;North
+6;Kyiv National University of Construction and Architecture;Natural;North
+7;National Academy of Management;Economical;North
+8;National Aviation University;Natural;North
+9;National Pedagogical University named after M.P. Dragomanov;Pedagogical;North
+10;National Technical University of Ukraine 'Kiev Polytechnic Institute';Technical;North
+11;National University of Food Technologies;Natural;North
+12;National University of Life and Environmental Sciences;Natural;North
+13;National University of State Tax Service of Ukraine;Economical;North
+14;Nizhyn Gogol State University;Classic;North
+15;Rzhyschiv Industrial Teacher-Training Technical Secondary School;Humanitarian;North
+16;State University of Telecommunications;Technical;North
+17;Sumy State University;Classic;North
+18;Taras Shevchenko National University of Kyiv;Classic;North
+19;Vadym Getman Kiev National Economic University;Economical;North
+20;Zhytomyr Institute of Engineering and Technology;Classic;North
+21;National Aerospace University 'KhAI';Technical;East
+22;Kharkiv National University of Radio Electronics;Technical;East
+23;Donetsk National Technical University;Technical;East
+24;Luhansk Taras Shevchenko National University;Classic;East
+25;Kharkiv Institute of Banking of University of Banking of the National Bank of Ukraine;Economical;East
+26;Kharkiv National Pedagogical University G.S.Scovoroda;Pedagogical;East
+27;Kharkiv National Automobile and Highway University;Technical;East
+28;Kharkiv National University of Civil Engineering and Architecture;Technical;East
+29;Ukrainian Engineering and Pedagogical Academy (UEPA);Pedagogical;East
+30;V.N. Karazin Kharkiv National University;Classic;East
+31;Kharkiv National University of Economics;Economical;East
+32;National Technical University 'Kharkiv Polytechnic Institute';Technical;East
+33;Volodymyr Dahl East Ukrainian National University;Classic;East
+34;Mariupol  State University;Classic;East
+35;Donbass State Engineering Academy;Technical;East
+36;Dnipropetrovsk National University of Railway Transport Named After Academician V. Lazaryan;Technical;Center
+37;Dnipropetrovsk National University of Railway Transport Named After Academician V. Lazaryan;Technical;Center
+38;National Metallurgical Academy of Ukraine;Economical;Center
+39;Dniprodzerzhinsk State Technical University;Technical;Center
+40;Ukrainian State University of Chemical Engineering;Technical;Center
+41;Cherkasy National University named after Bogdan Khmelnitsky;Classic;Center
+42;Poltava National Technical University named after Yuri Kondratyuk;Technical;Center
+43;Dnipropetrovsk National University;Classic;Center
+44;Kirovograd National Technical University;Technical;Center
+45;National Metallurgical Academy of Ukraine;Economical;Center
+46;V. Vinnijchenko Kirovograd State Pedagogical University;Pedagogical;Center
+47;V. Vinnijchenko Kirovograd State Pedagogical University;Pedagogical;Center
+48;Kiev National University of Technologies and Design;Technical;Center
+49;Kiev National University of Technologies and Design;Technical;Center
+50;Poltava National Technical University named after Yuri Kondratyuk;Technical;Center
+51;Kirovograd National Technical University;Technical;Center
+52;Dniprodzerzhinsk State Technical University;Technical;Center
+53;Poltava University of Economics and Trade;Economical;Center
+54;Poltava University of Economics and Trade;Economical;Center
+55;Cherkasy National University named after Bogdan Khmelnitsky;Classic;Center
+56;National Mining University;Technical;Center
+57;National Mining University;Technical;Center
+58;Kryvyi Rih National University;Classic;Center
+59;Kryvyi Rih National University;Classic;Center
+60;Kryvyi Rih Economic Institute of State institution of Higher Education 'Kryvyi Rih National University';Economical;Center
+61;Cherkasy State Technological University;Technical;Center
+62;Cherkasy State Technological University;Technical;Center
+63;V. Vinnijchenko Kirovograd State Pedagogical University;Pedagogical;Center
+64;Berdyansk State Pedagogical University;Pedagogical;South
+65;Melitopol State Pedagogical University;Pedagogical;South
+66;National University of Shipbuilding named after Admiral Makarov;Technical;South
+67;Odessa National Academy of Food Technologies;Technical;South
+68;Odessa National Academy of Telecommunications named after O.S. Popov;Technical;South
+69;Odessa National Mechnikov University;Classic;South
+70;Odessa National Polytechnic University;Technical;South
+71;Odessa National Academy of Food Technologies;Technical;South
+72;Tavria State Agrotechnological University;Agrarian;South
+73;Zaporizhzhia Classical Private University;Classic;South
+74;Zaporizhzhia National University;Classic;South
+75;Zaporizhzhia State Engineering Academy;Technical;South
+76;Zaporizhzhya National Technical University;Technical;South
+77;Rivne State Humanities University;Humanitarian;West
+78;Danylo Halytskyi Lviv National Medical University;Humanitarian;West
+79;Drohobych Ivan Franko State Teacher Training University;Pedagogical;West
+80;Ivano-Frankivsk National Technical University of Oil and Gas;Technical;West
+81;Lutsk National Technical University;Technical;West
+82;Lviv National University;Classic;West
+83;Lviv Polytechnic National University;Technical;West
+84;Lviv State University of Vital Activity Safety;Technical;West
+85;National Forestry University of Ukraine;Natural;West
+86;National Transport University;Technical;West
+87;National University of Water Management and Natural Resources Application;Natural;West
+88;Ukrainian Catholic University;Humanitarian;West
+89;Uzhgorod National University;Classic;West
+90;Vasyl Stefanyk Precarpathian National University;Classic;West
+91;Volyn University named after Lesya Ukrainka;Classic;West
+92;National University of Life and Environmental Sciences of Ukraine Berezhany Agrotechnical Institute;Natural;SouthWest
+93;Yuriy Fed'kovijch Chernivtsi National University;Classic;SouthWest
+94;Donetsk National University;Classic;SouthWest
+95;Khmelnitsky Polytechnic College;School;SouthWest
+96;Khmelnitsky National University;Classic;SouthWest
+97;Ivan Ogienko Kamyanets-Podilski National University;Classic;SouthWest
+98;Ternopil Academy of National Economics;Economical;SouthWest
+99;Ternopil Volodymyr Hnatyuk National Pedagogy University;Pedagogical;SouthWest
+100;Ternopil Ivan Pul'uj National Technical University;Technical;SouthWest
+101;Husiatyn College of Ternopil Ivan Pul'uj National Technical University;School;SouthWest
+102;Vyacheslav Chornovil Halytskyi Institute;School;SouthWest
+103;Vinnytsia Institute of Trade and Economics of Kyiv National University of Trade and Economics;Economical;SouthWest
+104;Vinnytsia National Technical University;Technical;SouthWest
+105;Vinnytsia State Pedagogical University named after Mykhailo Kotsubinsky;Pedagogical;SouthWest
+106;Zboriv College of Ternopil Ivan Pul'uj National Technical University;School;SouthWest
