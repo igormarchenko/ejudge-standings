@@ -6,7 +6,6 @@ import org.ssu.standings.entity.Contest;
 import org.ssu.standings.entity.Submission;
 import org.ssu.standings.parser.BaylorStandingsParser;
 import org.ssu.standings.utils.NodeListWrapper;
-import org.ssu.standings.utils.Settings;
 import org.w3c.dom.Node;
 
 import javax.annotation.Resource;
@@ -26,7 +25,7 @@ public class BaylorExportService {
                 .filter(contest -> contest.getTeamId(teamName).isPresent())
                 .findAny();
 
-        BaylorStandingsParser parser = new BaylorStandingsParser(Settings.getBaylorTeamsFile());
+        BaylorStandingsParser parser = new BaylorStandingsParser("C:\\baylor.xml");
         NodeListWrapper teams = new NodeListWrapper(parser.getTeams());
 
         List<BaylorTeam> baylorTeams = new ArrayList<>();

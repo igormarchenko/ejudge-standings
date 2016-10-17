@@ -1,0 +1,217 @@
+id; name; university_id
+1;EpicGrinch;1
+2;CHNTU Scarlet Crusade;2
+3;CHNTU 155.9;2
+4;CHNTU_PFP;2
+5;KNTEU_Argus;4
+6;KNUKiM_2;5
+7;KNUBA_StackOverflow;6
+8;KNUBA_BULLET;6
+9;NAM_bteam;7
+10;Unity Developers;8
+11;noBugsException;9
+12;NTUU_KPI_Schmetterlinge;10
+13;BayWatch;10
+14;NTUU_KPI_AIR;10
+15;NUFT_Mandelbrot's_children;11
+16;NUFT_Chernysh;11
+17;ShortCircuit;12
+18;timeless;12
+19;Emperors;12
+20;Taxman 2;13
+21;Taxman 1;13
+22;NDU_Romashka++;14
+23;RIPT;15
+24;SUT_Eclipse;16
+25;SSU_PROJECT_ANAKONDA;17
+26;SSU_Bulat;17
+27;The Alphas;18
+28;Nameless;18
+29;Polar Bears;18
+30;Shamans;18
+31;Forritary;18
+32;Daddies;18
+33;Advantage;18
+34;KNEU_QTEAM;19
+35;KNEU_SCOPE;19
+36;KNEU_Binary;19
+37;ZSTU_NOT_NULL;20
+38;ZSTU_CoffeeCoders;20
+39;ZSTU_PHP_TEAM;20
+40;ZhSU_team;3
+41;ZhSU_illuminati;3
+42;KhAI_Su-7B*;21
+43;KhNURE_Ties*;22
+44;DonNTU_CSTF_United*;23
+45;LTSNU_ITSUnited*;24
+46;KhNURE_Random_People*;22
+47;KhIBS_2;25
+48;KhNPU_PYGeeks;26
+49;KhNADU_ITM_7;27
+50;KhNUCEA_Sigma;28
+51;KhNADU_ITM_18;27
+52;UEPA2*;29
+53;KhNUCEA_EKIT3;28
+54;KhAI_Console;21
+55;KhAI_Steal_Rinse;21
+56;KhNU_BDSH;30
+57;KhNU_Prog4Life;30
+58;KhNUE_KOPTeam;31
+59;KhNUE_Infinity;31
+60;KhNU_FKS;30
+61;KhNURE_KG;22
+62;UEPA1;29
+63;KhAI_Apsis;21
+64;KhNURE_LOG;22
+65;KhNUE_InTo;31
+66;KhPI_bhes;32
+67;KhNUE_K.O.S.;31
+68;KhPI_Screed;32
+69;KhPI_Morituri;32
+70;KhPI_Society;32
+71;KhNU_TrioFox;30
+72;EUNU Imba Coders;33
+73;MSU_SA;34
+74;DSEA:MissDGMA2016;35
+75;DSEA:ITin3D;35
+76;DSEA:Heroes of Code and Magic;35
+77;DNURT_USERS;36
+78;DNURT_SudoSu;36
+79;NMetAU_Metal;38
+80;DSTU_Silent;39
+81;USUCE Resharper's;40
+82;ChNUBKh Team A;41
+83;PoltNTU_CE4_16;42
+84;DNU_Cifeidion;43
+85;DNU_Ducks;43
+86;DNU_Dodger;43
+87;DNU_ITus;43
+88;DNU_7777;43
+89;KNTU_UTNK;44
+90;NMetAU_EK01;38
+91;KSPU_NotFound;46
+92;KSPU_LSD445;46
+93;CkMIIT-KNUTD_Iwin_pooh;48
+94;CkMIIT-KNUTD_Ahead_of_the_wind;48
+95;PoltNTU_Trinity;42
+96;KNTU_NovusTeam;44
+97;DSTU_Armicron;39
+98;PUET_Bootmen;53
+99;PUET_Infinitech;53
+100;ChNUBKh Alive Cluster;41
+101;NMU_SPQR;56
+102;NMU_DMP;56
+103;KNU_Slaveholders;58
+104;KNU_crazy_rabbits;58
+105;IPPZ_2016_31;60
+106;ChSTU roflPriority;61
+107;ChSTU padawans;61
+108;KSPU_FatalError;46
+109;DSEA:ITin3D;35
+110;DSEA:Heroes of Code and Magic;35
+111;BSPU_Code_junkies ;64
+112;MSPU_AKUMA;65
+113;NUS_UFO;66
+114;NUS_Long;66
+115;NUS_VDM;66
+116;ONAFT_C++In14Days;67
+117;ONAFT_Third_Wheel;67
+118;ONAT_PI_guys;68
+119;ONAT_Funny_team;68
+120;ONU_Solvers_of_Fortune*;69
+121;ONU_Antananarivu*;69
+122;ONU_The_Big_Coding_Theory;69
+123;ONU_Luckomotive;69
+124;ONPU_TASCHI;70
+125;ONPU_FireFly;70
+126;ONPU_Compote;70
+127;ONPU_LightSCribe;70
+128;OSEU_Crutch;67
+129;OSEU_team1;67
+130;TSATU_Kotitta;72
+131;TSATU_Kostyli;72
+132;CPU_Polite_Zombie;73
+133;ZNU_Alt+F4;74
+134;ZNU-MED;74
+135;ZSEA_Random – my home;75
+136;ZSEA_Karambool;75
+137;ZSEA_Luckyteam;75
+138;ZNTU_ToAcme;76
+139;ZNTU_Pro100Team;76
+140;ZNTU_Kappatalize;76
+141;ZNTU_KernelPanic*;76
+142;ZNTU_PiecesOfFlare;76
+143;_TEAM_I_31_BEST_;77
+144;LNMU_esculap;78
+145;DDPU_Triada;79
+146;IFNTUOG_Multyfrukty;80
+147;LNTU_Hope;81
+148;LNTU_KT;81
+149;LNU c==8;82
+150;LNU LogyCode;82
+151;LNU VVT;82
+152;LNU_AlgoTesters;82
+153;Need_For_Sleep_Undercovdra;82
+154;NULP_Disciples;83
+155;NULP_Nerdasaurus;83
+156;NULP_PaPePiPoPu;83
+157;NULP_R2-D2;83
+158;LSUVAS_UBGD_Team;84
+159;NFUU_Junior;85
+160;NFUU_Veterans*;85
+161;NCNTU_IT;86
+162;NUWM_BrainStorm;87
+163;NUWM_Stream;87
+164;NUWM_Super_Nastia;87
+165;Owl;77
+166;SeniorYVLIT;77
+167;UCU_Socrative;88
+168;UCUlele;88
+169;UzhNU_Apriori;89
+170;UzhNU_AwesomeTeam;89
+171;UzhNU_Brainiacs;89
+172;UzhNU_Eagles;89
+173;UzhNU_MagicalPony;89
+174;148minutes;90
+175;PNU-ki-3;90
+176;PNU-ki-4;90
+177;EENU_Everest_Alpha;91
+178;EENU_Everest_Beta;91
+179;EENU_Everest_Gamma;91
+180;TNPU_StackTrace;99
+181;VSPU_Penguin_Overturners;105
+182;TNTU_iAmCoder;100
+183;TNTU_Bornhub;100
+184;DonNU_Phoenix*;94
+185;VNTU_TreeS;104
+186;CHNU_APM_NextGen;93
+187;CHNU_APM_Breaking_code*;93
+188;VITE_KNUTE_Cybernetics;103
+189;KPNU_3;97
+190;KPNU_1;97
+191;TNTUGK_16plus;101
+192;VNTU_RED;104
+193;TNTU_TNT;100
+194;ZC-TNTU_Prime*;106
+195;DonNU_FMIT-1;94
+196;KhNU_Compilation_Error*;96
+197;TNTUHC_Domamorych;102
+198;TNEU_C#2;98
+199;DonNU_Warriors;94
+200;CHNU_APM_FastPinkBanana;93
+201;KhNU_CodeMates;96
+202;CHNU_APM_FTW;93
+203;TNPU_StackOverflow;99
+204;KhmPC_BamBuK* ;95
+205;KhNU_Reverse_Polarity;96
+206;BATI_Energy*;92
+207;DonNU_Hollywood ;94
+208;VNTU_.pgg();104
+209;VNTU_[figTree];104
+210;TNTUGK_fixiki;101
+211;VNTU_Destructor;104
+212;KhNU_rva_team* ;96
+213;KhmPC_NoSaTka  ;95
+214;TNTU_qwerty;100
+215;TNEU_C#1;98
+216;VSPU_Bomb;105

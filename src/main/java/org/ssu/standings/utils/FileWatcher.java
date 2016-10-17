@@ -1,5 +1,6 @@
 package org.ssu.standings.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.ssu.standings.entity.Contest;
@@ -8,6 +9,7 @@ import org.ssu.standings.file.FileHandler;
 import org.ssu.standings.file.HTTPFileHandler;
 import org.ssu.standings.file.LocalFileHandler;
 import org.ssu.standings.parser.SubmissionsParser;
+import org.ssu.standings.repository.TeamRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +19,9 @@ import java.util.stream.Collectors;
 @Service
 @Scope("prototype")
 public class FileWatcher {
+    @Autowired
+    private TeamRepository teamsRepository;
+
     private Long lastModified = 0L;
     private FileHandler standingsFile;
     private Contest contest = new Contest();

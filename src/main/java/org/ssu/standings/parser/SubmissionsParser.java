@@ -3,6 +3,7 @@ package org.ssu.standings.parser;
 import org.ssu.standings.entity.Submission;
 import org.ssu.standings.entity.Task;
 import org.ssu.standings.entity.Team;
+import org.ssu.standings.utils.TeamInUniversityList;
 import org.ssu.standings.utils.XmlStream;
 import org.w3c.dom.Node;
 
@@ -13,6 +14,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubmissionsParser extends Parser {
+
+    public static final String TASK_ID_ATTRIBUTE = "id";
+    public static final String TASK_LONG_NAME_ATTRIBUTE = "long_name";
+    public static final String TASK_SHORT_NAME_ATTRIBUTE = "short_name";
     private static final String TEAM_NAME_ATTRIBUTE = "name";
     private static final String TEAM_ID_ATTRIBUTE = "id";
     private static final String DURATION = "duration";
@@ -33,9 +38,6 @@ public class SubmissionsParser extends Parser {
     private static final String TASKS_TAG = "problems";
     private static final String UNFOG_TIME = "unfog_time";
     private static final String NAME_TAG = "name";
-    public static final String TASK_ID_ATTRIBUTE = "id";
-    public static final String TASK_LONG_NAME_ATTRIBUTE = "long_name";
-    public static final String TASK_SHORT_NAME_ATTRIBUTE = "short_name";
 
     public SubmissionsParser(File file) {
         super(file);
@@ -76,8 +78,10 @@ public class SubmissionsParser extends Parser {
     public List<Team> parseTeamList() {
         return XmlStream.of(getChildNodes(USERS_TAG))
                 .filter(node -> node.getNodeType() == Node.ELEMENT_NODE)
-                .map(item -> new Team(Long.parseLong(getAttributeValue(item, TEAM_ID_ATTRIBUTE)),
-                        getAttributeValue(item, TEAM_NAME_ATTRIBUTE)))
+                .map(item -> new Team().setTeamIdInContest(Long.parseLong(getAttributeValue(item, TEAM_ID_ATTRIBUTE)))
+                        .setName(getAttributeValue(item, TEAM_NAME_ATTRIBUTE))
+                        .setUniversityEntity(TeamInUniversityList.universityForTeam(getAttributeValue(item, TEAM_NAME_ATTRIBUTE)))
+                )
                 .collect(Collectors.toList());
     }
 
@@ -103,7 +107,8 @@ public class SubmissionsParser extends Parser {
         Long duration = 18000L;
         try {
             duration = Long.parseLong(getAttributeFromRunLogTag(DURATION));
-        } catch (NullPointerException ex) {}
+        } catch (NullPointerException ex) {
+        }
         return duration;
     }
 

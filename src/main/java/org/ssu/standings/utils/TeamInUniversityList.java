@@ -1,5 +1,6 @@
 package org.ssu.standings.utils;
 
+
 import org.ssu.standings.entity.University;
 
 import java.util.Map;
@@ -16,8 +17,8 @@ public class TeamInUniversityList {
     }
 
     public static University universityForTeam(String team) {
-        return (teamUniversity.containsKey(team)) ?
-                teamUniversity.get(team) :
+        return (teamUniversity.containsKey(team.trim())) ?
+                teamUniversity.get(team.trim()) :
                 new University()
                         .setType(DEFAULT_TYPE)
                         .setName(DEFAULT_NAME)
