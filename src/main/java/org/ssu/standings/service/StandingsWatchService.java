@@ -33,7 +33,7 @@ public class StandingsWatchService {
 
     @PostConstruct
     public void init() throws ParserConfigurationException, IOException, SAXException {
-        TeamInUniversityList.setTeamUniversity(teamRepository.findAll().stream().collect(Collectors.toMap(item -> item.getName().trim(), Team::getUniversityEntity)));
+        TeamInUniversityList.setTeamUniversity(teamRepository.findAll().stream().collect(Collectors.toMap(item -> item.getName().trim(), Team::getUniversityEntity, (a, b) -> a)));
 
         watchers = externalFilesRepository.findAll()
                 .stream()

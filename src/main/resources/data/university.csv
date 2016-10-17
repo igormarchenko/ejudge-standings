@@ -35,7 +35,6 @@ university_id; university_name; type; region
 34;Mariupol  State University;Classic;East
 35;Donbass State Engineering Academy;Technical;East
 36;Dnipropetrovsk National University of Railway Transport Named After Academician V. Lazaryan;Technical;Center
-37;Dnipropetrovsk National University of Railway Transport Named After Academician V. Lazaryan;Technical;Center
 38;National Metallurgical Academy of Ukraine;Economical;Center
 39;Dniprodzerzhinsk State Technical University;Technical;Center
 40;Ukrainian State University of Chemical Engineering;Technical;Center
@@ -45,23 +44,12 @@ university_id; university_name; type; region
 44;Kirovograd National Technical University;Technical;Center
 45;National Metallurgical Academy of Ukraine;Economical;Center
 46;V. Vinnijchenko Kirovograd State Pedagogical University;Pedagogical;Center
-47;V. Vinnijchenko Kirovograd State Pedagogical University;Pedagogical;Center
 48;Kiev National University of Technologies and Design;Technical;Center
-49;Kiev National University of Technologies and Design;Technical;Center
-50;Poltava National Technical University named after Yuri Kondratyuk;Technical;Center
-51;Kirovograd National Technical University;Technical;Center
-52;Dniprodzerzhinsk State Technical University;Technical;Center
 53;Poltava University of Economics and Trade;Economical;Center
-54;Poltava University of Economics and Trade;Economical;Center
-55;Cherkasy National University named after Bogdan Khmelnitsky;Classic;Center
 56;National Mining University;Technical;Center
-57;National Mining University;Technical;Center
 58;Kryvyi Rih National University;Classic;Center
-59;Kryvyi Rih National University;Classic;Center
 60;Kryvyi Rih Economic Institute of State institution of Higher Education 'Kryvyi Rih National University';Economical;Center
 61;Cherkasy State Technological University;Technical;Center
-62;Cherkasy State Technological University;Technical;Center
-63;V. Vinnijchenko Kirovograd State Pedagogical University;Pedagogical;Center
 64;Berdyansk State Pedagogical University;Pedagogical;South
 65;Melitopol State Pedagogical University;Pedagogical;South
 66;National University of Shipbuilding named after Admiral Makarov;Technical;South
@@ -69,7 +57,6 @@ university_id; university_name; type; region
 68;Odessa National Academy of Telecommunications named after O.S. Popov;Technical;South
 69;Odessa National Mechnikov University;Classic;South
 70;Odessa National Polytechnic University;Technical;South
-71;Odessa National Academy of Food Technologies;Technical;South
 72;Tavria State Agrotechnological University;Agrarian;South
 73;Zaporizhzhia Classical Private University;Classic;South
 74;Zaporizhzhia National University;Classic;South
