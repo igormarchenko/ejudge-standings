@@ -36,4 +36,14 @@
             <column name="is_final" value="true"/>
         </insert>
     </changeSet>
+
+    <changeSet id="5" author="Igor Marchenko">
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="login" value="admin"/>
+            <column name="pass" value="12345"/>
+            <column name="role" value="ADMIN"/>
+            <column name="enabled" value="TRUE"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

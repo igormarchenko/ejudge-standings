@@ -1,3 +1,4 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Igor
@@ -14,5 +15,10 @@
 </head>
 <body>
 admin page
+<sec:authentication property="principal.username" />
+<br/>
+<sec:authentication property="principal.password" />
+<br/>
 </body>
 </html>
+
