@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,25 @@ public class SiteController {
     private BaylorExportService baylorExportService;
     @Resource
     private PropertiesService propertiesService;
+
+    @RequestMapping(value = "/login-success", method = RequestMethod.POST)
+    public String loginSuccess() {
+        return "redirect:/admin";
+    }
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView adminLoginPage(ModelAndView model) {
+        model.setViewName("login");
+        return model;
+    }
+
+
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView adminHomePage(ModelAndView model) {
+        model.setViewName("admin");
+        return model;
+    }
 
     private String authorizeCookie(String login, String password) {
         MessageDigest messageDigest = null;
