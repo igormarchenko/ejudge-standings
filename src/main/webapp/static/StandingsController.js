@@ -121,7 +121,7 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
                     'university': team.university
                 };
             });
-
+            lastSubmitOnContest[response.id] = -1;
             angular.forEach(response.submissions, function (submission) {
                 pushSubmission(submission, response.id);
             });

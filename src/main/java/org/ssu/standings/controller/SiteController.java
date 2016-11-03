@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.ssu.standings.service.ApiService;
 import org.ssu.standings.service.BaylorExportService;
 import org.ssu.standings.service.PropertiesService;
 import org.ssu.standings.service.StandingsWatchService;
@@ -36,7 +37,15 @@ public class SiteController {
     private BaylorExportService baylorExportService;
     @Resource
     private PropertiesService propertiesService;
+    @Resource
+    private ApiService apiService;
 
+    @RequestMapping(value = "/api/teamlist", method = RequestMethod.GET)
+    @ResponseBody
+    public String teamList() throws JsonProcessingException {
+        return new ObjectMapper()
+                .writeValueAsString(apiService.teamList());
+    }
     @RequestMapping(value = "/login-success", method = RequestMethod.POST)
     public String loginSuccess() {
         return "redirect:/admin";
@@ -48,8 +57,7 @@ public class SiteController {
         return model;
     }
 
-
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/teams", "/admin"}, method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView adminHomePage(ModelAndView model) {
         model.setViewName("admin");

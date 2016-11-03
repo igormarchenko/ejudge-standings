@@ -1,0 +1,27 @@
+
+<script>
+    $(document).ready(function () {
+        $('#teams_table').DataTable({
+            "ajax": {
+                "url": "/api/teamlist",
+                "type": "GET",
+                "dataSrc": ""
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "university.name" }
+            ]
+        } );
+    });
+</script>
+<table id="teams_table" class="table table-striped table-bordered">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Team Name</th>
+        <th>University</th>
+    </tr>
+    </thead>
+
+</table>

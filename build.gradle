@@ -1,16 +1,113 @@
+plugins {
+    id 'com.craigburke.bower-installer' version '2.5.1'
+    id "com.eriwen.gradle.js" version "2.14.1"
+    id "com.eriwen.gradle.css" version "2.14.0"
+}
+
+group 'org.ssu'
+version '1.1-SNAPSHOT'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
 
 apply plugin: 'java'
 apply plugin: 'war'
+apply plugin: 'css'
+
+sourceCompatibility = 1.8
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+bower {
+    installBase = '/bower_components'
 
-group 'org.ssu'
-version '1.0-SNAPSHOT'
+    'angular'('1.5.8') {
+        source 'angular.js'
+    }
+
+    'angular-sanitize'('https://github.com/angular/bower-angular-sanitize.git')
+    'angular-ui-select'('https://github.com/angular-ui/ui-select.git')
+    'ui-router'('0.2.x')
+
+    'angular-route'('1.5.8') {
+        source 'angular-route.js' >> 'angular-route.js'
+    }
+
+    'bootstrap'('3.3.x') {
+        source 'dist/css/*.min.css' >> 'styles/'
+        source 'dist/fonts/**' >> 'fonts/'
+        excludes 'jquery'
+    }
+    'datatables.net'('1.10.12')
+    'datatables.net-dt'('1.10.12')
+}
+
+
+
+def scriptFiles = ['bower_components/jquery/dist/jquery.js',
+                   'bower_components/angular/angular.js',
+                   'bower_components/angular-sanitize/angular-sanitize.js',
+                   'bower_components/angular-route/angular-route.js',
+                   'bower_components/angular-ui-select/dist/select.js',
+                   'bower_components/ui-router/release/angular-ui-router.js',
+                    'bower_components/datatables.net/js/jquery.dataTables.js']
+
+def styleFiles = ['bower_components/angular-ui-select/dist/select.css',
+                  'bower_components/bootstrap/dist/css/bootstrap.css',
+                  'bower_components/datatables.net-dt/css/jquery.dataTables.css']
+
+task copyBootstrapFonts(type: Copy) {
+    from 'bower_components/bootstrap/dist/fonts'
+    into 'src/main/webapp/static/fonts'
+}
+
+
+task copyDatatablesImages(type : Copy) {
+    from 'bower_components/datatables.net-dt/images'
+    into 'src/main/webapp/static/images'
+}
+combineJs {
+    encoding = "UTF-8"
+    source = scriptFiles
+    dest = file("src/main/webapp/static/script.js")
+}
+
+minifyJs {
+    source = combineJs
+    dest = file("src/main/webapp/static/script.js")
+    sourceMap = file("all.sourcemap.json")
+    closure {
+        warningLevel = 'QUIET'
+    }
+}
+
+combineCss {
+    source = styleFiles
+    dest = "${buildDir}/all.css"
+}
+
+minifyCss {
+    source = combineCss
+    dest = file("src/main/webapp/static/style.css")
+    yuicompressor {
+        lineBreakPos = -1
+    }
+}
+
+task installPlugins() {
+    dependsOn.add(bowerRefresh)
+    dependsOn.add(copyBootstrapFonts)
+    dependsOn.add(copyDatatablesImages)
+    //dependsOn.add(minifyJs)
+    dependsOn.add(minifyCss)
+}
+
+assemble.dependsOn.add(installPlugins)
 
 dependencies {
 

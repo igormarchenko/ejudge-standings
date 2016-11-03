@@ -12,7 +12,7 @@ public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="id")
-    @JsonIgnore
+    @JsonProperty("id")
     private Long id;
     @Column(name = "name")
     private String name;
@@ -23,7 +23,8 @@ public class Team {
     @JsonManagedReference("team-university")
     private University universityEntity;
 
-    @JsonProperty("id")
+//    @JsonProperty("team-id")
+    @JsonIgnore
     private transient Long teamIdInContest;
 
     public Long getTeamIdInContest() {
