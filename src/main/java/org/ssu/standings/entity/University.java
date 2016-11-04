@@ -1,6 +1,7 @@
 package org.ssu.standings.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,7 +24,8 @@ public class University {
     private String type;
 
     @OneToMany(mappedBy = "universityEntity")
-    @JsonBackReference("team-university")
+//    @JsonBackReference("team-university")
+    @JsonIgnore
     private List<Team> teams;
 
     public Long getId() {

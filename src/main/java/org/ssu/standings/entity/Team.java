@@ -20,7 +20,7 @@ public class Team {
     @ManyToOne
     @JoinColumn(name = "university_id", nullable = false)
     @JsonProperty("university")
-    @JsonManagedReference("team-university")
+//    @JsonManagedReference("team-university")
     private University universityEntity;
 
 //    @JsonProperty("team-id")

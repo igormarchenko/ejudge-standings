@@ -4,13 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.ssu.standings.entity.Team;
 import org.ssu.standings.service.ApiService;
 import org.ssu.standings.service.BaylorExportService;
 import org.ssu.standings.service.PropertiesService;
@@ -20,6 +21,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.ws.Response;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -42,14 +44,43 @@ public class SiteController {
 
     @RequestMapping(value = "/api/teamlist", method = RequestMethod.GET)
     @ResponseBody
-    public String teamList() throws JsonProcessingException {
-        return new ObjectMapper()
-                .writeValueAsString(apiService.teamList());
+    public ResponseEntity teamList() throws JsonProcessingException {
+        return ResponseEntity.ok(new ObjectMapper()
+                .writeValueAsString(apiService.teamList()));
     }
+
+    @RequestMapping(value = "/api/universitylist", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity univesityList() throws JsonProcessingException {
+        return ResponseEntity.ok(new ObjectMapper()
+                .writeValueAsString(apiService.universityList()));
+    }
+
+    @RequestMapping(value = "/admin/deleteteam/{teamId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity removeTeam(@PathVariable Long teamId) {
+        apiService.removeTeam(teamId);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/admin/saveteam", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity saveTeam(@RequestBody ObjectNode data) throws JsonProcessingException {
+        Team team = null;
+        try {
+            team = new ObjectMapper().readValue(data.get("data").toString(), Team.class);
+            apiService.saveTeam(team);
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(team));
+    }
+
     @RequestMapping(value = "/login-success", method = RequestMethod.POST)
     public String loginSuccess() {
         return "redirect:/admin";
     }
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView adminLoginPage(ModelAndView model) {

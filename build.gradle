@@ -45,21 +45,23 @@ bower {
     }
     'datatables.net'('1.10.12')
     'datatables.net-dt'('1.10.12')
+    'angular-datatables'('0.5.5')
 }
 
-
-
 def scriptFiles = ['bower_components/jquery/dist/jquery.js',
+                   'bower_components/bootstrap/dist/js/bootstrap.js',
                    'bower_components/angular/angular.js',
                    'bower_components/angular-sanitize/angular-sanitize.js',
                    'bower_components/angular-route/angular-route.js',
                    'bower_components/angular-ui-select/dist/select.js',
                    'bower_components/ui-router/release/angular-ui-router.js',
-                    'bower_components/datatables.net/js/jquery.dataTables.js']
+                   'bower_components/datatables.net/js/jquery.dataTables.js',
+                   'bower_components/angular-datatables/dist/angular-datatables.js']
 
 def styleFiles = ['bower_components/angular-ui-select/dist/select.css',
                   'bower_components/bootstrap/dist/css/bootstrap.css',
-                  'bower_components/datatables.net-dt/css/jquery.dataTables.css']
+                  'bower_components/datatables.net-dt/css/jquery.dataTables.css',
+                  'bower_components/angular-datatables/dist/css/angular-datatables.min.css']
 
 task copyBootstrapFonts(type: Copy) {
     from 'bower_components/bootstrap/dist/fonts'
@@ -67,7 +69,7 @@ task copyBootstrapFonts(type: Copy) {
 }
 
 
-task copyDatatablesImages(type : Copy) {
+task copyDatatablesImages(type: Copy) {
     from 'bower_components/datatables.net-dt/images'
     into 'src/main/webapp/static/images'
 }
@@ -103,7 +105,7 @@ task installPlugins() {
     dependsOn.add(bowerRefresh)
     dependsOn.add(copyBootstrapFonts)
     dependsOn.add(copyDatatablesImages)
-    //dependsOn.add(minifyJs)
+    dependsOn.add(combineJs)
     dependsOn.add(minifyCss)
 }
 

@@ -26,15 +26,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/admin/**").access("hasAuthority('ADMIN')")
                 .antMatchers("/**").access("permitAll")
                 .and().formLogin().loginPage("/login")
                 .successForwardUrl("/login-success")
                 .usernameParameter("login")
                 .passwordParameter("password")
-                .loginProcessingUrl("/j_spring_security_check")
-                .and().csrf();
+                .loginProcessingUrl("/j_spring_security_check");
 
     }
 }

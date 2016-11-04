@@ -4,10 +4,33 @@ angular.module('ejudgeStandings.services', [])
 
         apiService.teamList = function () {
             return $http({
-                method: 'POST',
-                url: '/teamList'
-            })
+                method: 'GET',
+                url: '/api/teamlist'
+            });
         };
 
+
+        apiService.universityList = function () {
+            return $http({
+                method: 'GET',
+                url: '/api/universitylist'
+            });
+        };
+
+        apiService.removeTeam = function (teamId) {
+            return $http({
+                method: 'GET',
+                url: '/admin/deleteteam/' + teamId
+            });
+
+        };
+
+        apiService.saveTeam = function (team) {
+            return $http({
+                method: 'POST',
+                url: '/admin/saveteam',
+                data: {'data': team}
+            });
+        }
         return apiService;
     });
