@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.ssu.standings.entity.ContestInfo;
 import org.ssu.standings.entity.Team;
 import org.ssu.standings.entity.University;
 import org.ssu.standings.service.ApiService;
@@ -57,10 +58,24 @@ public class SiteController {
                 .writeValueAsString(apiService.universityList()));
     }
 
+    @RequestMapping(value = "/api/contestlist", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity contestList() throws JsonProcessingException {
+        return ResponseEntity.ok(new ObjectMapper()
+                .writeValueAsString(apiService.contestList()));
+    }
+
     @RequestMapping(value = "/admin/deleteteam/{teamId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity removeTeam(@PathVariable Long teamId) {
         apiService.removeTeam(teamId);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/admin/deletecontest/{contestId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity removeContest(@PathVariable Long contestId) {
+        apiService.deleteContest(contestId);
         return ResponseEntity.ok().build();
     }
 
@@ -77,7 +92,7 @@ public class SiteController {
         Team team = null;
         try {
             team = new ObjectMapper().readValue(data.get("data").toString(), Team.class);
-            apiService.saveTeam(team);
+            team = apiService.saveTeam(team);
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -90,13 +105,25 @@ public class SiteController {
         University university = null;
         try {
             university = new ObjectMapper().readValue(data.get("data").toString(), University.class);
-            apiService.saveUniversity(university);
+            university = apiService.saveUniversity(university);
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok(new ObjectMapper().writeValueAsString(university));
     }
 
+    @RequestMapping(value = "/admin/savecontest", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity saveContest(@RequestBody ObjectNode data) throws JsonProcessingException {
+        ContestInfo contestInfo = null;
+        try {
+            contestInfo = new ObjectMapper().readValue(data.get("data").toString(), ContestInfo.class);
+            contestInfo = apiService.saveContest(contestInfo);
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(contestInfo));
+    }
 
     @RequestMapping(value = "/login-success", method = RequestMethod.POST)
     public String loginSuccess() {
@@ -110,7 +137,7 @@ public class SiteController {
         return model;
     }
 
-    @RequestMapping(value = {"/admin/teams", "/admin", "/admin/universities"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/teams", "/admin", "/admin/universities", "/admin/contests"}, method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView adminHomePage(ModelAndView model) {
         model.setViewName("admin");

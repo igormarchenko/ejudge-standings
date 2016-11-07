@@ -86,11 +86,56 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
                 $('#editUniversity').modal('hide');
                 angular.copy(emptyUniversity, $scope.selectedUniversity);
             });
-        }
+        };
 
         $scope.removeUniversity = function (universityId) {
             ejudgeStandingsApiService.removeUniversity(universityId).success(function () {
                 delete $scope.universities[universityId];
+            });
+        };
+
+    })
+    .controller('contestsEditorController', function ($scope, ejudgeStandingsApiService, DTOptionsBuilder, DTColumnDefBuilder) {
+        $scope.contests = contestList();
+        $scope.selectedContest = {'is_final': false, 'external_files': []};
+
+        function contestList() {
+            ejudgeStandingsApiService.contestList().success(function (response) {
+                $scope.contests = {};
+                angular.forEach(response, function (contest) {
+                    $scope.contests[contest.id] = contest;
+                });
+            });
+        }
+
+        $scope.editContest = function (contestId) {
+            angular.copy($scope.contests[contestId], $scope.selectedContest);
+            $('#editContest').modal('show');
+        };
+
+        $scope.removeURL = function (index) {
+            delete $scope.selectedContest.external_files[index];
+        };
+
+        $scope.addUrl = function () {
+            $scope.selectedContest.external_files.push({
+                'is_final': $scope.selectedContest.is_final,
+                'contest_id': $scope.selectedContest.id
+            });
+        };
+
+        $scope.saveSelectedContest = function () {
+            ejudgeStandingsApiService.saveContest($scope.selectedContest).success(function (response) {
+                $scope.contests[response.id] = {};
+                angular.copy(response, $scope.contests[response.id]);
+                $('#editContest').modal('hide');
+                angular.copy({'is_final': false, 'external_files': []}, $scope.selectedContest);
+            });
+        };
+
+        $scope.removeContest = function (contestId) {
+            ejudgeStandingsApiService.removeContest(contestId).success(function () {
+                delete $scope.contests[contestId];
             });
         };
 

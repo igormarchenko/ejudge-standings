@@ -10,6 +10,9 @@ angular.module('ejudgeStandings',
     }).when("/admin/universities", {
         templateUrl: "/views/universities.html",
         controller: "universityController"
+    }).when("/admin/contests", {
+        templateUrl: "/views/contests.html",
+        controller: "contestsEditorController"
     });
     $locationProvider.html5Mode({
         enabled: true,

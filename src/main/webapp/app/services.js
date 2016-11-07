@@ -17,6 +17,13 @@ angular.module('ejudgeStandings.services', [])
             });
         };
 
+        apiService.contestList = function () {
+            return $http({
+                method: 'GET',
+                url: '/api/contestlist'
+            });
+        };
+
         apiService.removeTeam = function (teamId) {
             return $http({
                 method: 'GET',
@@ -40,10 +47,26 @@ angular.module('ejudgeStandings.services', [])
             });
         };
 
+        apiService.saveContest = function (contest) {
+            return $http({
+                method: 'POST',
+                url: '/admin/savecontest',
+                data: {'data': contest}
+            });
+        };
+
         apiService.removeUniversity = function (universityId) {
             return $http({
                 method: 'GET',
                 url: '/admin/deleteuniversity/' + universityId
+            });
+
+        };
+
+        apiService.removeContest = function (contestId) {
+            return $http({
+                method: 'GET',
+                url: '/admin/deletecontest/' + contestId
             });
 
         };

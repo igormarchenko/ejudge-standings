@@ -1,0 +1,79 @@
+<style>
+    .glyph {
+        cursor: pointer;
+        margin-left: 10px;
+        font-size: 13pt;
+    }
+</style>
+<table datatable="ng" dt-options="" dt-column-defs="dtColumnDefs" class="row-border hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>External files</th>
+        <th>Is results final</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="contest in contests track by $index">
+        <td>{{contest.id}}</td>
+        <td>
+            <span ng-repeat="file in contest.external_files track by $index">{{file.link}}<br/></span>
+        </td>
+        <td>{{contest.is_final}}</td>
+        <td>
+            <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editContest(contest.id)"></span>
+            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true"
+                  ng-click="removeContest(contest.id)"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editContest">
+    Add new contest
+</button>
+
+
+<div class="modal fade" id="editContest" tabindex="-1" role="dialog" aria-labelledby="editContestLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editContestLabel">Contest Edit</h4>
+            </div>
+
+            <div class="modal-body">
+                {{selectedContest}}
+                <form class="form-horizontal">
+                    <div class="form-group" ng-repeat="url in selectedContest.external_files track by $index"
+                         ng-if="url">
+                        <label for="universityName + $index" class="col-sm-2 control-label">URL</label>
+                        <div class="col-sm-8">
+                            <!--{{selectedContest.external_files[$index]}}-->
+                            <input type="text" class="form-control" id="universityName + $index"
+                                   ng-model="selectedContest.external_files[$index].link" name="external_file[$index]"
+                                   placeholder="URL">
+                        </div>
+                        <span class="glyphicon glyphicon-remove glyph col-sm-1" style="font-size:20px; padding-top:5px;"
+                              aria-hidden="true" ng-click="removeURL($index)"></span>
+                    </div>
+
+                </form>
+                <div class="row">
+                    <button type="button" class="btn btn-primary btn-xs pull-right" style="margin-bottom: 3px; margin-right: 11px;" ng-click="addUrl()">Add
+                        URL
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="saveSelectedContest()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
