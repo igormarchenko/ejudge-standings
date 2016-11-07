@@ -34,4 +34,11 @@ public class ApiService {
     }
 
 
+    public void removeUniversity(Long universityId) {
+        universityRepository.delete(universityId);
+    }
+
+    public University saveUniversity(University university) {
+        return universityRepository.save(university);
+    }
 }

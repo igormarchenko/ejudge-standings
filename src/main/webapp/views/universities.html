@@ -1,0 +1,93 @@
+<style>
+    .glyph {
+        cursor: pointer;
+        margin-left: 10px;
+        font-size: 13pt;
+    }
+</style>
+<table datatable="ng" dt-options="" dt-column-defs="dtColumnDefs" class="row-border hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>University</th>
+        <th>Region</th>
+        <th>Type</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="university in universities track by $index">
+        <td>{{university.id}}</td>
+        <td>{{university.name}}</td>
+        <td>{{university.region}}</td>
+        <td>{{university.type}}</td>
+        <td>
+            <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editUniversity(university.id)"></span>
+            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true" ng-click="removeUniversity(university.id)"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editUniversity">
+    Add new university
+</button>
+
+
+<div class="modal fade" id="editUniversity" tabindex="-1" role="dialog" aria-labelledby="editUniversityLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editUniversityLabel">University Edit</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="universityName" class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="universityName" ng-model = "selectedUniversity.name" name="universityName" placeholder="University Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="region" class="col-sm-2 control-label">Region</label>
+                        <div class="col-sm-10">
+                            <select id="region" class="form-control" ng-model="selectedUniversity.region">
+                                <option value = "North">North</option>
+                                <option value = "East">East</option>
+                                <option value = "Center">Center</option>
+                                <option value = "South">South</option>
+                                <option value = "West">West</option>
+                                <option value = "South-West">South-West</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type" class="col-sm-2 control-label">Type</label>
+                        <div class="col-sm-10">
+                            <select id="type" class="form-control" ng-model="selectedUniversity.type">
+                                <option value="Agrarian">Agrarian</option>
+                                <option value="Classic">Classic</option>
+                                <option value="Economical">Economical</option>
+                                <option value="Humanitarian">Humanitarian</option>
+                                <option value="Natural">Natural</option>
+                                <option value="Pedagogical">Pedagogical</option>
+                                <option value="School">School</option>
+                                <option value="Technical">Technical</option>
+                                <option value="Technical">Technical</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="saveSelectedUniversity()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

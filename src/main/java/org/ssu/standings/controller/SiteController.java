@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.ssu.standings.entity.Team;
+import org.ssu.standings.entity.University;
 import org.ssu.standings.service.ApiService;
 import org.ssu.standings.service.BaylorExportService;
 import org.ssu.standings.service.PropertiesService;
@@ -63,6 +64,13 @@ public class SiteController {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value = "/admin/deleteuniversity/{universityId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity removeUniversity(@PathVariable Long universityId) {
+        apiService.removeUniversity(universityId);
+        return ResponseEntity.ok().build();
+    }
+
     @RequestMapping(value = "/admin/saveteam", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveTeam(@RequestBody ObjectNode data) throws JsonProcessingException {
@@ -76,6 +84,20 @@ public class SiteController {
         return ResponseEntity.ok(new ObjectMapper().writeValueAsString(team));
     }
 
+    @RequestMapping(value = "/admin/saveuniversity", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity saveUniversity(@RequestBody ObjectNode data) throws JsonProcessingException {
+        University university = null;
+        try {
+            university = new ObjectMapper().readValue(data.get("data").toString(), University.class);
+            apiService.saveUniversity(university);
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(university));
+    }
+
+
     @RequestMapping(value = "/login-success", method = RequestMethod.POST)
     public String loginSuccess() {
         return "redirect:/admin";
@@ -88,7 +110,7 @@ public class SiteController {
         return model;
     }
 
-    @RequestMapping(value = {"/admin/teams", "/admin"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/teams", "/admin", "/admin/universities"}, method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView adminHomePage(ModelAndView model) {
         model.setViewName("admin");

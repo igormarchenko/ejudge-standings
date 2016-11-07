@@ -7,6 +7,9 @@ angular.module('ejudgeStandings',
     $routeProvider.when("/admin/teams", {
         templateUrl: "/views/teams.html",
         controller: "teamsController"
+    }).when("/admin/universities", {
+        templateUrl: "/views/universities.html",
+        controller: "universityController"
     });
     $locationProvider.html5Mode({
         enabled: true,

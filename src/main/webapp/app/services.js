@@ -22,7 +22,6 @@ angular.module('ejudgeStandings.services', [])
                 method: 'GET',
                 url: '/admin/deleteteam/' + teamId
             });
-
         };
 
         apiService.saveTeam = function (team) {
@@ -31,6 +30,23 @@ angular.module('ejudgeStandings.services', [])
                 url: '/admin/saveteam',
                 data: {'data': team}
             });
-        }
+        };
+
+        apiService.saveUniversity = function (university) {
+            return $http({
+                method: 'POST',
+                url: '/admin/saveuniversity',
+                data: {'data': university}
+            });
+        };
+
+        apiService.removeUniversity = function (universityId) {
+            return $http({
+                method: 'GET',
+                url: '/admin/deleteuniversity/' + universityId
+            });
+
+        };
+
         return apiService;
     });
