@@ -1,8 +1,10 @@
 package org.ssu.standings.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ContestInfo {
     @JsonProperty("id")
@@ -34,12 +36,27 @@ public class ContestInfo {
         return externalFileDescriptionList;
     }
 
+    @JsonIgnore
+    public List<String> getUrlsFromDescriptions() {
+        return externalFileDescriptionList
+                .stream()
+                .map(ExternalFileDescription::getLink)
+                .collect(Collectors.toList());
+    }
+
     public static final class Builder {
         private Long contestId;
         private Boolean isFinal;
         private List<ExternalFileDescription> externalFileDescriptionList;
 
         public Builder() {
+        }
+
+        public Builder(List<ExternalFileDescription> externalFileDescriptionList) {
+            ExternalFileDescription firstFile = externalFileDescriptionList.stream().findFirst().orElseThrow(NullPointerException::new);
+            this.contestId = firstFile.getContestId();
+            this.externalFileDescriptionList = externalFileDescriptionList;
+            this.isFinal = firstFile.getIsFinal();
         }
 
         public Builder(Long contestId, Boolean isFinal, List<ExternalFileDescription> externalFileDescriptionList) {

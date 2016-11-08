@@ -20,40 +20,41 @@ public class BaylorExportService {
     private StandingsWatchService standingsWatchService;
 
     public List<BaylorTeam> getResultsForBaylor() throws ParserConfigurationException {
-        Function<String, Optional<Contest>> getContestForTeam = (teamName) -> standingsWatchService.getContestData()
-                .stream()
-                .filter(contest -> contest.getTeamId(teamName).isPresent())
-                .findAny();
-
-        BaylorStandingsParser parser = new BaylorStandingsParser("C:\\baylor.xml");
-        NodeListWrapper teams = new NodeListWrapper(parser.getTeams());
-
-        List<BaylorTeam> baylorTeams = new ArrayList<>();
-        for (Node node : teams) {
-            BaylorTeam baylorTeam = new BaylorTeam().setTeamName(parser.getAttributeValue(node, "TeamName"))
-                    .setTeamId(Long.parseLong(parser.getAttributeValue(node, "TeamID")));
-
-            Optional<Contest> contest = getContestForTeam.apply(baylorTeam.getTeamName());
-
-            if (contest.isPresent()) {
-                List<Submission> submissions = contest.get().getTeamSubmissions(contest.get().getTeamId(baylorTeam.getTeamName()).get());
-                List<Submission> acceptedSubmissions = getAcceptedSubmissions(submissions);
-                Long acceptedTasks = acceptedSubmissions.stream().map(Submission::getProblemId).distinct().count();
-                baylorTeam.setLastProblemTime(calculateLastProblemTime(acceptedSubmissions))
-                        .setProblemsSolved(Math.toIntExact(acceptedTasks))
-                        .setTotalTime(Math.toIntExact(calculatePenalty(submissions)));
-            }
-            baylorTeams.add(baylorTeam);
-        }
-
-        Collections.sort(baylorTeams);
-
-
-        for (int i = 0; i < baylorTeams.size(); i++) {
-            baylorTeams.get(i).setRank(i + 1);
-        }
-
-        return baylorTeams;
+//        Function<String, Optional<Contest>> getContestForTeam = (teamName) -> standingsWatchService.getContestData()
+//                .stream()
+//                .filter(contest -> contest.getTeamId(teamName).isPresent())
+//                .findAny();
+//
+//        BaylorStandingsParser parser = new BaylorStandingsParser("C:\\baylor.xml");
+//        NodeListWrapper teams = new NodeListWrapper(parser.getTeams());
+//
+//        List<BaylorTeam> baylorTeams = new ArrayList<>();
+//        for (Node node : teams) {
+//            BaylorTeam baylorTeam = new BaylorTeam().setTeamName(parser.getAttributeValue(node, "TeamName"))
+//                    .setTeamId(Long.parseLong(parser.getAttributeValue(node, "TeamID")));
+//
+//            Optional<Contest> contest = getContestForTeam.apply(baylorTeam.getTeamName());
+//
+//            if (contest.isPresent()) {
+//                List<Submission> submissions = contest.get().getTeamSubmissions(contest.get().getTeamId(baylorTeam.getTeamName()).get());
+//                List<Submission> acceptedSubmissions = getAcceptedSubmissions(submissions);
+//                Long acceptedTasks = acceptedSubmissions.stream().map(Submission::getProblemId).distinct().count();
+//                baylorTeam.setLastProblemTime(calculateLastProblemTime(acceptedSubmissions))
+//                        .setProblemsSolved(Math.toIntExact(acceptedTasks))
+//                        .setTotalTime(Math.toIntExact(calculatePenalty(submissions)));
+//            }
+//            baylorTeams.add(baylorTeam);
+//        }
+//
+//        Collections.sort(baylorTeams);
+//
+//
+//        for (int i = 0; i < baylorTeams.size(); i++) {
+//            baylorTeams.get(i).setRank(i + 1);
+//        }
+//
+//        return baylorTeams;
+        return null;
     }
 
     private Long calculatePenalty(List<Submission> submissions) {

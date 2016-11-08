@@ -1,5 +1,5 @@
-angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standingsController",
-    ["$scope", '$window', "$http", '$interval', '$cookies', function ($scope, $window, $http, $interval, $cookies) {
+angular.module("standingsPage", ['ui.select']).controller("standingsController",
+    ["$scope", '$window', "$http", '$interval', function ($scope, $window, $http, $interval) {
         var data = {};
         var unfreezed = false;
         var freezedSumbiossions = {};
@@ -372,7 +372,8 @@ angular.module("standingsPage", ['ui.select', 'ngCookies']).controller("standing
         };
 
         $scope.isUserAuthorized = function () {
-            return $cookies.get('authorize') != null;
+            return true;
+            // return $cookies.get('authorize') != null;
         };
 
         $scope.unFreezeNextSubmit = function () {

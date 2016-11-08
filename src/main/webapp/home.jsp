@@ -1,9 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <script src="static/scripts.min.js"></script>
+    <script src="static/script.js"></script>
     <script src="static/StandingsController.js"></script>
-    <link rel="stylesheet" href="static/styles.min.css"/>
+    <link rel="stylesheet" href="static/style.css"/>
     <style>
         body {
             padding: 15px;

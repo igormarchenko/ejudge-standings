@@ -1,5 +1,6 @@
 package org.ssu.standings.parser;
 
+import org.apache.commons.logging.Log;
 import org.ssu.standings.entity.Submission;
 import org.ssu.standings.entity.Task;
 import org.ssu.standings.entity.Team;
@@ -11,9 +12,11 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class SubmissionsParser extends Parser {
+    static Logger log = Logger.getLogger(SubmissionsParser.class.getName());
 
     public static final String TASK_ID_ATTRIBUTE = "id";
     public static final String TASK_LONG_NAME_ATTRIBUTE = "long_name";
@@ -56,13 +59,25 @@ public class SubmissionsParser extends Parser {
     }
 
     public LocalDateTime getFrozenTime() {
-        Long fogSeconds = Long.parseLong(getAttributeFromRunLogTag(FOG_TIME));
-        return getEndTime().minusSeconds(fogSeconds);
+        LocalDateTime result = getEndTime();
+        try {
+            Long fogSeconds = Long.parseLong(getAttributeFromRunLogTag(FOG_TIME));
+            result = getEndTime().minusSeconds(fogSeconds);
+        } catch (NullPointerException ex) {
+            log.warning("Frozen tag is not present!");
+        }
+        return result;
     }
 
     public LocalDateTime getUnFrozenTime() {
-        Long unfogSeconds = Long.parseLong(getAttributeFromRunLogTag(UNFOG_TIME));
-        return getEndTime().plusSeconds(unfogSeconds);
+        LocalDateTime result = getEndTime();
+        try {
+            Long unfogSeconds = Long.parseLong(getAttributeFromRunLogTag(UNFOG_TIME));
+            result = getEndTime().plusSeconds(unfogSeconds);
+        } catch (NullPointerException ex) {
+            log.warning("Unfrozen tag is not present!");
+        }
+        return result;
     }
 
     public List<Task> parseTaskList() {
@@ -108,12 +123,24 @@ public class SubmissionsParser extends Parser {
         try {
             duration = Long.parseLong(getAttributeFromRunLogTag(DURATION));
         } catch (NullPointerException ex) {
+            log.warning("Contest duration tag is not present!");
         }
         return duration;
     }
 
+
+    public LocalDateTime getCurrentTime() {
+        return parseDate("current_time");
+    }
+
     public LocalDateTime getStartTime() {
-        return parseDate(START_TIME_TAG);
+        LocalDateTime startTime = getCurrentTime();
+        try {
+            startTime = parseDate(START_TIME_TAG);
+        } catch (NullPointerException ex) {
+            log.warning("Start time tag is not present! Contest is not started!");
+        }
+        return startTime;
     }
 
     public LocalDateTime getEndTime() {

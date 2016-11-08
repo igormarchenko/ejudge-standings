@@ -1,6 +1,5 @@
 package org.ssu.standings.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.ssu.standings.entity.Contest;
@@ -9,33 +8,30 @@ import org.ssu.standings.file.FileHandler;
 import org.ssu.standings.file.HTTPFileHandler;
 import org.ssu.standings.file.LocalFileHandler;
 import org.ssu.standings.parser.SubmissionsParser;
-import org.ssu.standings.repository.TeamRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 @Scope("prototype")
 public class FileWatcher {
-    @Autowired
-    private TeamRepository teamsRepository;
-
-    private Long lastModified = 0L;
-    private FileHandler standingsFile;
+    private List<FileHandler> standingsFiles;
+    private Boolean isFinal;
     private Contest contest = new Contest();
 
-    public FileWatcher(String path) {
-        if (path.startsWith("http://")) {
+    public FileWatcher(List<String> links) {
+        Function<String, FileHandler> getFileHandler = path -> {
             try {
-                standingsFile = new HTTPFileHandler(path);
+                return path.startsWith("http://") ? new HTTPFileHandler(path) : new LocalFileHandler(path);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-            standingsFile = new LocalFileHandler(path);
-        }
+            return null;
+        };
+        standingsFiles = links.stream().map(getFileHandler).collect(Collectors.toList());
         updateChanges();
     }
 
@@ -50,21 +46,42 @@ public class FileWatcher {
             return new ArrayList<>();
     }
 
-    public Boolean isChanged() {
-        Long actualLastModified = standingsFile.lastModified();
-        Boolean modified = lastModified != actualLastModified;
-        if (modified) {
-            updateChanges();
-            frozeSubmissions();
-        }
+//    public Boolean isChanged() {
+//        Predicate<FileHandler> isFileChanged = FileHandler::hasActualChanges;
+//
+//        Long actualLastModified = standingsFile.lastModified();
+//        Boolean modified = lastModified != actualLastModified;
+//        if (modified) {
+//            updateChanges();
+//            frozeSubmissions();
+//        }
+//
+//        lastModified = actualLastModified;
+//        return modified;
+//    }
 
-        lastModified = actualLastModified;
-        return modified;
+    public void updateChanges() {
+        List<Contest> contests = standingsFiles.stream()
+                .filter(FileHandler::hasActualChanges)
+                .map(this::updateFileHandlerData)
+                .collect(Collectors.toList());
+        contest = ContestsMerger.merge(contests);
+//        SubmissionsParser xmlParser = new SubmissionsParser(standingsFile.getUri());
+//        contest.setContestId(xmlParser.getContestId())
+//                .setName(xmlParser.getContestName())
+//                .setTeams(xmlParser.parseTeamList())
+//                .setSubmissions(xmlParser.parseSubmissionList())
+//                .setTasks(xmlParser.parseTaskList())
+//                .setCurrentTime(xmlParser.getCurrentTime())
+//                .setBeginTime(xmlParser.getStartTime())
+//                .setEndTime(xmlParser.getEndTime())
+//                .setFrozenTime(xmlParser.getFrozenTime())
+//                .setUnfrozenTime();
     }
 
-    private void updateChanges() {
-        SubmissionsParser xmlParser = new SubmissionsParser(standingsFile.getUri());
-        contest.setContestId(xmlParser.getContestId())
+    private Contest updateFileHandlerData(FileHandler fileHandler) {
+        SubmissionsParser xmlParser = new SubmissionsParser(fileHandler.getUri());
+        return new Contest().setContestId(xmlParser.getContestId())
                 .setName(xmlParser.getContestName())
                 .setTeams(xmlParser.parseTeamList())
                 .setSubmissions(xmlParser.parseSubmissionList())
@@ -73,7 +90,8 @@ public class FileWatcher {
                 .setBeginTime(xmlParser.getStartTime())
                 .setEndTime(xmlParser.getEndTime())
                 .setFrozenTime(xmlParser.getFrozenTime())
-                .setUnfrozenTime();
+                .setUnfrozenTime(xmlParser.getUnFrozenTime())
+                .setIsFinalResults(isFinal);
     }
 
     private void frozeSubmissions() {
@@ -103,7 +121,7 @@ public class FileWatcher {
     }
 
     public FileWatcher setIsFinalResults(Boolean isFinalResults) {
-        contest.setIsFinalResults(isFinalResults);
+        this.isFinal = isFinalResults;
         return this;
     }
 }

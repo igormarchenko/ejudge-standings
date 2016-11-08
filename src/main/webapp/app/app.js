@@ -11,7 +11,7 @@ angular.module('ejudgeStandings',
         templateUrl: "/views/universities.html",
         controller: "universityController"
     }).when("/admin/contests", {
-        templateUrl: "/views/contests.html",
+        templateUrl: "/views/contest-editor.html",
         controller: "contestsEditorController"
     });
     $locationProvider.html5Mode({

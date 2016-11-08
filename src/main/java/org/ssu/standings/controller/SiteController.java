@@ -144,6 +144,15 @@ public class SiteController {
         return model;
     }
 
+
+    @RequestMapping(value = "/contest/{contestId}")
+    @ResponseBody
+    public ModelAndView contestHomePage(@PathVariable Long contestId) {
+        System.out.println(contestId);
+        ModelAndView model = new ModelAndView();
+        model.setViewName("contest");
+        return model;
+    }
     private String authorizeCookie(String login, String password) {
         MessageDigest messageDigest = null;
         try {
@@ -194,12 +203,12 @@ public class SiteController {
     }
 
 
-    @RequestMapping(value = "/api/init-results", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/init-results/{contestId}", method = RequestMethod.GET)
     @ResponseBody
-    public String getResults() {
+    public String getResults(@PathVariable Long contestId) {
         try {
             return new ObjectMapper()
-                    .writeValueAsString(standingsWatchService.getContestData());
+                    .writeValueAsString(standingsWatchService.getContestData(contestId));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

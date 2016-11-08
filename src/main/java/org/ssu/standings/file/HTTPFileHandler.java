@@ -6,16 +6,18 @@ import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class HTTPFileHandler implements FileHandler {
     private URL url;
+    private Long lastChanges = 0L;
 
     public HTTPFileHandler(String path) throws IOException {
         url = new URL(path);
     }
 
     @Override
-    public long lastModified() {
+    public Long lastModified() {
         HttpURLConnection connection = null;
 
         try {
@@ -25,6 +27,17 @@ public class HTTPFileHandler implements FileHandler {
             e.printStackTrace();
         }
         return connection != null ? connection.getLastModified() : 0;
+    }
+
+    @Override
+    public Long lastChanges() {
+        return lastChanges;
+    }
+
+    @Override
+    public Long updateLastChanges(Long timestamp) {
+        lastChanges = timestamp;
+        return lastChanges;
     }
 
     @Override

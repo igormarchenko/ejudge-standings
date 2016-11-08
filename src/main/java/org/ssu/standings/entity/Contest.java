@@ -13,11 +13,11 @@ public class Contest {
     private Long contestId;
 
     private String name;
-    private String region;
     private LocalDateTime beginTime;
     private LocalDateTime endTime;
     private LocalDateTime frozenTime;
     private LocalDateTime unfrozenTime;
+    private LocalDateTime currentTime;
     private Boolean isFinalResults;
 
     private transient List<Submission> frozenSubmits;
@@ -41,6 +41,15 @@ public class Contest {
 
     public List<Submission> getSubmissions() {
         return submissions.stream().filter(item -> !"CE".equals(item.getStatus())).collect(Collectors.toList());
+    }
+
+    public LocalDateTime getCurrentTime() {
+        return currentTime;
+    }
+
+    public Contest setCurrentTime(LocalDateTime currentTime) {
+        this.currentTime = currentTime;
+        return this;
     }
 
     public Contest setSubmissions(List<Submission> submissions) {
@@ -111,7 +120,7 @@ public class Contest {
     }
 
     public Boolean isFrozen() {
-        return inFrozenTime(LocalDateTime.now());
+        return inFrozenTime(currentTime);
     }
 
     public List<Task> getTasks() {
@@ -132,15 +141,6 @@ public class Contest {
         return this;
     }
 
-    public String getRegion() {
-        return region;
-    }
-
-    public Contest setRegion(String region) {
-        this.region = region;
-        return this;
-    }
-
     public Boolean getIsFinalResults() {
         return isFinalResults;
     }
@@ -151,11 +151,11 @@ public class Contest {
     }
 
     public Optional<Team> getTeamId(String teamName) {
-        return teams.stream().filter(team -> team.getName().equals(teamName)).findAny();
+        return teams.stream().filter(team -> team.getName().trim().equals(teamName)).findAny();
     }
 
     public List<Submission> getTeamSubmissions(Team team) {
-        return submissions.stream().filter(submission -> submission.getUserId().equals(team.getId())).collect(Collectors.toList());
+        return submissions.stream().filter(submission -> submission.getUserId().equals(team.getTeamIdInContest())).collect(Collectors.toList());
     }
 
     public List<Submission> getFrozenSubmits() {
