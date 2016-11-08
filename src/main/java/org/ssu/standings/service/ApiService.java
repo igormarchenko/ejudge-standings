@@ -71,21 +71,21 @@ public class ApiService {
 
     @Transactional
     public ContestInfo saveContest(ContestInfo contestInfo) {
-        deleteContest(contestInfo.getContestId());
-        if (contestInfo.getContestId() == null) {
-            Long contestId = lastContestId() + 1;
-            Boolean isFinal = contestInfo.getIsFinal();
+        Long contestId = Optional.ofNullable(contestInfo.getContestId()).orElse(lastContestId() + 1);
+        Boolean isFinal = Optional.ofNullable(contestInfo.getIsFinal()).orElse(false);
 
-            contestInfo = new ContestInfo.Builder()
-                    .withContestId(lastContestId() + 1)
-                    .withExternalFileDesriptions(contestInfo.getExternalFileDescriptionList().stream()
-                            .map(item -> new ExternalFileDescription.Builder(item)
-                                    .withContestId(contestId)
-                                    .withIsFinal(isFinal)
-                                    .build())
-                            .collect(Collectors.toList()))
-                    .withIsFinal(contestInfo.getIsFinal()).build();
-        }
+        deleteContest(contestInfo.getContestId());
+
+        contestInfo = new ContestInfo.Builder()
+                .withContestId(contestId)
+                .withExternalFileDesriptions(contestInfo.getExternalFileDescriptionList().stream()
+                        .filter(Objects::nonNull)
+                        .map(item -> new ExternalFileDescription.Builder(item)
+                                .withContestId(contestId)
+                                .withIsFinal(isFinal)
+                                .build())
+                        .collect(Collectors.toList()))
+                .withIsFinal(contestInfo.getIsFinal()).build();
 
         return new ContestInfo.Builder(contestInfo.getContestId(),
                 contestInfo.getIsFinal(),

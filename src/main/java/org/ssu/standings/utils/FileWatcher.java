@@ -69,10 +69,11 @@ public class FileWatcher {
                 .setTeams(xmlParser.parseTeamList())
                 .setSubmissions(xmlParser.parseSubmissionList())
                 .setTasks(xmlParser.parseTaskList())
+                .setCurrentTime(xmlParser.getCurrentTime())
                 .setBeginTime(xmlParser.getStartTime())
                 .setEndTime(xmlParser.getEndTime())
                 .setFrozenTime(xmlParser.getFrozenTime())
-                .setUnfrozenTime(xmlParser.getUnFrozenTime());
+                .setUnfrozenTime();
     }
 
     private void frozeSubmissions() {
