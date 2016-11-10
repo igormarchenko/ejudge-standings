@@ -46,6 +46,7 @@ bower {
     'datatables.net'('1.10.12')
     'datatables.net-dt'('1.10.12')
     'angular-datatables'('0.5.5')
+    'sprintf.js'("https://github.com/alexei/sprintf.js.git")
 }
 
 def scriptFiles = ['bower_components/jquery/dist/jquery.js',
@@ -55,6 +56,8 @@ def scriptFiles = ['bower_components/jquery/dist/jquery.js',
                    'bower_components/angular-route/angular-route.js',
                    'bower_components/angular-ui-select/dist/select.js',
                    'bower_components/ui-router/release/angular-ui-router.js',
+                   'bower_components/sprintf.js/dist/sprintf.min.js',
+                   'bower_components/sprintf.js/dist/angular-sprintf.min.js',
                    'bower_components/datatables.net/js/jquery.dataTables.js',
                    'bower_components/angular-datatables/dist/angular-datatables.js']
 

@@ -23,8 +23,8 @@ public class Team {
 //    @JsonManagedReference("team-university")
     private University universityEntity;
 
-//    @JsonProperty("team-id")
-    @JsonIgnore
+    @JsonProperty("contest_team_id")
+//    @JsonIgnore
     private transient Long teamIdInContest;
 
     public Long getTeamIdInContest() {

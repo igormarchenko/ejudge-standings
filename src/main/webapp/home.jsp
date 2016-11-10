@@ -2,7 +2,7 @@
 <html>
 <head>
     <script src="static/script.js"></script>
-    <script src="static/StandingsController.js"></script>
+    <script src="static/StandingsControllerDeprecated.js"></script>
     <link rel="stylesheet" href="static/style.css"/>
     <style>
         body {
