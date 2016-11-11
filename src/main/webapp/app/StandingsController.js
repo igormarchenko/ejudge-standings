@@ -1,4 +1,4 @@
-angular.module("standingsPage", ['ui.select', 'ngSanitize']).controller("standingsController",
+angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).controller("standingsController",
     ["$scope", '$window', "$http", '$interval', '$location', function ($scope, $window, $http, $interval, $location) {
         $scope.results = [];
 
@@ -108,19 +108,29 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize']).controller("standin
             return result;
         };
 
+        var canTeamMoveUp = function (teamPosition) {
+            return teamPosition - 1 >= 0 && compareTeams($scope.results[teamPosition], $scope.results[teamPosition - 1]) < 0;
+        };
+
         var updateTeamPosition = function (teamPosition) {
 
-            while (true) {
-                if (teamPosition - 1 < 0) break;
-                if (compareTeams($scope.results[teamPosition], $scope.results[teamPosition - 1]) > 0) break;
+            var slideInterval = setInterval(function () {
+                if (!canTeamMoveUp(teamPosition)) {
+                    clearInterval(slideInterval);
+                } else {
+                    var tempTeam = {};
 
-                var tempTeam = {};
-                angular.copy($scope.results[teamPosition], tempTeam);
-                angular.copy($scope.results[teamPosition - 1], $scope.results[teamPosition]);
-                angular.copy(tempTeam, $scope.results[teamPosition - 1]);
+                    angular.copy($scope.results[teamPosition - 1], tempTeam);
+                    angular.copy($scope.results[teamPosition], $scope.results[teamPosition - 1]);
+                    angular.copy(tempTeam, $scope.results[teamPosition]);
 
-                teamPosition--;
-            }
+                    // $('#team' + $scope.results[teamPosition - 1].contest_team_id).fadeOut(600, function () {
+                    //     $('#team' + $scope.results[teamPosition - 1].contest_team_id).fadeIn(600);
+                    // });
+                    teamPosition--;
+                    $scope.$apply();
+                }
+            }, 900);
         };
 
         var updateResults = function () {
@@ -128,12 +138,15 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize']).controller("standin
                 method: 'GET',
                 url: '/api/results/' + contestId + '/' + lastSubmitTime
             }).success(function (response) {
-                console.log(response);
-                angular.forEach(response, function (submit) {
-                    var team = findTeamPosition(submit.userId);
-                    pushSubmitOnline(team, submit);
-                    updateTeamPosition(team);
-                });
+                if (response.length > 0) {
+                    // console.log(response);
+                    angular.forEach(response, function (submit) {
+                        var team = findTeamPosition(submit.userId);
+                        pushSubmitOnline(team, submit);
+                        updateTeamPosition(team);
+
+                    });
+                }
             })
         };
 

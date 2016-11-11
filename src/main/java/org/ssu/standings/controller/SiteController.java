@@ -68,7 +68,7 @@ public class SiteController {
     @RequestMapping(value = "/contest/{contestId}")
     @ResponseBody
     public ModelAndView contestHomePage(@PathVariable Long contestId) {
-        System.out.println(contestId);
+//        System.out.println(contestId);
         ModelAndView model = new ModelAndView();
         model.setViewName("contest");
         return model;
