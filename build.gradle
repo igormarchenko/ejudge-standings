@@ -48,6 +48,7 @@ bower {
     'angular-datatables'('0.5.5')
     'sprintf.js'("https://github.com/alexei/sprintf.js.git")
     'angular-animate'('https://github.com/angular/bower-angular-animate.git')
+    'floatThead'('1.2.13')
 }
 
 def scriptFiles = ['bower_components/jquery/dist/jquery.js',
@@ -61,6 +62,7 @@ def scriptFiles = ['bower_components/jquery/dist/jquery.js',
                    'bower_components/sprintf.js/dist/sprintf.min.js',
                    'bower_components/sprintf.js/dist/angular-sprintf.min.js',
                    'bower_components/datatables.net/js/jquery.dataTables.js',
+                   'bower_components/floatThead/dist/jquery.floatThead.min.js',
                    'bower_components/angular-datatables/dist/angular-datatables.js']
 
 def styleFiles = ['bower_components/angular-ui-select/dist/select.css',

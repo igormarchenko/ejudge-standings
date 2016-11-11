@@ -1,6 +1,8 @@
 angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).controller("standingsController",
-    ["$scope", '$window', "$http", '$interval', '$location', function ($scope, $window, $http, $interval, $location) {
+    ["$scope", '$window', "$http", '$interval', '$location', '$timeout', function ($scope, $window, $http, $interval, $location, $timeout) {
         $scope.results = [];
+        $scope.contest = {};
+        $scope.tasks = [];
 
         var results = {};
         var contestId;
@@ -33,6 +35,11 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                 method: 'GET',
                 url: '/api/init-results/' + contestId
             }).success(function (response) {
+                $scope.contest.name = response.name;
+                $scope.contest.last_success = {};
+                $scope.contest.last_submit = {};
+                // console.log(response);
+                angular.copy(response.tasks, $scope.tasks);
                 var tasks = {};
                 angular.forEach(response.tasks, function (task) {
                     tasks[task.id] = {
@@ -61,7 +68,9 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
 
                 $scope.results.sort(compareTeams);
 
-                console.log($scope.results);
+                $timeout(function () {
+                    $("#resultsTable").floatThead({});
+                }, 0);
             });
         };
 
@@ -86,8 +95,20 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                 if (submission.status == "OK") {
                     team.solved++;
                     team.penalty += currentTask.penalty;
+                    $scope.contest.last_success = {
+                        'time': sprintf("%02d:%02d:%02d", submission.time / 3600, submission.time % 3600 / 60, submission.time % 60),
+                        'team': team,
+                        'task': String.fromCharCode(97 + submission.problemId).toUpperCase()
+                    };
                 }
             }
+
+            $scope.contest.last_submit = {
+                'time': sprintf("%02d:%02d:%02d", submission.time / 3600, submission.time % 3600 / 60, submission.time % 60),
+                'team': team,
+                'task': String.fromCharCode(97 + submission.problemId).toUpperCase()
+            };
+
             return team;
         };
 
@@ -124,7 +145,9 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                     angular.copy($scope.results[teamPosition], $scope.results[teamPosition - 1]);
                     angular.copy(tempTeam, $scope.results[teamPosition]);
 
+                    // console.log($scope.results[teamPosition - 1].contest_team_id);
                     // $('#team' + $scope.results[teamPosition - 1].contest_team_id).fadeOut(600, function () {
+                    //     console.log($scope.results[teamPosition - 1].contest_team_id);
                     //     $('#team' + $scope.results[teamPosition - 1].contest_team_id).fadeIn(600);
                     // });
                     teamPosition--;
@@ -139,7 +162,6 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                 url: '/api/results/' + contestId + '/' + lastSubmitTime
             }).success(function (response) {
                 if (response.length > 0) {
-                    // console.log(response);
                     angular.forEach(response, function (submit) {
                         var team = findTeamPosition(submit.userId);
                         pushSubmitOnline(team, submit);

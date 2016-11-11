@@ -22,73 +22,41 @@
             background-color: #8c8c8c;
         }
 
-        /*.animation .ng-enter {*/
-            /*-webkit-transition: 1s;*/
-            /*transition: 1s;*/
-
-            /*margin-left: 100%;*/
-        /*}*/
-
-        /*.animation .ng-enter-active {*/
-            /*margin-left: 0;*/
-        /*}*/
-
-        /*.animation .ng-leave {*/
-            /*-webkit-transition: 1s;*/
-            /*transition: 1s;*/
-
-            /*margin-left: 0;*/
-        /*}*/
-
-        /*.animation .ng-leave-active {*/
-            /*margin-left: 100%;*/
-        /*}*/
-
-        /*.animation .ng-move {*/
-            /*-webkit-transition: 1s;*/
-            /*transition: 1s;*/
-
-            /*background: gold;*/
-        /*}*/
-
-        /*.animation .ng-move-active {*/
-            /*background: #fff;*/
-        /*}*/
+        table.floatThead-table {
+            border-top: none;
+            border-bottom: none;
+            background-color: #FFF;
+        }
     </style>
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
 </head>
 <body ng-app="standingsPage"
       ng-controller="standingsController"
       ng-init="init()">
-
-<%--<ul class="list-group">--%>
-    <%--<li ng-repeat="team in results track by $index" id="team{{team.contest_team_id}}" class="animation list-group-item" >--%>
-        <%--<table class="table table-bordered" style="border:#929292 !important;">--%>
-            <%--<tr>--%>
-                <%--<td width="40px">--%>
-                    <%--<h4>{{$index + 1}}</h4>--%>
-                <%--</td>--%>
-                <%--<td width="450px">--%>
-                    <%--<b>{{team.name}}</b> <br/><i ng-if="team.university.name != '-'">{{team.university.name}}--%>
-                    <%--[{{team.university.region}}]</i>--%>
-                <%--</td>--%>
-                <%--<td ng-repeat="task in team.tasks track by $index"--%>
-                    <%--width="50px"--%>
-                    <%--valign="middle"--%>
-                    <%--ng-class="cellStyle(task.status)"--%>
-                    <%--ng-bind-html="taskResult(task)"--%>
-                    <%--class="text-center">--%>
-
-                <%--</td>--%>
-                <%--<td width="50px">--%>
-                    <%--<b>{{team.solved}}</b>--%>
-                    <%--<br/>--%>
-                    <%--<i>{{team.penalty}}</i>--%>
-                <%--</td>--%>
-            <%--</tr>--%>
-        <%--</table>--%>
-    <%--</li>--%>
-<%--</ul>--%>
-<table class="table table-bordered" style="border:#929292 !important;">
+<h2>{{contest.name}} <br/>
+    <small style="line-height: 32px;">Last success: {{contest.last_success.team.name}} at {{contest.last_success.time}}
+        on problem
+        {{contest.last_success.task}}
+    </small>
+    <br/>
+    <small style="line-height: 32px;">Last submit: {{contest.last_submit.team.name}} at {{contest.last_submit.time}} on
+        problem
+        {{contest.last_submit.task}}
+    </small>
+</h2>
+<table class="table table-bordered" id="resultsTable">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Team</th>
+        <th ng-repeat="task in tasks track by $index" style="text-align: center"> {{task.shortName}}</th>
+        <th>Solved</th>
+    </tr>
+    </thead>
     <tr ng-repeat="team in results track by $index" id="team{{team.contest_team_id}}">
         <td width="40px">
             <h4>{{$index + 1}}</h4>
