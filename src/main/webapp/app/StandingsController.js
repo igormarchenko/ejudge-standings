@@ -70,6 +70,9 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
 
                 $timeout(function () {
                     $("#resultsTable").floatThead({});
+                    $('html, body').animate({
+                        scrollTop: $("#resultsTable").offset().top
+                    }, 1000);
                 }, 0);
             });
         };
@@ -145,11 +148,10 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                     angular.copy($scope.results[teamPosition], $scope.results[teamPosition - 1]);
                     angular.copy(tempTeam, $scope.results[teamPosition]);
 
-                    // console.log($scope.results[teamPosition - 1].contest_team_id);
-                    // $('#team' + $scope.results[teamPosition - 1].contest_team_id).fadeOut(600, function () {
-                    //     console.log($scope.results[teamPosition - 1].contest_team_id);
-                    //     $('#team' + $scope.results[teamPosition - 1].contest_team_id).fadeIn(600);
-                    // });
+                    var obj = $('#team' + $scope.results[teamPosition - 1].contest_team_id);
+                    obj.fadeOut(600, function () {
+                        obj.fadeIn(600);
+                    });
                     teamPosition--;
                     $scope.$apply();
                 }
