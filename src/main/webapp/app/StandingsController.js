@@ -3,10 +3,17 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
         $scope.results = [];
         $scope.contest = {};
         $scope.tasks = [];
+        $scope.universityTypes = [];
+        $scope.regionList = [];
+        $scope.selectors = {
+            regions: [],
+            universityTypes: []
+        };
 
         var results = {};
         var contestId;
         var lastSubmitTime = -1;
+
         $scope.init = function () {
             contestId = window.location.pathname.split('/').pop();
             initResults(contestId);
@@ -38,7 +45,6 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                 $scope.contest.name = response.name;
                 $scope.contest.last_success = {};
                 $scope.contest.last_submit = {};
-                // console.log(response);
                 angular.copy(response.tasks, $scope.tasks);
                 var tasks = {};
                 angular.forEach(response.tasks, function (task) {
@@ -55,8 +61,19 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                     results[team.contest_team_id].solved = 0;
                     results[team.contest_team_id].penalty = 0;
                     results[team.contest_team_id].tasks = {};
+                    results[team.contest_team_id].isDisplayed = true;
+
                     angular.copy(tasks, results[team.contest_team_id].tasks);
+                    $scope.universityTypes.push(team.university.type);
+                    $scope.regionList.push(team.university.region);
                 });
+
+                $scope.universityTypes = $.unique($scope.universityTypes).sort();
+                $scope.regionList = $.unique($scope.regionList).sort();
+
+                angular.copy($scope.universityTypes, $scope.selectors.universityTypes);
+                angular.copy($scope.regionList, $scope.selectors.regions);
+
 
                 angular.forEach(response.submissions, function (submission) {
                     pushSubmission(submission);
@@ -77,6 +94,12 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
             });
         };
 
+        $scope.filter = function () {
+            angular.forEach(results, function (team) {
+                team.isDisplayed = $scope.selectors.universityTypes.indexOf(team.university.type) >= 0 &&
+                    $scope.selectors.regions.indexOf(team.university.region) >= 0;
+            });
+        };
         var pushSubmission = function (submission) {
             results[submission.userId] = addSubmitToTeam(results[submission.userId], submission);
             lastSubmitTime = Math.max(lastSubmitTime, submission.time);

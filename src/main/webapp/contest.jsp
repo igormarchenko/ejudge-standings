@@ -56,7 +56,9 @@
     </div>
     <div class="col-md-1">
         <sec:authorize access="hasAuthority('ADMIN')">
-        <button type="button" class="btn btn-info" style="margin-top:30px;">Settings</button>
+            <button type="button" class="btn btn-info" style="margin-top:30px;" data-toggle="modal"
+                    data-target="#settings-modal">Settings
+            </button>
         </sec:authorize>
     </div>
 </div>
@@ -70,7 +72,7 @@
         <th>Solved</th>
     </tr>
     </thead>
-    <tr ng-repeat="team in results track by $index" id="team{{team.contest_team_id}}">
+    <tr ng-repeat="team in results | filter: {isDisplayed: true} track by $index" id="team{{team.contest_team_id}}">
         <td width="40px">
             <h4>{{$index + 1}}</h4>
         </td>
@@ -93,5 +95,72 @@
         </td>
     </tr>
 </table>
+
+
+<div class="modal fade" id="settings-modal" tabindex="-1" role="dialog" aria-labelledby="settings-modal"
+     style="z-index: 2010 !important;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Settings</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="regionSelector" class="col-sm-2 control-label">Region</label>
+                        <div class="col-sm-10">
+                            <ui-select multiple
+                                       id="regionSelector"
+                                       ng-model="selectors.regions"
+                                       theme="bootstrap">
+                                <ui-select-match allow-clear="true" placeholder="">
+                                    {{$item}}
+                                </ui-select-match>
+                                <ui-select-choices
+                                        repeat="region in regionList | filter: $select.search">
+                                    {{region}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="universityTypeSelector" class="col-sm-2 control-label">University Type</label>
+                        <div class="col-sm-10">
+                            <ui-select multiple
+                                       id="universityTypeSelector"
+                                       ng-model="selectors.universityTypes"
+                                       theme="bootstrap">
+                                <ui-select-match allow-clear="true" placeholder="">
+                                    {{$item}}
+                                </ui-select-match>
+                                <ui-select-choices
+                                        repeat="university in universityTypes | filter: $select.search">
+                                    {{university}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="filter()"
+                        onclick="$('#settings-modal').modal('hide')">Filter
+                </button>
+                <button type="button"
+                        class="btn btn-warning"
+                        ng-click="unFreezeResults()"
+                        onclick="$('#settings-modal').modal('hide')">Unfreeze
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
