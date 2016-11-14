@@ -46,37 +46,12 @@ public class FileWatcher {
             return new ArrayList<>();
     }
 
-//    public Boolean isChanged() {
-//        Predicate<FileHandler> isFileChanged = FileHandler::hasActualChanges;
-//
-//        Long actualLastModified = standingsFile.lastModified();
-//        Boolean modified = lastModified != actualLastModified;
-//        if (modified) {
-//            updateChanges();
-//            frozeSubmissions();
-//        }
-//
-//        lastModified = actualLastModified;
-//        return modified;
-//    }
-
     public void updateChanges() {
         List<Contest> contests = standingsFiles.stream()
                 .filter(FileHandler::hasActualChanges)
                 .map(this::updateFileHandlerData)
                 .collect(Collectors.toList());
         contest = ContestsMerger.merge(contests);
-//        SubmissionsParser xmlParser = new SubmissionsParser(standingsFile.getUri());
-//        contest.setContestId(xmlParser.getContestId())
-//                .setName(xmlParser.getContestName())
-//                .setTeams(xmlParser.parseTeamList())
-//                .setSubmissions(xmlParser.parseSubmissionList())
-//                .setTasks(xmlParser.parseTaskList())
-//                .setCurrentTime(xmlParser.getCurrentTime())
-//                .setBeginTime(xmlParser.getStartTime())
-//                .setEndTime(xmlParser.getEndTime())
-//                .setFrozenTime(xmlParser.getFrozenTime())
-//                .setUnfrozenTime();
     }
 
     private Contest updateFileHandlerData(FileHandler fileHandler) {

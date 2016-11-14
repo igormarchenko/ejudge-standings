@@ -33,17 +33,6 @@ public class StandingsWatchService {
     @PostConstruct
     public void init() throws ParserConfigurationException, IOException, SAXException {
        updateWatchers();
-
-//       watchers = externalFilesRepository.findAll()
-//                .stream()
-//                .map(item ->
-//                        item.
-//
-//                        new FileWatcher(item.getLink())
-//                        .setContestId(item.getContestId())
-//                        .setIsFinalResults(item.getFinal()))
-//                .collect(Collectors.toMap(FileWatcher::getContestId, item -> item));
-                ;
     }
 
     public void updateWatchers() {
@@ -63,20 +52,11 @@ public class StandingsWatchService {
                         .setIsFinalResults(item.getValue().getIsFinal())
                 ));
     }
-//    @Scheduled(fixedDelay = 1000)
-//    public void checkChanges() {
-//        watchers.values().forEach(FileWatcher::isChanged);
-//    }
 
     @Scheduled(fixedDelay = 1000)
     public void updateChanges() {
         watchers.values().forEach(FileWatcher::updateChanges);
     }
-
-//    public Map<Long, List<Submission>> getLastSubmissions(Map<Long, Long> lastSubmits) {
-//        return lastSubmits.entrySet().stream()
-//                .collect(Collectors.toMap(Map.Entry::getKey, item -> watchers.get(item.getKey()).getLastChanged(item.getValue())));
-//    }
 
     public List<Submission> getLastSubmissions(Long contestId, Long time) {
         return watchers.get(contestId).getContest().getSubmissions()
@@ -84,9 +64,6 @@ public class StandingsWatchService {
                 .filter(item -> item.getTime() > time)
                 .collect(Collectors.toList());
     }
-//    public Boolean isContestChanged(Map<Long, Long> lastSubmit) {
-//        return !getLastSubmissions(lastSubmit).isEmpty();
-//    }
 
     public Contest getContestData(Long contestId) {
         return watchers.get(contestId).getContest();

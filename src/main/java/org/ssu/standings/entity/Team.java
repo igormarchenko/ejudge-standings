@@ -20,11 +20,9 @@ public class Team {
     @ManyToOne
     @JoinColumn(name = "university_id", nullable = false)
     @JsonProperty("university")
-//    @JsonManagedReference("team-university")
     private University universityEntity;
 
     @JsonProperty("contest_team_id")
-//    @JsonIgnore
     private transient Long teamIdInContest;
 
     public Long getTeamIdInContest() {

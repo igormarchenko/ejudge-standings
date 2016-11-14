@@ -27,8 +27,6 @@ public class SiteController {
     private StandingsWatchService standingsWatchService;
     @Resource
     private BaylorExportService baylorExportService;
-    //    @Resource
-//    private PropertiesService propertiesService;
     @Resource
     private ApiService apiService;
 
@@ -68,60 +66,16 @@ public class SiteController {
     @RequestMapping(value = "/contest/{contestId}")
     @ResponseBody
     public ModelAndView contestHomePage(@PathVariable Long contestId) {
-//        System.out.println(contestId);
         ModelAndView model = new ModelAndView();
         model.setViewName("contest");
         return model;
     }
-//    private String authorizeCookie(String login, String password) {
-//        MessageDigest messageDigest = null;
-//        try {
-//            messageDigest = MessageDigest.getInstance("SHA-256");
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
-//        if (messageDigest != null) {
-//            messageDigest.update((login + password + login).getBytes());
-//            BigInteger bigInt = new BigInteger(1, messageDigest.digest());
-//            String md5Hex = bigInt.toString(16);
-//
-//            while (md5Hex.length() < 32) {
-//                md5Hex = "0" + md5Hex;
-//            }
-//
-//            return md5Hex;
-//        }
-//        return (login + password + login);
-//    }
 
     @RequestMapping("/")
     public ModelAndView homePage(ModelAndView model) {
         model.setViewName("/home");
         return model;
     }
-
-//    @RequestMapping(value = "/api/results", method = RequestMethod.GET)
-//    @ResponseBody
-//    public String getResults(@RequestParam(value = "last_submit") String lastSubmit) {
-//        Map<Long, Long> map = new HashMap<>();
-//
-//        try {
-//            map = new ObjectMapper().readValue(lastSubmit, new TypeReference<Map<Long, Long>>() {
-//            });
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if (standingsWatchService.isContestChanged(map)) {
-//            try {
-//                return new ObjectMapper()
-//                        .writeValueAsString(standingsWatchService.getLastSubmissions(map));
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return "{}";
-//    }
-
 
     @RequestMapping(value = "/api/init-results/{contestId}", method = RequestMethod.GET)
     @ResponseBody
@@ -146,35 +100,6 @@ public class SiteController {
         }
         return "{}";
     }
-
-
-//    @RequestMapping(value = "/api/frozen-results", method = RequestMethod.GET)
-//    @ResponseBody
-//    public String getFrozenResults(@CookieValue("authorize") String authorizeCookie) {
-//        if (authorizeCookie(propertiesService.getLogin(), propertiesService.getPassword()).equals(authorizeCookie)) {
-//            try {
-//                return new ObjectMapper()
-//                        .writeValueAsString(standingsWatchService.getFrozenResults());
-//            } catch (JsonProcessingException e) {
-//
-//                e.printStackTrace();
-//            }
-//        }
-//        return "{}";
-//    }
-
-//    @RequestMapping(value = "/authorize", method = RequestMethod.GET)
-//    public ModelAndView authorize(HttpServletResponse response,
-//                                  @RequestParam(value = "login") String login,
-//                                  @RequestParam(value = "password") String password) {
-//        if (login.equals(propertiesService.getLogin()) && password.equals(propertiesService.getPassword())) {
-//            response.addCookie(new Cookie("authorize", authorizeCookie(propertiesService.getLogin(), propertiesService.getPassword())));
-//        }
-//
-//        ModelAndView model = new ModelAndView();
-//        model.setViewName("/home");
-//        return model;
-//    }
 
     @RequestMapping(value = "/baylor", method = RequestMethod.GET, produces = "application/xml")
     @ResponseBody
