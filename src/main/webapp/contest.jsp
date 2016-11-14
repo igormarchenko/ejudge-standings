@@ -1,3 +1,4 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -37,17 +38,29 @@
 <body ng-app="standingsPage"
       ng-controller="standingsController"
       ng-init="init()">
-<h2>{{contest.name}} <br/>
-    <small style="line-height: 32px;">Last success: {{contest.last_success.team.name}} at {{contest.last_success.time}}
-        on problem
-        {{contest.last_success.task}}
-    </small>
-    <br/>
-    <small style="line-height: 32px;">Last submit: {{contest.last_submit.team.name}} at {{contest.last_submit.time}} on
-        problem
-        {{contest.last_submit.task}}
-    </small>
-</h2>
+<div class="row">
+    <div class="col-md-11">
+        <h2>{{contest.name}} <br/>
+            <small style="line-height: 32px;">Last success: {{contest.last_success.team.name}} at
+                {{contest.last_success.time}}
+                on problem
+                {{contest.last_success.task}}
+            </small>
+            <br/>
+            <small style="line-height: 32px;">Last submit: {{contest.last_submit.team.name}} at
+                {{contest.last_submit.time}} on
+                problem
+                {{contest.last_submit.task}}
+            </small>
+        </h2>
+    </div>
+    <div class="col-md-1">
+        <sec:authorize access="hasAuthority('ADMIN')">
+        <button type="button" class="btn btn-info" style="margin-top:30px;">Settings</button>
+        </sec:authorize>
+    </div>
+</div>
+
 <table class="table table-bordered" id="resultsTable">
     <thead>
     <tr>
