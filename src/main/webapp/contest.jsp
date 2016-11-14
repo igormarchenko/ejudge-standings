@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Standings</title>
     <script src="/static/script.js"></script>
     <script src="/app/StandingsController.js"></script>
     <link rel="stylesheet" href="/static/style.css"/>

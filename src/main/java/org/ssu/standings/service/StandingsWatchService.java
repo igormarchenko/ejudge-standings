@@ -54,6 +54,10 @@ public class StandingsWatchService {
 
     }
 
+    public Map<Long, String> getContestList() {
+        return watchers.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, item -> item.getValue().getContest().getName()));
+    }
+
     @Scheduled(fixedDelay = 1000)
     public void updateChanges() {
         watchers.values().forEach(FileWatcher::updateChanges);

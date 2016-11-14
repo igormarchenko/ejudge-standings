@@ -74,6 +74,7 @@ public class SiteController {
     @RequestMapping("/")
     public ModelAndView homePage(ModelAndView model) {
         model.setViewName("/home");
+        model.addObject("contests", standingsWatchService.getContestList());
         return model;
     }
 
