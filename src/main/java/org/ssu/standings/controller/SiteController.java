@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 @RequestMapping("/")
 @Controller
-@EnableScheduling
 public class SiteController {
     @Resource
     private StandingsWatchService standingsWatchService;
@@ -100,6 +100,24 @@ public class SiteController {
         }
         return "{}";
     }
+
+    @RequestMapping(value = "/api/frozenresults/{contestId}", method = RequestMethod.GET)
+    @ResponseBody
+    public String getFrozenResults(@PathVariable Long contestId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            if(authentication.getAuthorities().stream().filter(item -> "ADMIN".equals(item.getAuthority())).count() > 0) {
+                return new ObjectMapper()
+                        .writeValueAsString(standingsWatchService.getFrozenResults(contestId));
+            } else {
+                return "{}";
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "{}";
+    }
+
 
     @RequestMapping(value = "/baylor", method = RequestMethod.GET, produces = "application/xml")
     @ResponseBody

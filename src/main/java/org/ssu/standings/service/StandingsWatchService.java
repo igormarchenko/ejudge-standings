@@ -16,7 +16,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +31,8 @@ public class StandingsWatchService {
 
     @PostConstruct
     public void init() throws ParserConfigurationException, IOException, SAXException {
-       updateWatchers();
+        updateWatchers();
+        updateChanges();
     }
 
     public void updateWatchers() {
@@ -51,6 +51,7 @@ public class StandingsWatchService {
                         .setContestId(item.getValue().getContestId())
                         .setIsFinalResults(item.getValue().getIsFinal())
                 ));
+
     }
 
     @Scheduled(fixedDelay = 1000)
@@ -59,17 +60,17 @@ public class StandingsWatchService {
     }
 
     public List<Submission> getLastSubmissions(Long contestId, Long time) {
-        return watchers.get(contestId).getContest().getSubmissions()
+        return getContestData(contestId).getSubmissions()
                 .stream()
                 .filter(item -> item.getTime() > time)
                 .collect(Collectors.toList());
     }
 
     public Contest getContestData(Long contestId) {
-        return watchers.get(contestId).getContest();
+        return watchers.get(contestId).getContestData();
     }
 
-    public Map<Long, List<Submission>> getFrozenResults() {
-        return watchers.keySet().stream().collect(Collectors.toMap(item -> item, item -> watchers.get(item).getFrozenSubmissions()));
+    public Map<Long, Map<Long, List<Submission>>> getFrozenResults(Long contestId) {
+        return watchers.get(contestId).getFrozenSubmissions().stream().collect(Collectors.groupingBy(Submission::getUserId, Collectors.groupingBy(Submission::getProblemId)));
     }
 }

@@ -13,7 +13,8 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
         var results = {};
         var contestId;
         var lastSubmitTime = -1;
-
+        var frozenSubmits = {};
+        var unfrozeMode = false;
         $scope.init = function () {
             contestId = window.location.pathname.split('/').pop();
             initResults(contestId);
@@ -36,6 +37,61 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
             return 'cell-wrong';
         };
 
+        $scope.unfrozeResults = function () {
+            $interval.cancel(interval);
+            $http({
+                url: '/api/frozenresults/' + contestId,
+                method: "GET",
+                params: {}
+            }).success(function (response) {
+                angular.copy(response, frozenSubmits);
+                unfrozeMode = true;
+            });
+        };
+
+        $scope.unfrozeNext = function () {
+            if (unfrozeMode) {
+                var frozenTask = findNextUnknownSubmission();
+                if (frozenTask != null) {
+                    var teamPosition = findTeamPosition(frozenTask.team.contest_team_id);
+                    $('html, body').animate({
+                        scrollTop: $("#team" + frozenTask.team.contest_team_id).offset().top - 300
+                    }, 500).promise().then(function() {
+                        var submitsForTask = frozenSubmits[frozenTask.team.contest_team_id][frozenTask.taskId];
+                        frozenTask.task.submissions = frozenTask.task.submissions.filter(function (submit) {
+                            return submit.status != "UNKNOWN";
+                        });
+                        frozenTask.task.count = frozenTask.task.submissions.length;
+                        angular.forEach(submitsForTask, function (submit) {
+                            pushSubmitOnline(teamPosition, submit);
+                        });
+                        updateTeamPosition(teamPosition);
+                        $scope.$apply();
+                    });
+                }
+            }
+        };
+        var findNextUnknownSubmission = function () {
+            var result = null;
+            var keepGoing = true;
+            $scope.results.slice().reverse().forEach(function (team) {
+                if (keepGoing) {
+                    angular.forEach(team.tasks, function (task, index) {
+                        if (keepGoing) {
+                            if (task.status == "UNKNOWN") {
+                                keepGoing = false;
+                                result = {
+                                    'team': team,
+                                    'task': task,
+                                    'taskId': index
+                                };
+                            }
+                        }
+                    });
+                }
+            });
+            return result;
+        };
 
         var initResults = function (contestId) {
             $http({
@@ -117,7 +173,9 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                 if (submission.status == "OK") {
                     currentTask.ok_time = Math.ceil(submission.time / 60.0);
                 }
-                currentTask.penalty = (currentTask.count - 1) * 20 + currentTask.ok_time;
+                if (submission.status != "UNKNOWN") {
+                    currentTask.penalty = (currentTask.count - 1) * 20 + currentTask.ok_time;
+                }
                 if (submission.status == "OK") {
                     team.solved++;
                     team.penalty += currentTask.penalty;
@@ -128,12 +186,13 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                     };
                 }
             }
-
-            $scope.contest.last_submit = {
-                'time': sprintf("%02d:%02d:%02d", submission.time / 3600, submission.time % 3600 / 60, submission.time % 60),
-                'team': team,
-                'task': String.fromCharCode(97 + submission.problemId).toUpperCase()
-            };
+            if (submission.status != "UNKNOWN") {
+                $scope.contest.last_submit = {
+                    'time': sprintf("%02d:%02d:%02d", submission.time / 3600, submission.time % 3600 / 60, submission.time % 60),
+                    'team': team,
+                    'task': String.fromCharCode(97 + submission.problemId).toUpperCase()
+                };
+            }
 
             return team;
         };
@@ -171,7 +230,7 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                     angular.copy($scope.results[teamPosition], $scope.results[teamPosition - 1]);
                     angular.copy(tempTeam, $scope.results[teamPosition]);
 
-                    var obj = $('#team' + $scope.results[teamPosition - 1].contest_team_id);
+                    var obj = $('#team' + $scope.results[teamPosition].contest_team_id);
                     obj.fadeOut(600, function () {
                         obj.fadeIn(600);
                     });

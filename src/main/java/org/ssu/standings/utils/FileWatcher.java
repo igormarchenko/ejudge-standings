@@ -78,6 +78,10 @@ public class FileWatcher {
     }
 
     public Contest getContest() {
+        return contest;
+    }
+
+    public Contest getContestData() {
         frozeSubmissions();
         return contest;
     }

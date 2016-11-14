@@ -20,7 +20,7 @@ public class Contest {
     private LocalDateTime currentTime;
     private Boolean isFinalResults;
 
-    private transient List<Submission> frozenSubmits;
+//    private transient List<Submission> frozenSubmits;
 
     public Long getId() {
         return id;
@@ -150,20 +150,20 @@ public class Contest {
         return this;
     }
 
-    public Optional<Team> getTeamId(String teamName) {
-        return teams.stream().filter(team -> team.getName().trim().equals(teamName)).findAny();
-    }
+//    public Optional<Team> getTeamId(String teamName) {
+//        return teams.stream().filter(team -> team.getName().trim().equals(teamName)).findAny();
+//    }
+//
+//    public List<Submission> getTeamSubmissions(Team team) {
+//        return submissions.stream().filter(submission -> submission.getUserId().equals(team.getTeamIdInContest())).collect(Collectors.toList());
+//    }
 
-    public List<Submission> getTeamSubmissions(Team team) {
-        return submissions.stream().filter(submission -> submission.getUserId().equals(team.getTeamIdInContest())).collect(Collectors.toList());
-    }
-
-    public List<Submission> getFrozenSubmits() {
-        return frozenSubmits;
-    }
-
-    public Contest setFrozenSubmits(List<Submission> frozenSubmits) {
-        this.frozenSubmits = frozenSubmits;
-        return this;
-    }
+//    public List<Submission> getFrozenSubmits() {
+//        return frozenSubmits;
+//    }
+//
+//    public Contest setFrozenSubmits(List<Submission> frozenSubmits) {
+//        this.frozenSubmits = frozenSubmits;
+//        return this;
+//    }
 }

@@ -31,7 +31,15 @@
     </style>
     <script>
         $(document).ready(function () {
+            $("body").keydown(function (event) {
+                if (event.which == 13) {
+                    event.preventDefault();
+                }
 
+                if (event.which == 78) {
+                    angular.element('body').scope().unfrozeNext();
+                }
+            });
         });
     </script>
 </head>
@@ -154,7 +162,7 @@
                 </button>
                 <button type="button"
                         class="btn btn-warning"
-                        ng-click="unFreezeResults()"
+                        ng-click="unfrozeResults()"
                         onclick="$('#settings-modal').modal('hide')">Unfreeze
                 </button>
             </div>
