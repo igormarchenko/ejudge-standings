@@ -11,6 +11,7 @@ import org.ssu.standings.entity.ContestInfo;
 import org.ssu.standings.entity.Team;
 import org.ssu.standings.entity.University;
 import org.ssu.standings.service.ApiService;
+import org.ssu.standings.service.StandingsWatchService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -20,6 +21,8 @@ import java.io.IOException;
 public class AdminController {
     @Resource
     private ApiService apiService;
+    @Resource
+    private StandingsWatchService standingsWatchService;
 
     @RequestMapping(value = {"/teams", "/home", "/universities", "/contests"}, method = RequestMethod.GET)
     @ResponseBody
@@ -82,6 +85,7 @@ public class AdminController {
         try {
             contestInfo = new ObjectMapper().readValue(data.get("data").toString(), ContestInfo.class);
             contestInfo = apiService.saveContest(contestInfo);
+            standingsWatchService.updateWatchers();
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

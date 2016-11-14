@@ -32,6 +32,21 @@ public class StandingsWatchService {
 
     @PostConstruct
     public void init() throws ParserConfigurationException, IOException, SAXException {
+       updateWatchers();
+
+//       watchers = externalFilesRepository.findAll()
+//                .stream()
+//                .map(item ->
+//                        item.
+//
+//                        new FileWatcher(item.getLink())
+//                        .setContestId(item.getContestId())
+//                        .setIsFinalResults(item.getFinal()))
+//                .collect(Collectors.toMap(FileWatcher::getContestId, item -> item));
+                ;
+    }
+
+    public void updateWatchers() {
         TeamInUniversityList.setTeamUniversity(teamRepository.findAll().stream().collect(Collectors.toMap(item -> item.getName().trim(), Team::getUniversityEntity, (a, b) -> a)));
 
         Map<Long, List<ExternalFileDescription>> contestDescriptions = externalFilesRepository.findAll()
@@ -47,19 +62,7 @@ public class StandingsWatchService {
                         .setContestId(item.getValue().getContestId())
                         .setIsFinalResults(item.getValue().getIsFinal())
                 ));
-
-//       watchers = externalFilesRepository.findAll()
-//                .stream()
-//                .map(item ->
-//                        item.
-//
-//                        new FileWatcher(item.getLink())
-//                        .setContestId(item.getContestId())
-//                        .setIsFinalResults(item.getFinal()))
-//                .collect(Collectors.toMap(FileWatcher::getContestId, item -> item));
-                ;
     }
-
 //    @Scheduled(fixedDelay = 1000)
 //    public void checkChanges() {
 //        watchers.values().forEach(FileWatcher::isChanged);
