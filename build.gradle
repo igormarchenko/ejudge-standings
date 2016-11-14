@@ -51,23 +51,23 @@ bower {
     'floatThead'('1.2.13')
 }
 
-def scriptFiles = ['bower_components/jquery/dist/jquery.js',
-                   'bower_components/bootstrap/dist/js/bootstrap.js',
-                   'bower_components/angular/angular.js',
-                   'bower_components/angular-sanitize/angular-sanitize.js',
-                   'bower_components/angular-route/angular-route.js',
+def scriptFiles = ['bower_components/jquery/dist/jquery.min.js',
+                   'bower_components/bootstrap/dist/js/bootstrap.min.js',
+                   'bower_components/angular/angular.min.js',
+                   'bower_components/angular-sanitize/angular-sanitize.min.js',
+                   'bower_components/angular-route/angular-route.min.js',
                    'bower_components/angular-animate/angular-animate.min.js',
-                   'bower_components/angular-ui-select/dist/select.js',
+                   'bower_components/angular-ui-select/dist/select.min.js',
                    'bower_components/ui-router/release/angular-ui-router.js',
                    'bower_components/sprintf.js/dist/sprintf.min.js',
                    'bower_components/sprintf.js/dist/angular-sprintf.min.js',
-                   'bower_components/datatables.net/js/jquery.dataTables.js',
+                   'bower_components/datatables.net/js/jquery.dataTables.min.js',
                    'bower_components/floatThead/dist/jquery.floatThead.min.js',
-                   'bower_components/angular-datatables/dist/angular-datatables.js']
+                   'bower_components/angular-datatables/dist/angular-datatables.min.js']
 
-def styleFiles = ['bower_components/angular-ui-select/dist/select.css',
-                  'bower_components/bootstrap/dist/css/bootstrap.css',
-                  'bower_components/datatables.net-dt/css/jquery.dataTables.css',
+def styleFiles = ['bower_components/angular-ui-select/dist/select.min.css',
+                  'bower_components/bootstrap/dist/css/bootstrap.min.css',
+                  'bower_components/datatables.net-dt/css/jquery.dataTables.min.css',
                   'bower_components/angular-datatables/dist/css/angular-datatables.min.css']
 
 task copyBootstrapFonts(type: Copy) {
