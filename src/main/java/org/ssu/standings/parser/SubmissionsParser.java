@@ -1,6 +1,5 @@
 package org.ssu.standings.parser;
 
-import org.apache.commons.logging.Log;
 import org.ssu.standings.entity.Submission;
 import org.ssu.standings.entity.Task;
 import org.ssu.standings.entity.Team;
@@ -18,9 +17,9 @@ import java.util.stream.Collectors;
 public class SubmissionsParser extends Parser {
     static Logger log = Logger.getLogger(SubmissionsParser.class.getName());
 
-    public static final String TASK_ID_ATTRIBUTE = "id";
-    public static final String TASK_LONG_NAME_ATTRIBUTE = "long_name";
-    public static final String TASK_SHORT_NAME_ATTRIBUTE = "short_name";
+    private static final String TASK_ID_ATTRIBUTE = "id";
+    private static final String TASK_LONG_NAME_ATTRIBUTE = "long_name";
+    private static final String TASK_SHORT_NAME_ATTRIBUTE = "short_name";
     private static final String TEAM_NAME_ATTRIBUTE = "name";
     private static final String TEAM_ID_ATTRIBUTE = "id";
     private static final String DURATION = "duration";

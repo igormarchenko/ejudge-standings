@@ -2,16 +2,13 @@ package org.ssu.standings.service;
 
 import org.springframework.stereotype.Service;
 import org.ssu.standings.entity.BaylorTeam;
-import org.ssu.standings.entity.Contest;
 import org.ssu.standings.entity.Submission;
-import org.ssu.standings.parser.BaylorStandingsParser;
-import org.ssu.standings.utils.NodeListWrapper;
-import org.w3c.dom.Node;
 
 import javax.annotation.Resource;
 import javax.xml.parsers.ParserConfigurationException;
-import java.util.*;
-import java.util.function.Function;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

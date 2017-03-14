@@ -15,20 +15,6 @@
     </changeSet>
 
     <changeSet id="3" author="Igor Marchenko">
-        <insert tableName="properties">
-            <column name="id" value="1"/>
-            <column name="key" value="login"/>
-            <column name="value" value="sergpet"/>
-        </insert>
-
-        <insert tableName="properties">
-            <column name="id" value="2"/>
-            <column name="key" value="password"/>
-            <column name="value" value="123456"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="4" author="Igor Marchenko">
         <insert tableName="external_files">
             <column name="id" value="1"/>
             <column name="link" value="http://ejudge.sumdu.edu.ua/external.xml"/>
@@ -37,7 +23,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="5" author="Igor Marchenko">
+    <changeSet id="4" author="Igor Marchenko">
         <insert tableName="users">
             <column name="id" value="1"/>
             <column name="login" value="admin"/>

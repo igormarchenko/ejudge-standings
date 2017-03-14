@@ -26,7 +26,7 @@ repositories {
 bower {
     installBase = '/bower_components'
 
-    'angular'('1.5.8') {
+    'angular'('>=1.5.8') {
         source 'angular.js'
     }
 
@@ -34,7 +34,7 @@ bower {
     'angular-ui-select'('https://github.com/angular-ui/ui-select.git')
     'ui-router'('0.2.x')
 
-    'angular-route'('1.5.8') {
+    'angular-route'('>=1.5.8') {
         source 'angular-route.js' >> 'angular-route.js'
     }
 
@@ -49,6 +49,7 @@ bower {
     'sprintf.js'("https://github.com/alexei/sprintf.js.git")
     'angular-animate'('https://github.com/angular/bower-angular-animate.git')
     'floatThead'('1.2.13')
+    'sly-repeat'('https://github.com/scalyr/angular.git')
 }
 
 def scriptFiles = ['bower_components/jquery/dist/jquery.min.js',
@@ -63,6 +64,7 @@ def scriptFiles = ['bower_components/jquery/dist/jquery.min.js',
                    'bower_components/sprintf.js/dist/angular-sprintf.min.js',
                    'bower_components/datatables.net/js/jquery.dataTables.min.js',
                    'bower_components/floatThead/dist/jquery.floatThead.min.js',
+                   'bower_components/sly-repeat/scalyr.js',
                    'bower_components/angular-datatables/dist/angular-datatables.min.js']
 
 def styleFiles = ['bower_components/angular-ui-select/dist/select.min.css',

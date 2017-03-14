@@ -11,10 +11,7 @@ import org.ssu.standings.repository.TeamRepository;
 import org.ssu.standings.repository.UniversityRepository;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,10 +60,8 @@ public class ApiService {
     }
 
     private Long lastContestId() {
-        Optional<ExternalFileDescription> lastContest = externalFilesRepository.findAll().stream().sorted((a, b) -> Long.compare(a.getContestId(), b.getContestId())).reduce((a, b) -> b);
-        if (lastContest.isPresent())
-            return lastContest.get().getContestId();
-        return 0L;
+        Optional<ExternalFileDescription> lastContest = externalFilesRepository.findAll().stream().sorted(Comparator.comparingLong(ExternalFileDescription::getContestId)).reduce((a, b) -> b);
+        return lastContest.map(ExternalFileDescription::getContestId).orElse(0L);
     }
 
     @Transactional

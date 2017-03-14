@@ -49,7 +49,7 @@ public class PersistenceConfig {
             setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
             setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
             setProperty("hibernate.globally_quoted_identifiers", "true");
-            setProperty("hibernate.show_sql", "true");
+            setProperty("hibernate.show_sql", "false");
         }});
         return sessionFactory;
     }
@@ -67,7 +67,7 @@ public class PersistenceConfig {
         entityManager.setJpaProperties(new Properties() {{
             setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
             setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
-            setProperty("hibernate.show_sql", "true");
+            setProperty("hibernate.show_sql", "false");
             setProperty("current_session_context_class", "thread");
             setProperty("hibernate.enable_lazy_load_no_trans", "true");
         }});

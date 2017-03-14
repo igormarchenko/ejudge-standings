@@ -1,4 +1,4 @@
-angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).controller("standingsController",
+angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate', 'sly']).controller("standingsController",
     ["$scope", '$window', "$http", '$interval', '$location', '$timeout', function ($scope, $window, $http, $interval, $location, $timeout) {
         $scope.results = [];
         $scope.contest = {};
@@ -43,8 +43,8 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                 url: '/api/frozenresults/' + contestId,
                 method: "GET",
                 params: {}
-            }).success(function (response) {
-                angular.copy(response, frozenSubmits);
+            }).then(function (response) {
+                angular.copy(response.data, frozenSubmits);
                 unfrozeMode = true;
             });
         };
@@ -97,13 +97,13 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
             $http({
                 method: 'GET',
                 url: '/api/init-results/' + contestId
-            }).success(function (response) {
-                $scope.contest.name = response.name;
+            }).then(function (response) {
+                $scope.contest.name = response.data.name;
                 $scope.contest.last_success = {};
                 $scope.contest.last_submit = {};
-                angular.copy(response.tasks, $scope.tasks);
+                angular.copy(response.data.tasks, $scope.tasks);
                 var tasks = {};
-                angular.forEach(response.tasks, function (task) {
+                angular.forEach(response.data.tasks, function (task) {
                     tasks[task.id] = {
                         'count': 0,
                         'status': 'N/A',
@@ -112,7 +112,7 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                     };
                 });
 
-                angular.forEach(response.teams, function (team) {
+                angular.forEach(response.data.teams, function (team) {
                     results[team.contest_team_id] = team;
                     results[team.contest_team_id].solved = 0;
                     results[team.contest_team_id].penalty = 0;
@@ -131,7 +131,7 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                 angular.copy($scope.regionList, $scope.selectors.regions);
 
 
-                angular.forEach(response.submissions, function (submission) {
+                angular.forEach(response.data.submissions, function (submission) {
                     pushSubmission(submission);
                 });
 
@@ -147,7 +147,7 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
                         scrollTop: $("#resultsTable").offset().top
                     }, 1000);
                 }, 0);
-            });
+            }, function() {});
         };
 
         $scope.filter = function () {
@@ -244,9 +244,9 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate']).contro
             $http({
                 method: 'GET',
                 url: '/api/results/' + contestId + '/' + lastSubmitTime
-            }).success(function (response) {
+            }).then(function (response) {
                 if (response.length > 0) {
-                    angular.forEach(response, function (submit) {
+                    angular.forEach(response.data, function (submit) {
                         var team = findTeamPosition(submit.userId);
                         pushSubmitOnline(team, submit);
                         updateTeamPosition(team);

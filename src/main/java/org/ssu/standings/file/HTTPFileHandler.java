@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class HTTPFileHandler implements FileHandler {
     private URL url;

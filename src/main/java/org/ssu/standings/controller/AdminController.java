@@ -58,7 +58,7 @@ public class AdminController {
     @RequestMapping(value = "/saveteam", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveTeam(@RequestBody ObjectNode data) throws JsonProcessingException {
-        Team team = null;
+        Team team;
         try {
             team = new ObjectMapper().readValue(data.get("data").toString(), Team.class);
             team = apiService.saveTeam(team);
@@ -72,7 +72,7 @@ public class AdminController {
     @RequestMapping(value = "/saveuniversity", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveUniversity(@RequestBody ObjectNode data) throws JsonProcessingException {
-        University university = null;
+        University university;
         try {
             university = new ObjectMapper().readValue(data.get("data").toString(), University.class);
             university = apiService.saveUniversity(university);
@@ -86,7 +86,7 @@ public class AdminController {
     @RequestMapping(value = "/savecontest", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveContest(@RequestBody ObjectNode data) throws JsonProcessingException {
-        ContestInfo contestInfo = null;
+        ContestInfo contestInfo;
         try {
             contestInfo = new ObjectMapper().readValue(data.get("data").toString(), ContestInfo.class);
             contestInfo = apiService.saveContest(contestInfo);

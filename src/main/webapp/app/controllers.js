@@ -10,18 +10,18 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         };
 
         function initTeams() {
-            ejudgeStandingsApiService.teamList().success(function (response) {
+            ejudgeStandingsApiService.teamList().then(function (response) {
                 $scope.teams = {};
-                angular.forEach(response, function (team) {
+                angular.forEach(response.data, function (team) {
                     $scope.teams[team.id] = team;
                 });
             });
         }
 
         function universityList() {
-            ejudgeStandingsApiService.universityList().success(function (response) {
+            ejudgeStandingsApiService.universityList().then(function (response) {
                 $scope.universities = {};
-                angular.forEach(response, function (university) {
+                angular.forEach(response.data, function (university) {
                     $scope.universities[university.id] = university;
                 });
             });
@@ -48,9 +48,9 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         };
 
         $scope.saveSelectedTeam = function () {
-            ejudgeStandingsApiService.saveTeam($scope.selectedTeam).success(function (response) {
-                $scope.teams[response.id] = {};
-                angular.copy(response, $scope.teams[response.id]);
+            ejudgeStandingsApiService.saveTeam($scope.selectedTeam).then(function (response) {
+                $scope.teams[response.data.id] = {};
+                angular.copy(response.data, $scope.teams[response.data.id]);
                 $('#editTeam').modal('hide');
                 angular.copy(emptyTeam, $scope.selectedTeam);
             });
@@ -66,9 +66,9 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         };
 
         function universityList() {
-            ejudgeStandingsApiService.universityList().success(function (response) {
+            ejudgeStandingsApiService.universityList().then(function (response) {
                 $scope.universities = {};
-                angular.forEach(response, function (university) {
+                angular.forEach(response.data, function (university) {
                     $scope.universities[university.id] = university;
                 });
             });
@@ -80,16 +80,16 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         };
 
         $scope.saveSelectedUniversity = function () {
-            ejudgeStandingsApiService.saveUniversity($scope.selectedUniversity).success(function (response) {
-                $scope.universities[response.id] = {};
-                angular.copy(response, $scope.universities[response.id]);
+            ejudgeStandingsApiService.saveUniversity($scope.selectedUniversity).then(function (response) {
+                $scope.universities[response.data.id] = {};
+                angular.copy(response.data, $scope.universities[response.data.id]);
                 $('#editUniversity').modal('hide');
                 angular.copy(emptyUniversity, $scope.selectedUniversity);
             });
         };
 
         $scope.removeUniversity = function (universityId) {
-            ejudgeStandingsApiService.removeUniversity(universityId).success(function () {
+            ejudgeStandingsApiService.removeUniversity(universityId).then(function () {
                 delete $scope.universities[universityId];
             });
         };
@@ -100,9 +100,9 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         $scope.selectedContest = {'is_final': false, 'external_files': []};
 
         function contestList() {
-            ejudgeStandingsApiService.contestList().success(function (response) {
+            ejudgeStandingsApiService.contestList().then(function (response) {
                 $scope.contests = {};
-                angular.forEach(response, function (contest) {
+                angular.forEach(response.data, function (contest) {
                     $scope.contests[contest.id] = contest;
                 });
             });
@@ -125,16 +125,16 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         };
 
         $scope.saveSelectedContest = function () {
-            ejudgeStandingsApiService.saveContest($scope.selectedContest).success(function (response) {
-                $scope.contests[response.id] = {};
-                angular.copy(response, $scope.contests[response.id]);
+            ejudgeStandingsApiService.saveContest($scope.selectedContest).then(function (response) {
+                $scope.contests[response.data.id] = {};
+                angular.copy(response.data, $scope.contests[response.data.id]);
                 $('#editContest').modal('hide');
                 angular.copy({'is_final': false, 'external_files': []}, $scope.selectedContest);
             });
         };
 
         $scope.removeContest = function (contestId) {
-            ejudgeStandingsApiService.removeContest(contestId).success(function () {
+            ejudgeStandingsApiService.removeContest(contestId).then(function () {
                 delete $scope.contests[contestId];
             });
         };

@@ -4,6 +4,7 @@ import org.ssu.standings.entity.Contest;
 import org.ssu.standings.entity.Submission;
 import org.ssu.standings.entity.Team;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public class ContestsMerger {
                 .collect(Collectors.toList());
 
         List<Submission> submissions = contests.stream().flatMap(item -> item.getSubmissions().stream())
-                .sorted((a, b) -> a.getTime().compareTo(b.getTime()))
+                .sorted(Comparator.comparing(Submission::getTime))
                 .collect(Collectors.toList());
 
         return new Contest().setContestId(anyContest.getContestId())

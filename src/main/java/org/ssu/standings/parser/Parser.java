@@ -39,7 +39,7 @@ public class Parser {
         return getCurrentNode(tag).item(0).getChildNodes();
     }
 
-    public String getAttributeValue(Node node, String attributeName) {
+    protected String getAttributeValue(Node node, String attributeName) {
         return node.getAttributes()
                 .getNamedItem(attributeName)
                 .getNodeValue();
