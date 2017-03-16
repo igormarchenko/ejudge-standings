@@ -182,7 +182,7 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate', 'sly'])
                     $scope.contest.last_success = {
                         'time': sprintf("%02d:%02d:%02d", submission.time / 3600, submission.time % 3600 / 60, submission.time % 60),
                         'team': team,
-                        'task': String.fromCharCode(97 + submission.problemId).toUpperCase()
+                        'task': String.fromCharCode(96 + submission.problemId).toUpperCase()
                     };
                 }
             }
@@ -190,7 +190,7 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate', 'sly'])
                 $scope.contest.last_submit = {
                     'time': sprintf("%02d:%02d:%02d", submission.time / 3600, submission.time % 3600 / 60, submission.time % 60),
                     'team': team,
-                    'task': String.fromCharCode(97 + submission.problemId).toUpperCase()
+                    'task': String.fromCharCode(96 + submission.problemId).toUpperCase()
                 };
             }
 
