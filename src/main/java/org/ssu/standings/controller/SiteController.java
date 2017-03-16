@@ -63,7 +63,7 @@ public class SiteController {
         return model;
     }
 
-    @RequestMapping(value = "/contest/{contestId}")
+    @RequestMapping(value = "/contest/{contestId}", produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public ModelAndView contestHomePage(@PathVariable Long contestId) {
         ModelAndView model = new ModelAndView();
@@ -71,14 +71,14 @@ public class SiteController {
         return model;
     }
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/", produces = "text/plain;charset=UTF-8")
     public ModelAndView homePage(ModelAndView model) {
         model.setViewName("/home");
         model.addObject("contests", standingsWatchService.getContestList());
         return model;
     }
 
-    @RequestMapping(value = "/api/init-results/{contestId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/init-results/{contestId}", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String getInitResults(@PathVariable Long contestId) {
         try {
@@ -90,7 +90,7 @@ public class SiteController {
         return "{}";
     }
 
-    @RequestMapping(value = "/api/results/{contestId}/{time}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/results/{contestId}/{time}", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String getResults(@PathVariable Long contestId, @PathVariable Long time) {
         try {
@@ -102,7 +102,7 @@ public class SiteController {
         return "{}";
     }
 
-    @RequestMapping(value = "/api/frozenresults/{contestId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/frozenresults/{contestId}", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String getFrozenResults(@PathVariable Long contestId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

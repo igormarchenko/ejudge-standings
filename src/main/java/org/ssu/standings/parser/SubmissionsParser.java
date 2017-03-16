@@ -63,7 +63,7 @@ public class SubmissionsParser extends Parser {
             Long fogSeconds = Long.parseLong(getAttributeFromRunLogTag(FOG_TIME));
             result = getEndTime().minusSeconds(fogSeconds);
         } catch (NullPointerException ex) {
-            log.warning("Frozen tag is not present!");
+//            log.warning("Frozen tag is not present!");
         }
         return result;
     }
@@ -74,7 +74,7 @@ public class SubmissionsParser extends Parser {
             Long unfogSeconds = Long.parseLong(getAttributeFromRunLogTag(UNFOG_TIME));
             result = getEndTime().plusSeconds(unfogSeconds);
         } catch (NullPointerException ex) {
-            log.warning("Unfrozen tag is not present!");
+//            log.warning("Unfrozen tag is not present!");
         }
         return result;
     }
@@ -122,7 +122,7 @@ public class SubmissionsParser extends Parser {
         try {
             duration = Long.parseLong(getAttributeFromRunLogTag(DURATION));
         } catch (NullPointerException ex) {
-            log.warning("Contest duration tag is not present!");
+//            log.warning("Contest duration tag is not present!");
         }
         return duration;
     }
