@@ -245,7 +245,7 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate', 'sly'])
                 method: 'GET',
                 url: '/api/results/' + contestId + '/' + lastSubmitTime
             }).then(function (response) {
-                if (response.length > 0) {
+                if (response.data.length > 0) {
                     angular.forEach(response.data, function (submit) {
                         var team = findTeamPosition(submit.userId);
                         pushSubmitOnline(team, submit);
