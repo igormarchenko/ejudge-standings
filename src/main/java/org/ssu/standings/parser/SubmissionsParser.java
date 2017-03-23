@@ -90,13 +90,16 @@ public class SubmissionsParser extends Parser {
     }
 
     public List<Team> parseTeamList() {
-        return XmlStream.of(getChildNodes(USERS_TAG))
+        List<Team> teams = XmlStream.of(getChildNodes(USERS_TAG))
                 .filter(node -> node.getNodeType() == Node.ELEMENT_NODE)
                 .map(item -> new Team().setTeamIdInContest(Long.parseLong(getAttributeValue(item, TEAM_ID_ATTRIBUTE)))
                         .setName(getAttributeValue(item, TEAM_NAME_ATTRIBUTE))
                         .setUniversityEntity(TeamInUniversityList.universityForTeam(getAttributeValue(item, TEAM_NAME_ATTRIBUTE)))
                 )
                 .collect(Collectors.toList());
+
+        teams.stream().filter(team -> team.getName().isEmpty()).forEach(team -> team.setName(String.format("team%d", team.getTeamIdInContest())));
+        return teams;
     }
 
     public List<Submission> parseSubmissionList() {
