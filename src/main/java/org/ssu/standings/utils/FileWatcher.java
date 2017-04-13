@@ -2,12 +2,11 @@ package org.ssu.standings.utils;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.ssu.standings.entity.Contest;
+import org.ssu.standings.entity.ContestDEPRECATED;
 import org.ssu.standings.entity.Submission;
-import org.ssu.standings.file.FileHandler;
-import org.ssu.standings.file.HTTPFileHandler;
-import org.ssu.standings.file.LocalFileHandler;
-import org.ssu.standings.parser.SubmissionsParser;
+import org.ssu.standings.updateobserver.handlers.FileHandler;
+import org.ssu.standings.updateobserver.handlers.HTTPFileHandler;
+import org.ssu.standings.updateobserver.handlers.LocalFileHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 public class FileWatcher {
     private List<FileHandler> standingsFiles;
     private Boolean isFinal;
-    private Contest contest = new Contest();
+    private ContestDEPRECATED contestDEPRECATED = new ContestDEPRECATED();
 
     public FileWatcher(List<String> links) {
         Function<String, FileHandler> getFileHandler = path -> {
@@ -37,26 +36,28 @@ public class FileWatcher {
 
     public List<Submission> getFrozenSubmissions() {
         updateChanges();
-        if (!contest.isFrozen()) {
-            return contest.getSubmissions()
+        if (!contestDEPRECATED.isFrozen()) {
+            return contestDEPRECATED.getSubmissions()
                     .stream()
-                    .filter(item -> contest.inFrozenTime(contest.getSubmissionTime(item.getTime())))
+                    .filter(item -> contestDEPRECATED.inFrozenTime(contestDEPRECATED.getSubmissionTime(item.getTime())))
                     .collect(Collectors.toList());
         } else
             return new ArrayList<>();
     }
 
     public void updateChanges() {
-        List<Contest> contests = standingsFiles.stream()
-                .filter(FileHandler::hasActualChanges)
+        List<ContestDEPRECATED> contestDEPRECATEDS = standingsFiles.stream()
+                //.filter(FileHandler::hasActualChanges)
                 .map(this::updateFileHandlerData)
                 .collect(Collectors.toList());
-        contest = ContestsMerger.merge(contests);
+        contestDEPRECATED = ContestsMerger.merge(contestDEPRECATEDS);
     }
 
-    private Contest updateFileHandlerData(FileHandler fileHandler) {
+    private ContestDEPRECATED updateFileHandlerData(FileHandler fileHandler) {
+        return null;
+        /*
         SubmissionsParser xmlParser = new SubmissionsParser(fileHandler.getUri());
-        return new Contest().setContestId(xmlParser.getContestId())
+        return new ContestDEPRECATED().setContestId(xmlParser.getContestId())
                 .setName(xmlParser.getContestName())
                 .setTeams(xmlParser.parseTeamList())
                 .setSubmissions(xmlParser.parseSubmissionList())
@@ -67,35 +68,36 @@ public class FileWatcher {
                 .setFrozenTime(xmlParser.getFrozenTime())
                 .setUnfrozenTime(xmlParser.getUnFrozenTime())
                 .setIsFinalResults(isFinal);
+                */
     }
 
     private void frozeSubmissions() {
-        if (!contest.getIsFinalResults() || contest.isFrozen()) {
-            contest.getSubmissions().stream()
-                    .filter(item -> contest.inFrozenTime(contest.getSubmissionTime(item.getTime())))
+        if (!contestDEPRECATED.getIsFinalResults() || contestDEPRECATED.isFrozen()) {
+            contestDEPRECATED.getSubmissions().stream()
+                    .filter(item -> contestDEPRECATED.inFrozenTime(contestDEPRECATED.getSubmissionTime(item.getTime())))
                     .forEach(item -> item.setStatus("UNKNOWN"));
         }
     }
 
-    public Contest getContest() {
-        return contest;
+    public ContestDEPRECATED getContestDEPRECATED() {
+        return contestDEPRECATED;
     }
 
-    public Contest getContestData() {
+    public ContestDEPRECATED getContestData() {
         frozeSubmissions();
-        return contest;
+        return contestDEPRECATED;
     }
 
     public List<Submission> getLastChanged(Long fromId) {
-        return contest.getSubmissions().stream().filter(item -> item.getRunId() > fromId).collect(Collectors.toList());
+        return contestDEPRECATED.getSubmissions().stream().filter(item -> item.getRunId() > fromId).collect(Collectors.toList());
     }
 
     public Long getContestId() {
-        return contest.getId();
+        return contestDEPRECATED.getId();
     }
 
     public FileWatcher setContestId(Long id) {
-        contest.setId(id);
+        contestDEPRECATED.setId(id);
         return this;
     }
 

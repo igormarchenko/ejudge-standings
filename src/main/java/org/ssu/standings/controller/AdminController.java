@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.ssu.standings.entity.ContestInfo;
-import org.ssu.standings.entity.Team;
-import org.ssu.standings.entity.University;
+import org.ssu.standings.dao.entity.Team;
+import org.ssu.standings.dao.entity.University;
 import org.ssu.standings.service.ApiService;
 import org.ssu.standings.service.StandingsWatchService;
 

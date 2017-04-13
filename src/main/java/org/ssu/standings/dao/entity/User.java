@@ -1,4 +1,4 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.dao.entity;
 
 import javax.persistence.*;
 

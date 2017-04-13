@@ -1,12 +1,14 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "external_files")
-public class ExternalFileDescription {
+@Table(name = "standings_files")
+public class StandingsFile {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,10 +43,36 @@ public class ExternalFileDescription {
         return isFinal;
     }
 
-    public ExternalFileDescription() {
+    public StandingsFile() {
     }
 
-    private ExternalFileDescription(Builder builder) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StandingsFile that = (StandingsFile) o;
+
+        return new EqualsBuilder()
+                .append(id, that.id)
+                .append(link, that.link)
+                .append(contestId, that.contestId)
+                .append(isFinal, that.isFinal)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(link)
+                .append(contestId)
+                .append(isFinal)
+                .toHashCode();
+    }
+
+    private StandingsFile(Builder builder) {
         this.id = builder.id;
         this.isFinal = builder.isFinal;
         this.link = builder.link;
@@ -57,11 +85,11 @@ public class ExternalFileDescription {
         private Long contestId;
         private Boolean isFinal;
 
-        public Builder(ExternalFileDescription externalFileDescription) {
-            this.id = externalFileDescription.getId();
-            this.contestId = externalFileDescription.getContestId();
-            this.isFinal = externalFileDescription.getIsFinal();
-            this.link = externalFileDescription.getLink();
+        public Builder(StandingsFile standingsFile) {
+            this.id = standingsFile.getId();
+            this.contestId = standingsFile.getContestId();
+            this.isFinal = standingsFile.getIsFinal();
+            this.link = standingsFile.getLink();
         }
 
         public Builder withContestId(Long contestId) {
@@ -73,8 +101,8 @@ public class ExternalFileDescription {
             this.isFinal = isFinal;
             return this;
         }
-        public ExternalFileDescription build() {
-            return new ExternalFileDescription(this);
+        public StandingsFile build() {
+            return new StandingsFile(this);
         }
     }
 }

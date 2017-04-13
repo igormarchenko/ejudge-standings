@@ -1,7 +1,5 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.dao.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;

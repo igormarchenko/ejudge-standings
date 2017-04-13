@@ -9,7 +9,7 @@
 <body>
 
 <ul class="list-group">
-    <c:forEach items="${contests}" var="contest">
+    <c:forEach items="${contestDEPRECATEDS}" var="contest">
         <li class="list-group-item"><a href="/contest/${contest.key}">${contest.value}</a></li>
     </c:forEach>
 </ul>

@@ -17,7 +17,7 @@ public class BaylorExportService {
     private StandingsWatchService standingsWatchService;
 
     public List<BaylorTeam> getResultsForBaylor() throws ParserConfigurationException {
-//        Function<String, Optional<Contest>> getContestForTeam = (teamName) -> standingsWatchService.getContestData()
+//        Function<String, Optional<ContestDEPRECATED>> getContestForTeam = (teamName) -> standingsWatchService.getContestData()
 //                .stream()
 //                .filter(contest -> contest.getTeamId(teamName).isPresent())
 //                .findAny();
@@ -30,7 +30,7 @@ public class BaylorExportService {
 //            BaylorTeam baylorTeam = new BaylorTeam().setTeamName(parser.getAttributeValue(node, "TeamName"))
 //                    .setTeamId(Long.parseLong(parser.getAttributeValue(node, "TeamID")));
 //
-//            Optional<Contest> contest = getContestForTeam.apply(baylorTeam.getTeamName());
+//            Optional<ContestDEPRECATED> contest = getContestForTeam.apply(baylorTeam.getTeamName());
 //
 //            if (contest.isPresent()) {
 //                List<Submission> submissions = contest.get().getTeamSubmissions(contest.get().getTeamId(baylorTeam.getTeamName()).get());

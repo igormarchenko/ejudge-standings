@@ -1,0 +1,40 @@
+package org.ssu.standings.entity;
+
+import org.ssu.standings.dao.entity.StandingsFile;
+import org.ssu.standings.updateobserver.FileHandlerFactory;
+import org.ssu.standings.updateobserver.Response;
+import org.ssu.standings.updateobserver.handlers.FileHandler;
+
+import java.io.IOException;
+
+
+public class ContestStandingsFileObserver {
+    private FileHandler watcher;
+    private Long lastModified = -1L;
+    private String content;
+
+    public ContestStandingsFileObserver(StandingsFile standingsFile) {
+        this(standingsFile.getLink());
+    }
+
+    public ContestStandingsFileObserver(String path) {
+        try {
+            watcher = FileHandlerFactory.getInstance().createFileHandler(path);
+            update();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update() throws IOException {
+        Response response = watcher.getUpdates();
+        if (response.getLastModified() > lastModified) {
+            lastModified = response.getLastModified();
+            content = response.getContent();
+        }
+    }
+
+    public String getContent() {
+        return content;
+    }
+}

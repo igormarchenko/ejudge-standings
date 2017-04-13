@@ -2,7 +2,7 @@ package org.ssu.standings.parser;
 
 import org.ssu.standings.entity.Submission;
 import org.ssu.standings.entity.Task;
-import org.ssu.standings.entity.Team;
+import org.ssu.standings.dao.entity.Team;
 import org.ssu.standings.utils.TeamInUniversityList;
 import org.ssu.standings.utils.XmlStream;
 import org.w3c.dom.Node;
@@ -125,7 +125,7 @@ public class SubmissionsParser extends Parser {
         try {
             duration = Long.parseLong(getAttributeFromRunLogTag(DURATION));
         } catch (NullPointerException ex) {
-//            log.warning("Contest duration tag is not present!");
+//            log.warning("ContestDEPRECATED duration tag is not present!");
         }
         return duration;
     }
@@ -140,7 +140,7 @@ public class SubmissionsParser extends Parser {
         try {
             startTime = parseDate(START_TIME_TAG);
         } catch (NullPointerException ex) {
-            log.warning("Start time tag is not present! Contest is not started!");
+            log.warning("Start time tag is not present! ContestDEPRECATED is not started!");
         }
         return startTime;
     }

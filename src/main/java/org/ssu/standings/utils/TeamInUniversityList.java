@@ -1,7 +1,7 @@
 package org.ssu.standings.utils;
 
 
-import org.ssu.standings.entity.University;
+import org.ssu.standings.dao.entity.University;
 
 import java.util.Map;
 

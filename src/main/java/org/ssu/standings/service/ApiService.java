@@ -2,13 +2,13 @@ package org.ssu.standings.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.ssu.standings.dao.repository.StandingsFilesRepository;
 import org.ssu.standings.entity.ContestInfo;
-import org.ssu.standings.entity.ExternalFileDescription;
-import org.ssu.standings.entity.Team;
-import org.ssu.standings.entity.University;
-import org.ssu.standings.repository.ExternalFilesRepository;
-import org.ssu.standings.repository.TeamRepository;
-import org.ssu.standings.repository.UniversityRepository;
+import org.ssu.standings.dao.entity.StandingsFile;
+import org.ssu.standings.dao.entity.Team;
+import org.ssu.standings.dao.entity.University;
+import org.ssu.standings.dao.repository.TeamRepository;
+import org.ssu.standings.dao.repository.UniversityRepository;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class ApiService {
     @Resource
-    private ExternalFilesRepository externalFilesRepository;
+    private StandingsFilesRepository standingsFilesRepository;
 
     @Resource
     private TeamRepository teamRepository;
@@ -51,8 +51,8 @@ public class ApiService {
     }
 
     public List<ContestInfo> contestList() {
-        Map<Long, List<ExternalFileDescription>> externalFiles = externalFilesRepository.findAll().stream()
-                .collect(Collectors.groupingBy(ExternalFileDescription::getContestId));
+        Map<Long, List<StandingsFile>> externalFiles = standingsFilesRepository.findAll().stream()
+                .collect(Collectors.groupingBy(StandingsFile::getContestId));
 
         return externalFiles.entrySet().stream()
                 .map(item -> new ContestInfo.Builder(item.getKey(), item.getValue().get(0).getIsFinal(), item.getValue()).build())
@@ -60,8 +60,8 @@ public class ApiService {
     }
 
     private Long lastContestId() {
-        Optional<ExternalFileDescription> lastContest = externalFilesRepository.findAll().stream().sorted(Comparator.comparingLong(ExternalFileDescription::getContestId)).reduce((a, b) -> b);
-        return lastContest.map(ExternalFileDescription::getContestId).orElse(0L);
+        Optional<StandingsFile> lastContest = standingsFilesRepository.findAll().stream().sorted(Comparator.comparingLong(StandingsFile::getContestId)).reduce((a, b) -> b);
+        return lastContest.map(StandingsFile::getContestId).orElse(0L);
     }
 
     @Transactional
@@ -73,9 +73,9 @@ public class ApiService {
 
         contestInfo = new ContestInfo.Builder()
                 .withContestId(contestId)
-                .withExternalFileDesriptions(contestInfo.getExternalFileDescriptionList().stream()
+                .withExternalFileDesriptions(contestInfo.getStandingsFiles().stream()
                         .filter(Objects::nonNull)
-                        .map(item -> new ExternalFileDescription.Builder(item)
+                        .map(item -> new StandingsFile.Builder(item)
                                 .withContestId(contestId)
                                 .withIsFinal(isFinal)
                                 .build())
@@ -84,11 +84,11 @@ public class ApiService {
 
         return new ContestInfo.Builder(contestInfo.getContestId(),
                 contestInfo.getIsFinal(),
-                externalFilesRepository.save(contestInfo.getExternalFileDescriptionList().stream().filter(Objects::nonNull).collect(Collectors.toList()))).build();
+                standingsFilesRepository.save(contestInfo.getStandingsFiles().stream().filter(Objects::nonNull).collect(Collectors.toList()))).build();
     }
 
     @Transactional
     public void deleteContest(Long contestId) {
-        externalFilesRepository.deleteByContestId(contestId);
+        standingsFilesRepository.deleteByContestId(contestId);
     }
 }
