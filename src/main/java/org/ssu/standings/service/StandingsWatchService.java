@@ -4,13 +4,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.ssu.standings.dao.entity.StandingsFile;
-import org.ssu.standings.entity.*;
 import org.ssu.standings.dao.repository.StandingsFilesRepository;
 import org.ssu.standings.dao.repository.TeamRepository;
+import org.ssu.standings.entity.ContestStandingsFileObserver;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -60,7 +61,7 @@ public class StandingsWatchService {
 //        watchers.values().forEach(FileWatcher::updateChanges);
 //    }
 
-//    public List<Submission> getLastSubmissions(Long contestId, Long time) {
+//    public List<SubmissionNode> getLastSubmissions(Long contestId, Long time) {
 //        return getContestData(contestId).getSubmissions()
 //                .stream()
 //                .filter(item -> item.getTime() > time)
@@ -71,12 +72,14 @@ public class StandingsWatchService {
 //        return watchers.get(contestId).getContestData();
 //    }
 //
-//    public Map<Long, Map<Long, List<Submission>>> getFrozenResults(Long contestId) {
-//        return watchers.get(contestId).getFrozenSubmissions().stream().collect(Collectors.groupingBy(Submission::getUserId, Collectors.groupingBy(Submission::getProblemId)));
+//    public Map<Long, Map<Long, List<SubmissionNode>>> getFrozenResults(Long contestId) {
+//        return watchers.get(contestId).getFrozenSubmissions().stream().collect(Collectors.groupingBy(SubmissionNode::getUserId, Collectors.groupingBy(SubmissionNode::getProblemId)));
 //    }
 //
 
+
     private Map<StandingsFile, ContestStandingsFileObserver> observers;
+
     @PostConstruct
     public void init() {
         observers = standingsFilesRepository.findAll().stream().collect(Collectors.toMap(Function.identity(), ContestStandingsFileObserver::new));
@@ -91,5 +94,14 @@ public class StandingsWatchService {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void getContestData(Long contestId) {
+        List<String> contestContent = observers
+                .entrySet()
+                .stream()
+                .filter(observer -> observer.getKey().getContestId().equals(contestId))
+                .map(observer -> observer.getValue().getContent())
+                .collect(Collectors.toList());
     }
 }

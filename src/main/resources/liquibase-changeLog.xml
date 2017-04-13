@@ -15,7 +15,7 @@
     </changeSet>
 
     <changeSet id="3" author="Igor Marchenko">
-        <insert tableName="external_files">
+        <insert tableName="standings_files">
             <column name="id" value="1"/>
             <column name="link" value="http://ejudge.sumdu.edu.ua/external.xml"/>
             <column name="contest_id" value="2"/>

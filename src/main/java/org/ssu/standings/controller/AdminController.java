@@ -35,7 +35,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity removeTeam(@PathVariable Long teamId) {
         apiService.removeTeam(teamId);
-        standingsWatchService.updateWatchers();
+//        standingsWatchService.updateWatchers();
         return ResponseEntity.ok().build();
     }
 
@@ -43,7 +43,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity removeContest(@PathVariable Long contestId) {
         apiService.deleteContest(contestId);
-        standingsWatchService.updateWatchers();
+//        standingsWatchService.updateWatchers();
         return ResponseEntity.ok().build();
     }
 
@@ -51,7 +51,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity removeUniversity(@PathVariable Long universityId) {
         apiService.removeUniversity(universityId);
-        standingsWatchService.updateWatchers();
+//        standingsWatchService.updateWatchers();
         return ResponseEntity.ok().build();
     }
 
@@ -62,7 +62,7 @@ public class AdminController {
         try {
             team = new ObjectMapper().readValue(data.get("data").toString(), Team.class);
             team = apiService.saveTeam(team);
-            standingsWatchService.updateWatchers();
+//            standingsWatchService.updateWatchers();
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -76,7 +76,7 @@ public class AdminController {
         try {
             university = new ObjectMapper().readValue(data.get("data").toString(), University.class);
             university = apiService.saveUniversity(university);
-            standingsWatchService.updateWatchers();
+//            standingsWatchService.updateWatchers();
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -90,7 +90,7 @@ public class AdminController {
         try {
             contestInfo = new ObjectMapper().readValue(data.get("data").toString(), ContestInfo.class);
             contestInfo = apiService.saveContest(contestInfo);
-            standingsWatchService.updateWatchers();
+//            standingsWatchService.updateWatchers();
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

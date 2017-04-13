@@ -124,7 +124,7 @@ dependencies {
 
 
     def springVersion = '4.3.2.RELEASE'
-    def jacksonVersion = '2.8.1'
+    def jacksonVersion = '2.8.8'
 
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.7.21'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
@@ -136,7 +136,10 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.8.2'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: jacksonVersion
+    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-parameter-names', version: jacksonVersion
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: jacksonVersion
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonVersion
 
     compile group: 'org.springframework', name: 'spring-jdbc', version: springVersion
     compile group: 'org.springframework', name: 'spring-tx', version: springVersion

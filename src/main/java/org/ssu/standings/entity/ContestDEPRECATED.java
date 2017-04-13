@@ -21,7 +21,7 @@ public class ContestDEPRECATED {
     private LocalDateTime currentTime;
     private Boolean isFinalResults;
 
-//    private transient List<Submission> frozenSubmits;
+//    private transient List<SubmissionNode> frozenSubmits;
 
     public Long getId() {
         return id;
@@ -155,15 +155,15 @@ public class ContestDEPRECATED {
 //        return teams.stream().filter(team -> team.getName().trim().equals(teamName)).findAny();
 //    }
 //
-//    public List<Submission> getTeamSubmissions(Team team) {
+//    public List<SubmissionNode> getTeamSubmissions(Team team) {
 //        return submissions.stream().filter(submission -> submission.getUserId().equals(team.getTeamIdInContest())).collect(Collectors.toList());
 //    }
 
-//    public List<Submission> getFrozenSubmits() {
+//    public List<SubmissionNode> getFrozenSubmits() {
 //        return frozenSubmits;
 //    }
 //
-//    public ContestDEPRECATED setFrozenSubmits(List<Submission> frozenSubmits) {
+//    public ContestDEPRECATED setFrozenSubmits(List<SubmissionNode> frozenSubmits) {
 //        this.frozenSubmits = frozenSubmits;
 //        return this;
 //    }

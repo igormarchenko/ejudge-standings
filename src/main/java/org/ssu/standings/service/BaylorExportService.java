@@ -1,7 +1,6 @@
 package org.ssu.standings.service;
 
 import org.springframework.stereotype.Service;
-import org.ssu.standings.entity.BaylorTeam;
 import org.ssu.standings.entity.Submission;
 
 import javax.annotation.Resource;
@@ -13,10 +12,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class BaylorExportService {
-    @Resource
-    private StandingsWatchService standingsWatchService;
+//    @Resource
+//    private StandingsWatchService standingsWatchService;
 
-    public List<BaylorTeam> getResultsForBaylor() throws ParserConfigurationException {
+//    public List<BaylorTeam> getResultsForBaylor() throws ParserConfigurationException {
 //        Function<String, Optional<ContestDEPRECATED>> getContestForTeam = (teamName) -> standingsWatchService.getContestData()
 //                .stream()
 //                .filter(contest -> contest.getTeamId(teamName).isPresent())
@@ -33,9 +32,9 @@ public class BaylorExportService {
 //            Optional<ContestDEPRECATED> contest = getContestForTeam.apply(baylorTeam.getTeamName());
 //
 //            if (contest.isPresent()) {
-//                List<Submission> submissions = contest.get().getTeamSubmissions(contest.get().getTeamId(baylorTeam.getTeamName()).get());
-//                List<Submission> acceptedSubmissions = getAcceptedSubmissions(submissions);
-//                Long acceptedTasks = acceptedSubmissions.stream().map(Submission::getProblemId).distinct().count();
+//                List<SubmissionNode> submissions = contest.get().getTeamSubmissions(contest.get().getTeamId(baylorTeam.getTeamName()).get());
+//                List<SubmissionNode> acceptedSubmissions = getAcceptedSubmissions(submissions);
+//                Long acceptedTasks = acceptedSubmissions.stream().map(SubmissionNode::getProblemId).distinct().count();
 //                baylorTeam.setLastProblemTime(calculateLastProblemTime(acceptedSubmissions))
 //                        .setProblemsSolved(Math.toIntExact(acceptedTasks))
 //                        .setTotalTime(Math.toIntExact(calculatePenalty(submissions)));
@@ -51,8 +50,8 @@ public class BaylorExportService {
 //        }
 //
 //        return baylorTeams;
-        return null;
-    }
+//        return null;
+//    }
 
     private Long calculatePenalty(List<Submission> submissions) {
         Map<Long, List<Submission>> acceptedSubmits = submissions.stream()
