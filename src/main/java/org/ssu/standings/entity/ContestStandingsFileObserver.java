@@ -1,6 +1,6 @@
 package org.ssu.standings.entity;
 
-import org.ssu.standings.dao.entity.StandingsFile;
+import org.ssu.standings.dao.entity.StandingsFileDAO;
 import org.ssu.standings.updateobserver.FileHandlerFactory;
 import org.ssu.standings.updateobserver.Response;
 import org.ssu.standings.updateobserver.handlers.FileHandler;
@@ -13,8 +13,8 @@ public class ContestStandingsFileObserver {
     private Long lastModified = -1L;
     private String content;
 
-    public ContestStandingsFileObserver(StandingsFile standingsFile) {
-        this(standingsFile.getLink());
+    public ContestStandingsFileObserver(StandingsFileDAO standingsFileDAO) {
+        this(standingsFileDAO.getLink());
     }
 
     public ContestStandingsFileObserver(String path) {

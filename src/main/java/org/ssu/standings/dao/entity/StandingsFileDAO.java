@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "standings_files")
-public class StandingsFile {
+public class StandingsFileDAO {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class StandingsFile {
         return isFinal;
     }
 
-    public StandingsFile() {
+    public StandingsFileDAO() {
     }
 
     @Override
@@ -52,7 +52,7 @@ public class StandingsFile {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        StandingsFile that = (StandingsFile) o;
+        StandingsFileDAO that = (StandingsFileDAO) o;
 
         return new EqualsBuilder()
                 .append(id, that.id)
@@ -72,7 +72,7 @@ public class StandingsFile {
                 .toHashCode();
     }
 
-    private StandingsFile(Builder builder) {
+    private StandingsFileDAO(Builder builder) {
         this.id = builder.id;
         this.isFinal = builder.isFinal;
         this.link = builder.link;
@@ -85,11 +85,11 @@ public class StandingsFile {
         private Long contestId;
         private Boolean isFinal;
 
-        public Builder(StandingsFile standingsFile) {
-            this.id = standingsFile.getId();
-            this.contestId = standingsFile.getContestId();
-            this.isFinal = standingsFile.getIsFinal();
-            this.link = standingsFile.getLink();
+        public Builder(StandingsFileDAO standingsFileDAO) {
+            this.id = standingsFileDAO.getId();
+            this.contestId = standingsFileDAO.getContestId();
+            this.isFinal = standingsFileDAO.getIsFinal();
+            this.link = standingsFileDAO.getLink();
         }
 
         public Builder withContestId(Long contestId) {
@@ -101,8 +101,8 @@ public class StandingsFile {
             this.isFinal = isFinal;
             return this;
         }
-        public StandingsFile build() {
-            return new StandingsFile(this);
+        public StandingsFileDAO build() {
+            return new StandingsFileDAO(this);
         }
     }
 }

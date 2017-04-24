@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "university")
-public class University {
+public class UniversityDAO {
     @Id
     @SequenceGenerator(initialValue = 200, name = "universities_seq_id", sequenceName = "universities_seq_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "universities_seq_id")
@@ -23,10 +23,10 @@ public class University {
     @Column(name = "type")
     private String type;
 
-    @OneToMany(mappedBy = "universityEntity")
+    @OneToMany(mappedBy = "university")
 //    @JsonBackReference("team-university")
     @JsonIgnore
-    private List<Team> teams;
+    private List<TeamDAO> teamDAOS;
 
     public Long getId() {
         return id;
@@ -40,7 +40,7 @@ public class University {
         return name;
     }
 
-    public University setName(String name) {
+    public UniversityDAO setName(String name) {
         this.name = name;
         return this;
     }
@@ -49,7 +49,7 @@ public class University {
         return region;
     }
 
-    public University setRegion(String region) {
+    public UniversityDAO setRegion(String region) {
         this.region = region;
         return this;
     }
@@ -58,16 +58,16 @@ public class University {
         return type;
     }
 
-    public University setType(String type) {
+    public UniversityDAO setType(String type) {
         this.type = type;
         return this;
     }
 
-    public List<Team> getTeams() {
-        return teams;
+    public List<TeamDAO> getTeamDAOS() {
+        return teamDAOS;
     }
 
-    public void setTeams(List<Team> teams) {
-        this.teams = teams;
+    public void setTeamDAOS(List<TeamDAO> teamDAOS) {
+        this.teamDAOS = teamDAOS;
     }
 }

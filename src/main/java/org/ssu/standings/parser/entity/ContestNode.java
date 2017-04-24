@@ -39,7 +39,7 @@ public class ContestNode {
     private Long unfogTime;
 
     @JacksonXmlProperty(localName = "users")
-    private List<UserNode> users;
+    private List<ParticipantNode> participants;
 
     @JacksonXmlProperty(localName = "problems")
     private List<ProblemNode> problems;
@@ -49,5 +49,54 @@ public class ContestNode {
 
     @JacksonXmlProperty(localName = "runs")
     private List<SubmissionNode> submissions;
+
+
+    public Long getContestId() {
+        return contestId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getStopTime() {
+        return stopTime;
+    }
+
+    public LocalDateTime getCurrentTime() {
+        return currentTime;
+    }
+
+    public Long getFogTime() {
+        return fogTime;
+    }
+
+    public Long getUnfogTime() {
+        return unfogTime;
+    }
+
+    public List<ParticipantNode> getParticipants() {
+        return participants;
+    }
+
+    public List<ProblemNode> getProblems() {
+        return problems;
+    }
+
+    public List<LanguageNode> getLanguages() {
+        return languages;
+    }
+
+    public List<SubmissionNode> getSubmissions() {
+        return submissions;
+    }
 }
 

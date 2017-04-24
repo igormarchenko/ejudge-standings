@@ -1,6 +1,6 @@
 package org.ssu.standings.entity;
 
-import org.ssu.standings.dao.entity.Team;
+import org.ssu.standings.dao.entity.TeamDAO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class ContestDEPRECATED {
     private Long id;
     private List<Submission> submissions;
-    private List<Team> teams;
+    private List<TeamDAO> teamDAOS;
     private List<Task> tasks;
     private Long contestId;
 
@@ -40,9 +40,9 @@ public class ContestDEPRECATED {
         isFinalResults = finalResults;
     }
 
-    public List<Submission> getSubmissions() {
-        return submissions.stream().filter(item -> !"CE".equals(item.getStatus())).collect(Collectors.toList());
-    }
+//    public List<Submission> getSubmissions() {
+//        return submissions.stream().filter(item -> !"CE".equals(item.getStatus())).collect(Collectors.toList());
+//    }
 
     public LocalDateTime getCurrentTime() {
         return currentTime;
@@ -58,12 +58,12 @@ public class ContestDEPRECATED {
         return this;
     }
 
-    public List<Team> getTeams() {
-        return teams;
+    public List<TeamDAO> getTeamDAOS() {
+        return teamDAOS;
     }
 
-    public ContestDEPRECATED setTeams(List<Team> teams) {
-        this.teams = teams;
+    public ContestDEPRECATED setTeamDAOS(List<TeamDAO> teamDAOS) {
+        this.teamDAOS = teamDAOS;
         return this;
     }
 
@@ -151,11 +151,11 @@ public class ContestDEPRECATED {
         return this;
     }
 
-//    public Optional<Team> getTeamId(String teamName) {
-//        return teams.stream().filter(team -> team.getName().trim().equals(teamName)).findAny();
+//    public Optional<TeamDAO> getTeamId(String teamName) {
+//        return teamDAOS.stream().filter(team -> team.getName().trim().equals(teamName)).findAny();
 //    }
 //
-//    public List<SubmissionNode> getTeamSubmissions(Team team) {
+//    public List<SubmissionNode> getTeamSubmissions(TeamDAO team) {
 //        return submissions.stream().filter(submission -> submission.getUserId().equals(team.getTeamIdInContest())).collect(Collectors.toList());
 //    }
 

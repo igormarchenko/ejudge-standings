@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "teams")
-public class Team {
+public class TeamDAO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="id")
@@ -17,8 +17,8 @@ public class Team {
 
     @ManyToOne
     @JoinColumn(name = "university_id", nullable = false)
-    @JsonProperty("university")
-    private University universityEntity;
+    @JsonProperty("universityDAO")
+    private UniversityDAO university;
 
     @JsonProperty("contest_team_id")
     private transient Long teamIdInContest;
@@ -27,7 +27,7 @@ public class Team {
         return teamIdInContest;
     }
 
-    public Team setTeamIdInContest(Long teamIdInContest) {
+    public TeamDAO setTeamIdInContest(Long teamIdInContest) {
         this.teamIdInContest = teamIdInContest;
         return this;
     }
@@ -36,7 +36,7 @@ public class Team {
         return id;
     }
 
-    public Team setId(Long id) {
+    public TeamDAO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -45,17 +45,17 @@ public class Team {
         return name;
     }
 
-    public Team setName(String name) {
+    public TeamDAO setName(String name) {
         this.name = name;
         return this;
     }
 
-    public University getUniversityEntity() {
-        return universityEntity;
+    public UniversityDAO getUniversity() {
+        return university;
     }
 
-    public Team setUniversityEntity(University universityEntity) {
-        this.universityEntity = universityEntity;
+    public TeamDAO setUniversity(UniversityDAO university) {
+        this.university = university;
         return this;
     }
 }

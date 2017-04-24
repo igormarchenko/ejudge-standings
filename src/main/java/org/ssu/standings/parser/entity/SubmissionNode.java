@@ -32,4 +32,44 @@ public class SubmissionNode {
 
     @JacksonXmlProperty(isAttribute = true, localName = "passed_mode")
     private String passedMode;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public String getRunUuid() {
+        return runUuid;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getProblemId() {
+        return problemId;
+    }
+
+    public Long getLanguageId() {
+        return languageId;
+    }
+
+    public Long getTest() {
+        return test;
+    }
+
+    public Long getNsec() {
+        return nsec;
+    }
+
+    public String getPassedMode() {
+        return passedMode;
+    }
 }

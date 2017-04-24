@@ -8,16 +8,14 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class FileHandlerFactory {
-    private static Optional<FileHandlerFactory> chooser = Optional.empty();
+    private FileHandlerFactory() {}
 
-    private FileHandlerFactory() {
+    private static final class SingletonHolder {
+        private static final FileHandlerFactory chooser = new FileHandlerFactory();
     }
 
     public static FileHandlerFactory getInstance() {
-        if (!chooser.isPresent())
-            chooser = Optional.of(new FileHandlerFactory());
-
-        return chooser.get();
+        return SingletonHolder.chooser;
     }
 
     public FileHandler createFileHandler(String path) throws IOException {

@@ -11,4 +11,16 @@ public class ProblemNode {
 
     @JacksonXmlProperty(isAttribute = true, localName = "long_name")
     private String longName;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public String getLongName() {
+        return longName;
+    }
 }
