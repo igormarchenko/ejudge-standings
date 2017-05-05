@@ -1,18 +1,22 @@
 package org.ssu.standings.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.ssu.standings.parser.entity.ProblemNode;
 
 public class Task {
+    @JsonProperty("id")
     private Long id;
+    @JsonProperty("shortName")
     private String shortName;
+    @JsonProperty("longName")
     private String longName;
 
-    public Task(Builder builder) {
-        this.id = builder.id;
-        this.shortName = builder.shortName;
-        this.longName = builder.longName;
+    public Task(ProblemNode task) {
+        id = task.getId();
+        shortName = task.getShortName();
+        longName = task.getLongName();
     }
 
 
@@ -50,21 +54,5 @@ public class Task {
                 .append(shortName)
                 .append(longName)
                 .toHashCode();
-    }
-
-    public static final class Builder {
-        private Long id;
-        private String shortName;
-        private String longName;
-
-        public Builder(ProblemNode task) {
-            id = task.getId();
-            shortName = task.getShortName();
-            longName = task.getLongName();
-        }
-
-        public Task build() {
-            return new Task(this);
-        }
     }
 }

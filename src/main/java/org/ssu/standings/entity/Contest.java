@@ -4,28 +4,32 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.parser.entity.ContestNode;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Contest {
-    @JsonProperty("contest_id")
+    @JsonProperty("id")
     private Long contestId;
-    @JsonProperty("contest_name")
+    @JsonProperty("name")
     private String name;
     @JsonProperty("duration")
     private Long duration;
-    @JsonProperty("start_time")
+    @JsonProperty("startTime")
     private LocalDateTime startTime;
-    @JsonProperty("stop_time")
+    @JsonProperty("stopTime")
     private LocalDateTime stopTime;
-    @JsonProperty("current_time")
+    @JsonProperty("currentTime")
     private LocalDateTime currentTime;
-    @JsonProperty("fog_time")
+    @JsonProperty("fogTime")
     private Long fogTime;
-    @JsonProperty("infog_time")
+    @JsonProperty("unfogTime")
     private Long unfogTime;
     @JsonProperty("results")
-    private Map<Long, ParticipantResult> results;
+    private List<ParticipantResult> results;
+
+    @JsonProperty("tasks")
+    private List<Task> tasks;
 
     public Contest(Builder builder) {
         this.contestId = builder.contestId;
@@ -36,7 +40,8 @@ public class Contest {
         this.currentTime = builder.currentTime;
         this.fogTime = builder.fogTime;
         this.unfogTime = builder.unfogTime;
-        this.results = builder.results;
+        this.results = builder.results.values().stream().sorted().collect(Collectors.toList());
+        this.tasks = builder.tasks;
     }
 
     public static final class Builder {
@@ -48,7 +53,7 @@ public class Contest {
         private LocalDateTime currentTime;
         private Long fogTime;
         private Long unfogTime;
-
+        private List<Task> tasks;
         private Map<Long, ParticipantResult> results;
 
         public Builder(ContestNode contest) {
@@ -60,7 +65,7 @@ public class Contest {
             currentTime = contest.getCurrentTime();
             fogTime = contest.getFogTime();
             unfogTime = contest.getUnfogTime();
-
+            tasks = contest.getProblems().stream().map(Task::new).collect(Collectors.toList());
             results = contest.getParticipants()
                     .stream()
                     .map(team -> new Participant.Builder(team).build())

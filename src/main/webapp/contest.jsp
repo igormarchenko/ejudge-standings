@@ -49,13 +49,13 @@
 <div class="row">
     <div class="col-md-11">
         <h2>{{contest.name}} <br/>
-            <small style="line-height: 32px;">Last success: {{contest.last_success.team.name}} at
+            <small style="line-height: 32px;">Last success: {{contest.last_success.teamDAO.name}} at
                 {{contest.last_success.time}}
                 on problem
                 {{contest.last_success.task}}
             </small>
             <br/>
-            <small style="line-height: 32px;">Last submit: {{contest.last_submit.team.name}} at
+            <small style="line-height: 32px;">Last submit: {{contest.last_submit.teamDAO.name}} at
                 {{contest.last_submit.time}} on
                 problem
                 {{contest.last_submit.task}}
@@ -80,15 +80,15 @@
         <th>Solved</th>
     </tr>
     </thead>
-    <tr ng-repeat="team in results | filter: {isDisplayed: true} track by $index" id="team{{team.contest_team_id}}">
+    <tr ng-repeat="teamDAO in results | filter: {isDisplayed: true} track by $index" id="teamDAO{{teamDAO.contest_team_id}}">
         <td width="40px">
             <h4>{{$index + 1}}</h4>
         </td>
         <td width="450px">
-            <b>{{team.name}}</b> <br/><i ng-if="team.university.name != '-'">{{team.university.name}}
-            [{{team.university.region}}]</i>
+            <b>{{teamDAO.name}}</b> <br/><i ng-if="teamDAO.universityDAO.name != '-'">{{teamDAO.universityDAO.name}}
+            [{{teamDAO.universityDAO.region}}]</i>
         </td>
-        <td ng-repeat="task in team.tasks track by $index"
+        <td ng-repeat="task in teamDAO.tasks track by $index"
             width="50px"
             valign="middle"
             ng-class="cellStyle(task.status)"
@@ -97,9 +97,9 @@
 
         </td>
         <td width="50px">
-            <b>{{team.solved}}</b>
+            <b>{{teamDAO.solved}}</b>
             <br/>
-            <i>{{team.penalty}}</i>
+            <i>{{teamDAO.penalty}}</i>
         </td>
     </tr>
 </table>
@@ -146,8 +146,8 @@
                                     {{$item}}
                                 </ui-select-match>
                                 <ui-select-choices
-                                        repeat="university in universityTypes | filter: $select.search">
-                                    {{university}}
+                                        repeat="universityDAO in universityTypes | filter: $select.search">
+                                    {{universityDAO}}
                                 </ui-select-choices>
                             </ui-select>
                         </div>

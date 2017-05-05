@@ -58,7 +58,7 @@ public class ContestInfo {
             StandingsFileDAO firstFile = standingsFileDAOList.stream().findFirst().orElseThrow(NullPointerException::new);
             this.contestId = firstFile.getContestId();
             this.standingsFileDAOList = standingsFileDAOList;
-            this.isFinal = firstFile.getIsFinal();
+//            this.isFinal = firstFile.getIsFinal();
         }
 
         public Builder(Long contestId, Boolean isFinal, List<StandingsFileDAO> standingsFileDAOList) {

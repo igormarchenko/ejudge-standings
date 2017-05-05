@@ -1,0 +1,120 @@
+<div class="row">
+    <div class="col-md-11">
+        <h2>{{contest.name}} <br/>
+            <!--<small style="line-height: 32px;">Last success: {{contest.last_success.teamDAO.name}} at-->
+                <!--{{contest.last_success.time}}-->
+                <!--on problem-->
+                <!--{{contest.last_success.task}}-->
+            <!--</small>-->
+            <!--<br/>-->
+            <!--<small style="line-height: 32px;">Last submit: {{contest.last_submit.teamDAO.name}} at-->
+                <!--{{contest.last_submit.time}} on-->
+                <!--problem-->
+                <!--{{contest.last_submit.task}}-->
+            <!--</small>-->
+        </h2>
+    </div>
+</div>
+<style>
+    .tableRow {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        color: #000;
+    }
+
+    .headerCellStyle {
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid #DDDDDD;
+    }
+
+    .taskCell {
+        width: 70px;
+        font-size: 16pt;
+        display: flex;
+        justify-content: center;
+    }
+
+    .penaltyCell {
+        width: 100px;
+        font-size: 16pt;
+    }
+
+    .solvedCell {
+        width: 100px;
+        font-size: 16pt;
+        text-align: center;
+    }
+
+    .participantCell {
+        flex-basis: 0;
+        flex-grow: 5;
+        /*flex-shrink: 5;*/
+        font-size: 16pt;
+    }
+
+    .participantNameCell {
+        font-size: 14pt;
+        font-weight: bold;
+        overflow: hidden;
+        text-align: left;
+    }
+
+    .taskResultBlock{
+        align-items: stretch;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .solvedTaskCell {
+        background-color: #2b9e2b;
+    }
+
+    .emptyTaskCell {
+        background-color: #8c8c8c;
+    }
+
+    .unsolvedTaskCell {
+        background-color: #b34542;
+    }
+
+    .penaltyNumber {
+        font-style: italic;
+        font-size: 12pt;
+    }
+</style>
+
+<div>
+    <div class="tableRow">
+        <div class="headerCellStyle taskCell"> #</div>
+        <div class="headerCellStyle participantCell"> Participant</div>
+
+        <div class="headerCellStyle taskCell" ng-repeat="task in contest.tasks" title="{{task.longName}}">
+            {{task.shortName}}
+        </div>
+        <!--<div class="headerCellStyle penaltyCell"> Penalty</div>-->
+        <div class="headerCellStyle solvedCell"> Solved</div>
+    </div>
+
+    <div class="tableRow" ng-repeat="result in contest.results track by $index">
+        <div class="headerCellStyle taskCell">{{$index + 1}}</div>
+        <div class="headerCellStyle participantCell participantNameCell"> {{result.participant.name}}</div>
+        <div class="headerCellStyle taskCell" ng-repeat="task in ::contest.tasks track by $index" title="{{task.longName}}">
+            <!--{{task.shortName}}-->
+            <div ng-show="!result.results[task.id]" class="taskResultBlock emptyTaskCell">&nbsp;</div>
+            <div ng-show="result.results[task.id] && result.results[task.id].status == 'OK'" class="taskResultBlock solvedTaskCell">
+                +{{result.results[task.id].tries}} <br/> <span>
+                {{formatTime(result.results[task.id].firstAcceptedSubmissionTime)}}
+                 </span>
+            </div>
+            <div ng-show="result.results[task.id] && result.results[task.id].status != 'OK'" class="taskResultBlock unsolvedTaskCell">
+                -{{result.results[task.id].tries}}
+            </div>
+        </div>
+        <!--<div class="headerCellStyle penaltyCell"> {{result.penalty}}</div>-->
+        <div class="headerCellStyle solvedCell"> {{result.solved}} <br/>
+            <span class="penaltyNumber">{{result.penalty}}</span>
+        </div>
+    </div>
+</div>

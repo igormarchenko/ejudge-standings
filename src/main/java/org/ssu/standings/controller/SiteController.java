@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.ssu.standings.entity.Contest;
 import org.ssu.standings.entity.ContestStandingsFileObserver;
 import org.ssu.standings.parser.StandingsFileParser;
 import org.ssu.standings.parser.entity.ContestNode;
@@ -24,6 +25,7 @@ import org.ssu.standings.service.StandingsWatchService;
 import javax.annotation.Resource;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/")
@@ -35,6 +37,8 @@ public class SiteController {
     private BaylorExportService baylorExportService;
     @Resource
     private ApiService apiService;
+
+
 
     @RequestMapping(value = "/api/teamlist", method = RequestMethod.GET)
     @ResponseBody
@@ -69,37 +73,19 @@ public class SiteController {
         return model;
     }
 
-    @RequestMapping(value = "/contest/{contestId}", produces = "text/plain;charset=UTF-8")
-    @ResponseBody
-    public ModelAndView contestHomePage(@PathVariable Long contestId) {
-        ModelAndView model = new ModelAndView();
-        model.setViewName("contest");
-        return model;
-    }
-
-    @RequestMapping(value = "/", produces = "text/plain;charset=UTF-8")
-    public ModelAndView homePage(ModelAndView model) throws IOException {
-
-        Long start = System.currentTimeMillis();
-        ContestStandingsFileObserver fileObserver = new ContestStandingsFileObserver("http://ejudge.sumdu.edu.ua/external.xml");
-        Optional<ContestNode> contest = StandingsFileParser.getInstance().parse(fileObserver.getContent());
-        System.out.printf("Time: %d\n", System.currentTimeMillis() - start);
-
-        model.setViewName("/home");
-//        model.addObject("contests", standingsWatchService.getContestList());
-        return model;
-    }
 
     @RequestMapping(value = "/api/init-results/{contestId}", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     @ResponseBody
-    public String getInitResults(@PathVariable Long contestId) {
+    public String getInitResults(@PathVariable Long contestId) throws JsonProcessingException {
+        Contest contestData = standingsWatchService.getContestData(contestId);
+        return new ObjectMapper().writeValueAsString(contestData);
 //        try {
 //            return new ObjectMapper()
 //                    .writeValueAsString(standingsWatchService.getContestData(contestId));
 //        } catch (JsonProcessingException e) {
 //            e.printStackTrace();
 //        }
-        return "{}";
+//        return "{}";
     }
 
     @RequestMapping(value = "/api/results/{contestId}/{time}", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
@@ -143,4 +129,12 @@ public class SiteController {
 //                .writeValueAsString(baylorExportService.getResultsForBaylor())
 //                .replaceAll("item", "Standing");
 //    }
+
+
+
+    @RequestMapping(value = {"/", "/contest/{contestId}"}, produces = "text/plain;charset=UTF-8")
+    public ModelAndView homePage(ModelAndView model, @PathVariable Optional<Long> contestId) throws IOException {
+        model.setViewName("/home");
+        return model;
+    }
 }

@@ -2,7 +2,9 @@ package org.ssu.standings.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.ssu.standings.dao.entity.ContestDAO;
 import org.ssu.standings.dao.entity.TeamDAO;
+import org.ssu.standings.dao.repository.ContestRepository;
 import org.ssu.standings.dao.repository.StandingsFilesRepository;
 import org.ssu.standings.entity.ContestInfo;
 import org.ssu.standings.dao.entity.StandingsFileDAO;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class ApiService {
     @Resource
-    private StandingsFilesRepository standingsFilesRepository;
+    private ContestRepository contestRepository;
 
     @Resource
     private TeamRepository teamRepository;
@@ -50,45 +52,42 @@ public class ApiService {
         return universityRepository.save(universityDAO);
     }
 
-    public List<ContestInfo> contestList() {
-        Map<Long, List<StandingsFileDAO>> externalFiles = standingsFilesRepository.findAll().stream()
-                .collect(Collectors.groupingBy(StandingsFileDAO::getContestId));
-
-        return externalFiles.entrySet().stream()
-                .map(item -> new ContestInfo.Builder(item.getKey(), item.getValue().get(0).getIsFinal(), item.getValue()).build())
-                .collect(Collectors.toList());
+    public List<ContestDAO> contestList() {
+        return contestRepository.findAll();
     }
 
     private Long lastContestId() {
-        Optional<StandingsFileDAO> lastContest = standingsFilesRepository.findAll().stream().sorted(Comparator.comparingLong(StandingsFileDAO::getContestId)).reduce((a, b) -> b);
-        return lastContest.map(StandingsFileDAO::getContestId).orElse(0L);
+//        Optional<StandingsFileDAO> lastContest = standingsFilesRepository.findAll().stream().sorted(Comparator.comparingLong(StandingsFileDAO::getContestId)).reduce((a, b) -> b);
+//        return lastContest.map(StandingsFileDAO::getContestId).orElse(0L);
+        return -1L;
     }
 
     @Transactional
     public ContestInfo saveContest(ContestInfo contestInfo) {
-        Long contestId = Optional.ofNullable(contestInfo.getContestId()).orElse(lastContestId() + 1);
-        Boolean isFinal = Optional.ofNullable(contestInfo.getIsFinal()).orElse(false);
-
-        deleteContest(contestInfo.getContestId());
-
-        contestInfo = new ContestInfo.Builder()
-                .withContestId(contestId)
-                .withExternalFileDesriptions(contestInfo.getStandingsFileDAOS().stream()
-                        .filter(Objects::nonNull)
-                        .map(item -> new StandingsFileDAO.Builder(item)
-                                .withContestId(contestId)
-                                .withIsFinal(isFinal)
-                                .build())
-                        .collect(Collectors.toList()))
-                .withIsFinal(contestInfo.getIsFinal()).build();
-
-        return new ContestInfo.Builder(contestInfo.getContestId(),
-                contestInfo.getIsFinal(),
-                standingsFilesRepository.save(contestInfo.getStandingsFileDAOS().stream().filter(Objects::nonNull).collect(Collectors.toList()))).build();
+//        Long contestId = Optional.ofNullable(contestInfo.getContestId()).orElse(lastContestId() + 1);
+//        Boolean isFinal = Optional.ofNullable(contestInfo.getIsFinal()).orElse(false);
+//
+//        deleteContest(contestInfo.getContestId());
+//
+//        contestInfo = new ContestInfo.Builder()
+//                .withContestId(contestId)
+//                .withExternalFileDesriptions(contestInfo.getStandingsFileDAOS().stream()
+//                        .filter(Objects::nonNull)
+//                        .map(item -> new StandingsFileDAO.Builder(item)
+//                                .withContestId(contestId)
+//                                .withIsFinal(isFinal)
+//                                .build())
+//                        .collect(Collectors.toList()))
+//                .withIsFinal(contestInfo.getIsFinal()).build();
+//
+//        return new ContestInfo.Builder(contestInfo.getContestId(),
+//                contestInfo.getIsFinal(),
+//                standingsFilesRepository.save(contestInfo.getStandingsFileDAOS().stream().filter(Objects::nonNull).collect(Collectors.toList()))).build();
+        return null;
     }
 
     @Transactional
     public void deleteContest(Long contestId) {
-        standingsFilesRepository.deleteByContestId(contestId);
+        contestRepository.delete(contestId);
     }
 }

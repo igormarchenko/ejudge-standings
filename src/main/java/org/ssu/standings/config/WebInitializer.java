@@ -1,11 +1,25 @@
 package org.ssu.standings.config;
 
+import com.planetj.servlet.filter.compression.CompressingFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.annotation.Resource;
+import javax.servlet.Filter;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletRegistration;
+import java.nio.charset.StandardCharsets;
 
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+        registration.setInitParameter("dispatchOptionsRequest", "true");
+        registration.setAsyncSupported(true);
+    }
+
+    @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] {CoreConfig.class};
+        return new Class[]{CoreConfig.class, WebSocketConfig.class};
     }
 
     @Override
@@ -16,5 +30,13 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
+    }
+
+    @Override
+    protected Filter[] getServletFilters() {
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding(StandardCharsets.UTF_8.name());
+
+        return new Filter[]{characterEncodingFilter};
     }
 }

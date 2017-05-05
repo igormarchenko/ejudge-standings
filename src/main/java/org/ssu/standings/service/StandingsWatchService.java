@@ -50,7 +50,7 @@ public class StandingsWatchService {
         });
     }
 
-    public List<Contest> getContestData(Long contestId) {
+    public Contest getContestData(Long contestId) {
         List<ContestNode> contestNodes = observers.entrySet()
                 .stream()
                 .filter(observer -> observer.getKey().getContestId().equals(contestId))
@@ -59,6 +59,6 @@ public class StandingsWatchService {
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        return contestNodes.stream().map(node -> new Contest.Builder(node).build()).collect(Collectors.toList());
+        return contestNodes.stream().map(node -> new Contest.Builder(node).build()).collect(Collectors.toList()).get(0);
     }
 }

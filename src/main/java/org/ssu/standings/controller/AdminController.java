@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.ssu.standings.dao.entity.TeamDAO;
+import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.entity.ContestInfo;
-import org.ssu.standings.dao.entity.Team;
-import org.ssu.standings.dao.entity.University;
 import org.ssu.standings.service.ApiService;
 import org.ssu.standings.service.StandingsWatchService;
 
@@ -58,29 +58,29 @@ public class AdminController {
     @RequestMapping(value = "/saveteam", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveTeam(@RequestBody ObjectNode data) throws JsonProcessingException {
-        Team team;
+        TeamDAO teamDAO;
         try {
-            team = new ObjectMapper().readValue(data.get("data").toString(), Team.class);
-            team = apiService.saveTeam(team);
+            teamDAO = new ObjectMapper().readValue(data.get("data").toString(), TeamDAO.class);
+            teamDAO = apiService.saveTeam(teamDAO);
 //            standingsWatchService.updateWatchers();
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(team));
+        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(teamDAO));
     }
 
     @RequestMapping(value = "/saveuniversity", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveUniversity(@RequestBody ObjectNode data) throws JsonProcessingException {
-        University university;
+        UniversityDAO universityDAO;
         try {
-            university = new ObjectMapper().readValue(data.get("data").toString(), University.class);
-            university = apiService.saveUniversity(university);
+            universityDAO = new ObjectMapper().readValue(data.get("data").toString(), UniversityDAO.class);
+            universityDAO = apiService.saveUniversity(universityDAO);
 //            standingsWatchService.updateWatchers();
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(university));
+        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(universityDAO));
     }
 
     @RequestMapping(value = "/savecontest", method = RequestMethod.POST)

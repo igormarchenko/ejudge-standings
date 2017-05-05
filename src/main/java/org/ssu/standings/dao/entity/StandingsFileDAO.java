@@ -1,5 +1,6 @@
 package org.ssu.standings.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,12 +21,12 @@ public class StandingsFileDAO {
     private String link;
 
     @Column(name = "contest_id")
-    @JsonProperty("contest_id")
+    @JsonIgnore
     private Long contestId;
 
-    @Column(name = "is_final")
-    @JsonProperty("is_final")
-    private Boolean isFinal;
+
+    public StandingsFileDAO() {
+    }
 
     public Long getId() {
         return id;
@@ -37,13 +38,6 @@ public class StandingsFileDAO {
 
     public Long getContestId() {
         return contestId;
-    }
-
-    public Boolean getIsFinal() {
-        return isFinal;
-    }
-
-    public StandingsFileDAO() {
     }
 
     @Override
@@ -58,7 +52,6 @@ public class StandingsFileDAO {
                 .append(id, that.id)
                 .append(link, that.link)
                 .append(contestId, that.contestId)
-                .append(isFinal, that.isFinal)
                 .isEquals();
     }
 
@@ -68,41 +61,6 @@ public class StandingsFileDAO {
                 .append(id)
                 .append(link)
                 .append(contestId)
-                .append(isFinal)
                 .toHashCode();
-    }
-
-    private StandingsFileDAO(Builder builder) {
-        this.id = builder.id;
-        this.isFinal = builder.isFinal;
-        this.link = builder.link;
-        this.contestId = builder.contestId;
-    }
-
-    public static final class Builder{
-        private Long id;
-        private String link;
-        private Long contestId;
-        private Boolean isFinal;
-
-        public Builder(StandingsFileDAO standingsFileDAO) {
-            this.id = standingsFileDAO.getId();
-            this.contestId = standingsFileDAO.getContestId();
-            this.isFinal = standingsFileDAO.getIsFinal();
-            this.link = standingsFileDAO.getLink();
-        }
-
-        public Builder withContestId(Long contestId) {
-            this.contestId = contestId;
-            return this;
-        }
-
-        public Builder withIsFinal(Boolean isFinal) {
-            this.isFinal = isFinal;
-            return this;
-        }
-        public StandingsFileDAO build() {
-            return new StandingsFileDAO(this);
-        }
     }
 }

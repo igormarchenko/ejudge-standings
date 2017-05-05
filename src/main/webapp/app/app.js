@@ -4,15 +4,12 @@ angular.module('ejudgeStandings',
         'ngRoute',
         'ngSanitize'
     ]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-    $routeProvider.when("/admin/teams", {
-        templateUrl: "/views/teams.html",
-        controller: "teamsController"
-    }).when("/admin/universities", {
-        templateUrl: "/views/universities.html",
-        controller: "universityController"
-    }).when("/admin/contests", {
-        templateUrl: "/views/contest-editor.html",
-        controller: "contestsEditorController"
+    $routeProvider.when("/", {
+        templateUrl: "/views/contest-list.html",
+        controller: "contestListController"
+    }).when("/contest/:contestId", {
+        templateUrl: "/views/contest-result.html",
+        controller: "resultsController"
     });
     $locationProvider.html5Mode({
         enabled: true,

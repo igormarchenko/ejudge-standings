@@ -21,11 +21,12 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
         results.putIfAbsent(submit.getProblemId(), new TaskResult());
         results.get(submit.getProblemId()).addNode(submit);
     }
-
+    @JsonProperty("penalty")
     public Long getPenalty() {
         return results.values().stream().mapToLong(TaskResult::getPenalty).sum();
     }
 
+    @JsonProperty("solved")
     public Long solvedProblems() {
         return results.values().stream().filter(result -> result.getStatus().equals(SubmissionStatus.OK)).count();
     }
@@ -39,7 +40,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
     @Override
     public int compare(ParticipantResult o1, ParticipantResult o2) {
         if (!o1.solvedProblems().equals(o2.solvedProblems()))
-            return Long.valueOf(o1.solvedProblems() - o2.solvedProblems()).intValue();
+            return Long.valueOf(o2.solvedProblems() - o1.solvedProblems()).intValue();
         else
             return Long.valueOf(o1.getPenalty() - o2.getPenalty()).intValue();
     }
