@@ -1,11 +1,15 @@
 package org.ssu.standings.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.ssu.standings.dao.entity.TeamDAO;
+import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.parser.entity.ContestNode;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Contest {
@@ -56,7 +60,8 @@ public class Contest {
         private List<Task> tasks;
         private Map<Long, ParticipantResult> results;
 
-        public Builder(ContestNode contest) {
+        public Builder(ContestNode contest, Map<String, List<TeamDAO>> teams) {
+            Function<String, UniversityDAO> getUniversityForTeam = teamName -> Optional.ofNullable(teams.get(teamName)).map(teamDAOS -> teamDAOS.get(0).getUniversity()).orElse(null);
             contestId = contest.getContestId();
             name = contest.getName();
             duration = contest.getDuration();
@@ -66,9 +71,10 @@ public class Contest {
             fogTime = contest.getFogTime();
             unfogTime = contest.getUnfogTime();
             tasks = contest.getProblems().stream().map(Task::new).collect(Collectors.toList());
+
             results = contest.getParticipants()
                     .stream()
-                    .map(team -> new Participant.Builder(team).build())
+                    .map(team -> new Participant.Builder(team, getUniversityForTeam.apply(team.getName())).build())
                     .collect(Collectors.toMap(Participant::getId, ParticipantResult::new));
 
             contest.getSubmissions().forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));

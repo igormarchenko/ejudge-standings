@@ -4,6 +4,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.ssu.standings.dao.entity.StandingsFileDAO;
+import org.ssu.standings.dao.entity.TeamDAO;
 import org.ssu.standings.dao.repository.StandingsFilesRepository;
 import org.ssu.standings.dao.repository.TeamRepository;
 import org.ssu.standings.entity.Contest;
@@ -51,6 +52,7 @@ public class StandingsWatchService {
     }
 
     public Contest getContestData(Long contestId) {
+        Map<String, List<TeamDAO>> teams = teamRepository.findAll().stream().collect(Collectors.groupingBy(TeamDAO::getName));
         List<ContestNode> contestNodes = observers.entrySet()
                 .stream()
                 .filter(observer -> observer.getKey().getContestId().equals(contestId))
@@ -59,6 +61,6 @@ public class StandingsWatchService {
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        return contestNodes.stream().map(node -> new Contest.Builder(node).build()).collect(Collectors.toList()).get(0);
+        return contestNodes.stream().map(node -> new Contest.Builder(node, teams).build()).collect(Collectors.toList()).get(0);
     }
 }

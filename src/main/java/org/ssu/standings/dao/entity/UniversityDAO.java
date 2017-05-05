@@ -1,6 +1,7 @@
 package org.ssu.standings.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,12 +16,15 @@ public class UniversityDAO {
     private Long id;
 
     @Column(name = "university_name")
+    @JsonProperty("name")
     private String name;
 
     @Column(name = "region")
+    @JsonProperty("region")
     private String region;
 
     @Column(name = "type")
+    @JsonProperty("type")
     private String type;
 
     @OneToMany(mappedBy = "university")

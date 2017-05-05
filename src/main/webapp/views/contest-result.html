@@ -83,6 +83,11 @@
         font-style: italic;
         font-size: 12pt;
     }
+
+    .universityCell {
+        font-weight: normal;
+        font-style: italic;
+    }
 </style>
 
 <div>
@@ -99,7 +104,10 @@
 
     <div class="tableRow" ng-repeat="result in contest.results track by $index">
         <div class="headerCellStyle taskCell">{{$index + 1}}</div>
-        <div class="headerCellStyle participantCell participantNameCell"> {{result.participant.name}}</div>
+        <div class="headerCellStyle participantCell participantNameCell"> {{result.participant.name}}
+            <br/>
+            <span class="universityCell">{{result.participant.university.name}}</span>
+        </div>
         <div class="headerCellStyle taskCell" ng-repeat="task in ::contest.tasks track by $index" title="{{task.longName}}">
             <!--{{task.shortName}}-->
             <div ng-show="!result.results[task.id]" class="taskResultBlock emptyTaskCell">&nbsp;</div>
