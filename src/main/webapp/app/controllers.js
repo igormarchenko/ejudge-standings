@@ -20,7 +20,8 @@ angular.module('ejudgeStandings.controllers', [])
             });
         }
 
-        $scope.formatTime = function(minutes) {
-            return sprintf("%02d:%02d", minutes / 60 / 60, minutes / 60 % 60);
+        $scope.formatTime = function(seconds) {
+            var minutes = (seconds + 60 - seconds % 60) / 60;
+            return sprintf("%02d:%02d", minutes / 60, minutes % 60);
         }
     });
