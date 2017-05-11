@@ -16,7 +16,7 @@ public class TaskResult {
     private Long penalty = 0L;
     @JsonProperty("status")
     private SubmissionStatus status = SubmissionStatus.EMPTY;
-    @JsonProperty("submits")
+    @JsonIgnore
     private List<Submission> submissions = new ArrayList<>();
 
     public TaskResult() {

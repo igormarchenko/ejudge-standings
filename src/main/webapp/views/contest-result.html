@@ -1,3 +1,27 @@
+<style>
+    .cell-ok {
+        background-color: #2b9e2b;
+    }
+
+    .cell-wrong {
+        background-color: #b34542;
+    }
+
+    .cell-unknown {
+        background-color: #965f0c;
+    }
+
+    .cell-empty {
+        background-color: #8c8c8c;
+    }
+
+    table.floatThead-table {
+        border-top: none;
+        border-bottom: none;
+        background-color: #FFF;
+    }
+</style>
+
 <div class="row">
     <div class="col-md-11">
         <h2>{{contest.name}} <br/>
@@ -15,139 +39,54 @@
         </h2>
     </div>
 </div>
-<style>
-    .tableRow {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        color: #000;
-    }
 
-    .headerCellStyle {
-        text-align: center;
-        vertical-align: middle;
-        border: 1px solid #DDDDDD;
-    }
-
-    .taskCell {
-        width: 70px;
-        font-size: 16pt;
-        display: flex;
-        justify-content: center;
-        font-weight: 600;
-    }
-
-    .penaltyCell {
-        width: 100px;
-        font-size: 16pt;
-    }
-
-    .solvedCell {
-        width: 100px;
-        font-size: 16pt;
-        text-align: center;
-    }
-
-    .participantCell {
-        flex-basis: 0;
-        flex-grow: 5;
-        /*flex-shrink: 5;*/
-        font-size: 16pt;
-        position: relative;
-    }
-
-    .participantNameCell {
-        font-size: 14pt;
-        font-weight: bold;
-        overflow: hidden;
-        text-align: left;
-    }
-
-    .taskResultBlock {
-        align-items: stretch;
-        box-sizing: border-box;
-        width: 100%;
-        padding-top: 5px;
-    }
-
-    .solvedTaskCell {
-        background-color: #2b9e2b;
-    }
-
-    .emptyTaskCell {
-        background-color: #8c8c8c;
-    }
-
-    .unsolvedTaskCell {
-        background-color: #b34542;
-        font-size: 13pt;
-        font-weight: bold;
-        padding-top: 15px;
-    }
-
-    .penaltyNumber {
-        font-style: italic;
-        font-size: 12pt;
-    }
-
-    .universityCell {
-        font-weight: normal;
-        font-style: italic;
-        overflow: hidden;
-        position: absolute;
-    }
-
-    .submissionTime {
-        font-size: 11pt;
-        font-style: italic;
-        font-weight: normal;
-    }
-
-    .problemTries {
-        font-size: 13pt;
-        font-weight: bold;
-        line-height: normal;
-    }
-</style>
-
-<div>
-    <div class="tableRow">
-        <div class="headerCellStyle taskCell"> #</div>
-        <div class="headerCellStyle participantCell"> Participant</div>
-
-        <div class="headerCellStyle taskCell" ng-repeat="task in contest.tasks" title="{{task.longName}}">
+<table class="table table-bordered" id="resultsTable">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Team</th>
+        <th ng-repeat="task in contest.tasks track by $index" style="text-align: center" title="{{task.longName}}">
             {{task.shortName}}
-        </div>
-        <!--<div class="headerCellStyle penaltyCell"> Penalty</div>-->
-        <div class="headerCellStyle solvedCell"> Solved</div>
-    </div>
+        </th>
+        <th>Solved</th>
+    </tr>
+    </thead>
+    <tbody infinite-scroll='loadMore()' infinite-scroll-disabled="scrollDisabled"
+           infinite-scroll-use-document-bottom="true">
 
-    <div class="tableRow" ng-repeat="result in contest.results track by $index">
-        <div class="headerCellStyle taskCell">{{$index + 1}}</div>
-        <div class="headerCellStyle participantCell participantNameCell"> {{result.participant.name}}
+    <tr ng-repeat="team in display track by $index">
+        <td width="40px">
+            <h4>{{$index + 1}}</h4>
+        </td>
+        <td width="450px">
+            <b>{{team.participant.name}}</b> <br/>
+            <i>{{team.participant.university.name}}</i>
+        </td>
+        <td ng-repeat="task in ::contest.tasks track by $index"
+            width="50px"
+            valign="middle"
+            ng-class="{undefined : 'cell-empty', 'EMPTY' : 'cell-empty', 'OK' : 'cell-ok', 'UNKNOWN' : 'cell-unknown', 'WA' : 'cell-wrong', 'TL' : 'cell-wrong', 'RT' : 'cell-wrong', 'PE' : 'cell-wrong', 'ML' : 'cell-wrong', 'SE' : 'cell-wrong'}[team.results[task.id].status]"
+            class="text-center">
+            <div ng-switch="team.results[task.id].status">
+                <div ng-switch-when="EMPTY|null|undefined" ng-switch-when-separator="|"></div>
+                <div ng-switch-when="OK"><b>+ {{(team.results[task.id].tries - 1 > 0) ? team.results[task.id].tries : ''}} </b>
+                    <br/>
+                    <i>
+                        <small> {{formatTime(team.results[task.id].firstAcceptedSubmissionTime)}}</small>
+                    </i>
+                </div>
+                <div ng-switch-when="UNKNOWN"><b>?</b></div>
+                <div ng-switch-default><b>-{{team.results[task.id].tries}}</b></div>
+            </div>
+
+
+        </td>
+        <td width="50px">
+            <b>{{team.solved}}</b>
             <br/>
-            <span class="universityCell">{{result.participant.university.name}}</span>
-        </div>
-        <div class="headerCellStyle taskCell" ng-repeat="task in ::contest.tasks track by $index">
-            <!--{{task.shortName}}-->
+            <i>{{team.penalty}}</i>
+        </td>
+    </tr>
+    </tbody>
 
-            <div ng-show="result.results[task.id] && result.results[task.id].status == 'OK'"
-                 class="taskResultBlock solvedTaskCell">
-                <span class="problemTries">
-                    +<span ng-show="result.results[task.id].tries > 1">{{result.results[task.id].tries - 1}}</span>
-                </span>
-                <br/>
-                <span class="submissionTime">{{formatTime(result.results[task.id].firstAcceptedSubmissionTime)}}</span>
-            </div>
-            <div ng-show="result.results[task.id] && result.results[task.id].status != 'OK' && result.results[task.id].status != 'EMPTY'"
-                 class="taskResultBlock unsolvedTaskCell">
-                -{{result.results[task.id].tries}}
-            </div>
-            <div ng-show="!result.results[task.id] || result.results[task.id].status == 'EMPTY'" class="taskResultBlock emptyTaskCell">&nbsp;</div>
-        </div>
-        <!--<div class="headerCellStyle penaltyCell"> {{result.penalty}}</div>-->
-        <div class="headerCellStyle solvedCell"> {{result.solved}} <br/>
-            <span class="penaltyNumber">{{result.penalty}}</span>
-        </div>
-    </div>
-</div>
+</table>

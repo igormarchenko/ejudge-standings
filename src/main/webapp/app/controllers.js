@@ -13,15 +13,35 @@ angular.module('ejudgeStandings.controllers', [])
     })
     .controller('resultsController', function ($scope, $routeParams, ejudgeApiService) {
         initContestData();
+        var data = {};
+        $scope.display = [];
+        $scope.scrollDisabled = true;
+
+        $scope.loadMore = function() {
+            var batchSize = 20;
+            if(data.results.length > 0) {
+                for (var i = 0; i < batchSize && i < data.results.length; i++) {
+                    $scope.display.push(data.results[i]);
+                }
+                data.results.splice(0, Math.min(batchSize, data.results.length));
+            } else {
+                $scope.scrollDisabled = true;
+            }
+        };
+
         function initContestData() {
             ejudgeApiService.contestData($routeParams.contestId).then(function (response) {
-                $scope.contest = response.data;
-                console.log($scope.contest);
+                data = response.data;
+                $scope.contest = {
+                    'name' : data.name,
+                    'tasks' : data.tasks
+                };
+                $scope.scrollDisabled = false;
             });
         }
 
         $scope.formatTime = function(seconds) {
             var minutes = (seconds + 60 - seconds % 60) / 60;
             return sprintf("%02d:%02d", minutes / 60, minutes % 60);
-        }
+        };
     });

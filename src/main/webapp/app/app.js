@@ -2,7 +2,8 @@ angular.module('ejudgeStandings',
     ['ejudgeStandings.controllers',
         'ejudgeStandings.services',
         'ngRoute',
-        'ngSanitize'
+        'ngSanitize',
+        'infinite-scroll'
     ]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider.when("/", {
         templateUrl: "/views/contest-list.html",
