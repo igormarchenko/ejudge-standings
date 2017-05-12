@@ -14,32 +14,14 @@
     .cell-empty {
         background-color: #8c8c8c;
     }
-
-    table.floatThead-table {
-        border-top: none;
-        border-bottom: none;
-        background-color: #FFF;
-    }
 </style>
 
 <div class="row">
     <div class="col-md-11">
-        <h2>{{contest.name}} <br/>
-            <!--<small style="line-height: 32px;">Last success: {{contest.last_success.teamDAO.name}} at-->
-            <!--{{contest.last_success.time}}-->
-            <!--on problem-->
-            <!--{{contest.last_success.task}}-->
-            <!--</small>-->
-            <!--<br/>-->
-            <!--<small style="line-height: 32px;">Last submit: {{contest.last_submit.teamDAO.name}} at-->
-            <!--{{contest.last_submit.time}} on-->
-            <!--problem-->
-            <!--{{contest.last_submit.task}}-->
-            <!--</small>-->
-        </h2>
+        <h2>{{contest.name}}</h2>
     </div>
 </div>
-
+<div>
 <table class="table table-bordered" id="resultsTable">
     <thead>
     <tr>
@@ -69,7 +51,8 @@
             class="text-center">
             <div ng-switch="team.results[task.id].status">
                 <div ng-switch-when="EMPTY|null|undefined" ng-switch-when-separator="|"></div>
-                <div ng-switch-when="OK"><b>+ {{(team.results[task.id].tries - 1 > 0) ? team.results[task.id].tries : ''}} </b>
+                <div ng-switch-when="OK"><b>+ {{(team.results[task.id].tries - 1 > 0) ? team.results[task.id].tries :
+                    ''}} </b>
                     <br/>
                     <i>
                         <small> {{formatTime(team.results[task.id].firstAcceptedSubmissionTime)}}</small>
@@ -90,3 +73,4 @@
     </tbody>
 
 </table>
+</div>
