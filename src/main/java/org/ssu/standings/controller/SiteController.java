@@ -4,21 +4,29 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.ssu.standings.entity.Contest;
+import org.ssu.standings.entity.ContestStandingsFileObserver;
+import org.ssu.standings.parser.StandingsFileParser;
+import org.ssu.standings.parser.entity.ContestNode;
 import org.ssu.standings.service.ApiService;
 import org.ssu.standings.service.BaylorExportService;
 import org.ssu.standings.service.StandingsWatchService;
 
 import javax.annotation.Resource;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/")
 @Controller
@@ -29,6 +37,8 @@ public class SiteController {
     private BaylorExportService baylorExportService;
     @Resource
     private ApiService apiService;
+
+
 
     @RequestMapping(value = "/api/teamlist", method = RequestMethod.GET)
     @ResponseBody
@@ -63,72 +73,68 @@ public class SiteController {
         return model;
     }
 
-    @RequestMapping(value = "/contest/{contestId}", produces = "text/plain;charset=UTF-8")
-    @ResponseBody
-    public ModelAndView contestHomePage(@PathVariable Long contestId) {
-        ModelAndView model = new ModelAndView();
-        model.setViewName("contest");
-        return model;
-    }
-
-    @RequestMapping(value = "/", produces = "text/plain;charset=UTF-8")
-    public ModelAndView homePage(ModelAndView model) {
-        model.setViewName("/home");
-        model.addObject("contests", standingsWatchService.getContestList());
-        return model;
-    }
 
     @RequestMapping(value = "/api/init-results/{contestId}", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     @ResponseBody
-    public String getInitResults(@PathVariable Long contestId) {
-        try {
-            return new ObjectMapper()
-                    .writeValueAsString(standingsWatchService.getContestData(contestId));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return "{}";
+    public String getInitResults(@PathVariable Long contestId) throws JsonProcessingException {
+        Contest contestData = standingsWatchService.getContestData(contestId);
+        return new ObjectMapper().writeValueAsString(contestData);
+//        try {
+//            return new ObjectMapper()
+//                    .writeValueAsString(standingsWatchService.getContestData(contestId));
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+//        return "{}";
     }
 
     @RequestMapping(value = "/api/results/{contestId}/{time}", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String getResults(@PathVariable Long contestId, @PathVariable Long time) {
-        try {
-            return new ObjectMapper()
-                    .writeValueAsString(standingsWatchService.getLastSubmissions(contestId, time));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            return new ObjectMapper()
+//                    .writeValueAsString(standingsWatchService.getLastSubmissions(contestId, time));
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
         return "{}";
     }
 
     @RequestMapping(value = "/api/frozenresults/{contestId}", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String getFrozenResults(@PathVariable Long contestId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        try {
-            if(authentication.getAuthorities().stream().filter(item -> "ADMIN".equals(item.getAuthority())).count() > 0) {
-                return new ObjectMapper()
-                        .writeValueAsString(standingsWatchService.getFrozenResults(contestId));
-            } else {
-                return "{}";
-            }
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        try {
+//            if(authentication.getAuthorities().stream().filter(item -> "ADMIN".equals(item.getAuthority())).count() > 0) {
+//                return new ObjectMapper()
+//                        .writeValueAsString(standingsWatchService.getFrozenResults(contestId));
+//            } else {
+//                return "{}";
+//            }
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
         return "{}";
     }
 
 
-    @RequestMapping(value = "/baylor", method = RequestMethod.GET, produces = "application/xml")
-    @ResponseBody
-    public String exportBaylor() throws ParserConfigurationException, JsonProcessingException {
-        return new XmlMapper()
-                .enable(SerializationFeature.CLOSE_CLOSEABLE)
-                .enable(SerializationFeature.INDENT_OUTPUT)
-                .writer()
-                .withRootName("icpc")
-                .writeValueAsString(baylorExportService.getResultsForBaylor())
-                .replaceAll("item", "Standing");
+//    @RequestMapping(value = "/baylor", method = RequestMethod.GET, produces = "application/xml")
+//    @ResponseBody
+//    public String exportBaylor() throws ParserConfigurationException, JsonProcessingException {
+//        return new XmlMapper()
+//                .enable(SerializationFeature.CLOSE_CLOSEABLE)
+//                .enable(SerializationFeature.INDENT_OUTPUT)
+//                .writer()
+//                .withRootName("icpc")
+//                .writeValueAsString(baylorExportService.getResultsForBaylor())
+//                .replaceAll("item", "Standing");
+//    }
+
+
+
+    @RequestMapping(value = {"/", "/contest/{contestId}"}, produces = "text/plain;charset=UTF-8")
+    public ModelAndView homePage(ModelAndView model, @PathVariable Optional<Long> contestId) throws IOException {
+        model.setViewName("/home");
+        return model;
     }
 }

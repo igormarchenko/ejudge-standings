@@ -2,6 +2,7 @@ package org.ssu.standings.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.ssu.standings.dao.entity.StandingsFileDAO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,14 +13,15 @@ public class ContestInfo {
     @JsonProperty("is_final")
     private Boolean isFinal;
     @JsonProperty("external_files")
-    private List<ExternalFileDescription> externalFileDescriptionList;
+    private List<StandingsFileDAO> standingsFileDAOS;
+
 
     public ContestInfo() {
     }
 
     public ContestInfo(Builder builder) {
         this.contestId = builder.contestId;
-        this.externalFileDescriptionList = builder.externalFileDescriptionList;
+        this.standingsFileDAOS = builder.standingsFileDAOList;
         this.isFinal = builder.isFinal;
     }
 
@@ -32,37 +34,37 @@ public class ContestInfo {
         return isFinal;
     }
 
-    public List<ExternalFileDescription> getExternalFileDescriptionList() {
-        return externalFileDescriptionList;
+    public List<StandingsFileDAO> getStandingsFileDAOS() {
+        return standingsFileDAOS;
     }
 
     @JsonIgnore
     public List<String> getUrlsFromDescriptions() {
-        return externalFileDescriptionList
+        return standingsFileDAOS
                 .stream()
-                .map(ExternalFileDescription::getLink)
+                .map(StandingsFileDAO::getLink)
                 .collect(Collectors.toList());
     }
 
     public static final class Builder {
         private Long contestId;
         private Boolean isFinal;
-        private List<ExternalFileDescription> externalFileDescriptionList;
+        private List<StandingsFileDAO> standingsFileDAOList;
 
         public Builder() {
         }
 
-        public Builder(List<ExternalFileDescription> externalFileDescriptionList) {
-            ExternalFileDescription firstFile = externalFileDescriptionList.stream().findFirst().orElseThrow(NullPointerException::new);
+        public Builder(List<StandingsFileDAO> standingsFileDAOList) {
+            StandingsFileDAO firstFile = standingsFileDAOList.stream().findFirst().orElseThrow(NullPointerException::new);
             this.contestId = firstFile.getContestId();
-            this.externalFileDescriptionList = externalFileDescriptionList;
-            this.isFinal = firstFile.getIsFinal();
+            this.standingsFileDAOList = standingsFileDAOList;
+//            this.isFinal = firstFile.getIsFinal();
         }
 
-        public Builder(Long contestId, Boolean isFinal, List<ExternalFileDescription> externalFileDescriptionList) {
+        public Builder(Long contestId, Boolean isFinal, List<StandingsFileDAO> standingsFileDAOList) {
             this.contestId = contestId;
             this.isFinal = isFinal;
-            this.externalFileDescriptionList = externalFileDescriptionList;
+            this.standingsFileDAOList = standingsFileDAOList;
         }
 
         public Builder withContestId(Long contestId) {
@@ -75,8 +77,8 @@ public class ContestInfo {
             return this;
         }
 
-        public Builder withExternalFileDesriptions(List<ExternalFileDescription> externalFileDescriptionList) {
-            this.externalFileDescriptionList = externalFileDescriptionList;
+        public Builder withExternalFileDesriptions(List<StandingsFileDAO> standingsFileDAOList) {
+            this.standingsFileDAOList = standingsFileDAOList;
             return this;
         }
 

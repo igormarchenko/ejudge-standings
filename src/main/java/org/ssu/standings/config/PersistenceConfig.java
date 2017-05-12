@@ -22,7 +22,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan({"org.ssu.standings"})
-@EnableJpaRepositories("org.ssu.standings.repository")
+@EnableJpaRepositories("org.ssu.standings.dao.repository")
 @PropertySource("classpath:db.properties")
 public class PersistenceConfig {
     @Resource
@@ -44,7 +44,7 @@ public class PersistenceConfig {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
 
-        sessionFactory.setPackagesToScan("org.ssu.standings.entity");
+        sessionFactory.setPackagesToScan("org.ssu.standings.dao.entity");
         sessionFactory.setHibernateProperties(new Properties() {{
             setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
             setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
@@ -60,7 +60,7 @@ public class PersistenceConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
         entityManager.setDataSource(dataSource);
-        entityManager.setPackagesToScan("org.ssu.standings.entity");
+        entityManager.setPackagesToScan("org.ssu.standings.dao.entity");
 
         entityManager.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 

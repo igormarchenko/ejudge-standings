@@ -15,13 +15,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="team in teams track by $index">
-        <td>{{team.id}}</td>
-        <td>{{team.name}}</td>
-        <td>{{team.university.name}}</td>
+    <tr ng-repeat="teamDAO in teamDAOS track by $index">
+        <td>{{teamDAO.id}}</td>
+        <td>{{teamDAO.name}}</td>
+        <td>{{teamDAO.universityDAO.name}}</td>
         <td>
-            <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editTeam(team.id)"></span>
-            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true" ng-click="removeTeam(team.id)"></span>
+            <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editTeam(teamDAO.id)"></span>
+            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true" ng-click="removeTeam(teamDAO.id)"></span>
         </td>
     </tr>
     </tbody>
@@ -29,7 +29,7 @@
 
 
 <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editTeam">
-    Add new team
+    Add new teamDAO
 </button>
 
 
@@ -50,10 +50,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="university" class="col-sm-2 control-label">University</label>
+                        <label for="universityDAO" class="col-sm-2 control-label">University</label>
                         <div class="col-sm-10">
-                            <select id="university" class="form-control" ng-model="selectedTeam.university"
-                                    ng-options="university.name for university in universities track by university.id">
+                            <select id="universityDAO" class="form-control" ng-model="selectedTeam.universityDAO"
+                                    ng-options="universityDAO.name for universityDAO in universities track by universityDAO.id">
                         </select>
                         </div>
                     </div>

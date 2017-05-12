@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.ssu.standings.dao.entity.TeamDAO;
+import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.entity.ContestInfo;
-import org.ssu.standings.entity.Team;
-import org.ssu.standings.entity.University;
 import org.ssu.standings.service.ApiService;
 import org.ssu.standings.service.StandingsWatchService;
 
@@ -35,7 +35,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity removeTeam(@PathVariable Long teamId) {
         apiService.removeTeam(teamId);
-        standingsWatchService.updateWatchers();
+//        standingsWatchService.updateWatchers();
         return ResponseEntity.ok().build();
     }
 
@@ -43,7 +43,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity removeContest(@PathVariable Long contestId) {
         apiService.deleteContest(contestId);
-        standingsWatchService.updateWatchers();
+//        standingsWatchService.updateWatchers();
         return ResponseEntity.ok().build();
     }
 
@@ -51,36 +51,36 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity removeUniversity(@PathVariable Long universityId) {
         apiService.removeUniversity(universityId);
-        standingsWatchService.updateWatchers();
+//        standingsWatchService.updateWatchers();
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/saveteam", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveTeam(@RequestBody ObjectNode data) throws JsonProcessingException {
-        Team team;
+        TeamDAO teamDAO;
         try {
-            team = new ObjectMapper().readValue(data.get("data").toString(), Team.class);
-            team = apiService.saveTeam(team);
-            standingsWatchService.updateWatchers();
+            teamDAO = new ObjectMapper().readValue(data.get("data").toString(), TeamDAO.class);
+            teamDAO = apiService.saveTeam(teamDAO);
+//            standingsWatchService.updateWatchers();
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(team));
+        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(teamDAO));
     }
 
     @RequestMapping(value = "/saveuniversity", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveUniversity(@RequestBody ObjectNode data) throws JsonProcessingException {
-        University university;
+        UniversityDAO universityDAO;
         try {
-            university = new ObjectMapper().readValue(data.get("data").toString(), University.class);
-            university = apiService.saveUniversity(university);
-            standingsWatchService.updateWatchers();
+            universityDAO = new ObjectMapper().readValue(data.get("data").toString(), UniversityDAO.class);
+            universityDAO = apiService.saveUniversity(universityDAO);
+//            standingsWatchService.updateWatchers();
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(university));
+        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(universityDAO));
     }
 
     @RequestMapping(value = "/savecontest", method = RequestMethod.POST)
@@ -90,7 +90,7 @@ public class AdminController {
         try {
             contestInfo = new ObjectMapper().readValue(data.get("data").toString(), ContestInfo.class);
             contestInfo = apiService.saveContest(contestInfo);
-            standingsWatchService.updateWatchers();
+//            standingsWatchService.updateWatchers();
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

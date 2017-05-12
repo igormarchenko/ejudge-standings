@@ -2,13 +2,15 @@ package org.ssu.standings.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.ssu.standings.dao.entity.ContestDAO;
+import org.ssu.standings.dao.entity.TeamDAO;
+import org.ssu.standings.dao.repository.ContestRepository;
+import org.ssu.standings.dao.repository.StandingsFilesRepository;
 import org.ssu.standings.entity.ContestInfo;
-import org.ssu.standings.entity.ExternalFileDescription;
-import org.ssu.standings.entity.Team;
-import org.ssu.standings.entity.University;
-import org.ssu.standings.repository.ExternalFilesRepository;
-import org.ssu.standings.repository.TeamRepository;
-import org.ssu.standings.repository.UniversityRepository;
+import org.ssu.standings.dao.entity.StandingsFileDAO;
+import org.ssu.standings.dao.entity.UniversityDAO;
+import org.ssu.standings.dao.repository.TeamRepository;
+import org.ssu.standings.dao.repository.UniversityRepository;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class ApiService {
     @Resource
-    private ExternalFilesRepository externalFilesRepository;
+    private ContestRepository contestRepository;
 
     @Resource
     private TeamRepository teamRepository;
@@ -25,16 +27,16 @@ public class ApiService {
     @Resource
     private UniversityRepository universityRepository;
 
-    public List<Team> teamList() {
+    public List<TeamDAO> teamList() {
         return teamRepository.findAll();
     }
 
-    public List<University> universityList() {
+    public List<UniversityDAO> universityList() {
         return universityRepository.findAll();
     }
 
-    public Team saveTeam(Team team) {
-        return teamRepository.save(team);
+    public TeamDAO saveTeam(TeamDAO teamDAO) {
+        return teamRepository.save(teamDAO);
     }
 
     public void removeTeam(Long teamId) {
@@ -46,49 +48,46 @@ public class ApiService {
         universityRepository.delete(universityId);
     }
 
-    public University saveUniversity(University university) {
-        return universityRepository.save(university);
+    public UniversityDAO saveUniversity(UniversityDAO universityDAO) {
+        return universityRepository.save(universityDAO);
     }
 
-    public List<ContestInfo> contestList() {
-        Map<Long, List<ExternalFileDescription>> externalFiles = externalFilesRepository.findAll().stream()
-                .collect(Collectors.groupingBy(ExternalFileDescription::getContestId));
-
-        return externalFiles.entrySet().stream()
-                .map(item -> new ContestInfo.Builder(item.getKey(), item.getValue().get(0).getIsFinal(), item.getValue()).build())
-                .collect(Collectors.toList());
+    public List<ContestDAO> contestList() {
+        return contestRepository.findAll();
     }
 
     private Long lastContestId() {
-        Optional<ExternalFileDescription> lastContest = externalFilesRepository.findAll().stream().sorted(Comparator.comparingLong(ExternalFileDescription::getContestId)).reduce((a, b) -> b);
-        return lastContest.map(ExternalFileDescription::getContestId).orElse(0L);
+//        Optional<StandingsFileDAO> lastContest = standingsFilesRepository.findAll().stream().sorted(Comparator.comparingLong(StandingsFileDAO::getContestId)).reduce((a, b) -> b);
+//        return lastContest.map(StandingsFileDAO::getContestId).orElse(0L);
+        return -1L;
     }
 
     @Transactional
     public ContestInfo saveContest(ContestInfo contestInfo) {
-        Long contestId = Optional.ofNullable(contestInfo.getContestId()).orElse(lastContestId() + 1);
-        Boolean isFinal = Optional.ofNullable(contestInfo.getIsFinal()).orElse(false);
-
-        deleteContest(contestInfo.getContestId());
-
-        contestInfo = new ContestInfo.Builder()
-                .withContestId(contestId)
-                .withExternalFileDesriptions(contestInfo.getExternalFileDescriptionList().stream()
-                        .filter(Objects::nonNull)
-                        .map(item -> new ExternalFileDescription.Builder(item)
-                                .withContestId(contestId)
-                                .withIsFinal(isFinal)
-                                .build())
-                        .collect(Collectors.toList()))
-                .withIsFinal(contestInfo.getIsFinal()).build();
-
-        return new ContestInfo.Builder(contestInfo.getContestId(),
-                contestInfo.getIsFinal(),
-                externalFilesRepository.save(contestInfo.getExternalFileDescriptionList().stream().filter(Objects::nonNull).collect(Collectors.toList()))).build();
+//        Long contestId = Optional.ofNullable(contestInfo.getContestId()).orElse(lastContestId() + 1);
+//        Boolean isFinal = Optional.ofNullable(contestInfo.getIsFinal()).orElse(false);
+//
+//        deleteContest(contestInfo.getContestId());
+//
+//        contestInfo = new ContestInfo.Builder()
+//                .withContestId(contestId)
+//                .withExternalFileDesriptions(contestInfo.getStandingsFileDAOS().stream()
+//                        .filter(Objects::nonNull)
+//                        .map(item -> new StandingsFileDAO.Builder(item)
+//                                .withContestId(contestId)
+//                                .withIsFinal(isFinal)
+//                                .build())
+//                        .collect(Collectors.toList()))
+//                .withIsFinal(contestInfo.getIsFinal()).build();
+//
+//        return new ContestInfo.Builder(contestInfo.getContestId(),
+//                contestInfo.getIsFinal(),
+//                standingsFilesRepository.save(contestInfo.getStandingsFileDAOS().stream().filter(Objects::nonNull).collect(Collectors.toList()))).build();
+        return null;
     }
 
     @Transactional
     public void deleteContest(Long contestId) {
-        externalFilesRepository.deleteByContestId(contestId);
+        contestRepository.delete(contestId);
     }
 }

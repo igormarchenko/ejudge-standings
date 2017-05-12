@@ -1,169 +1,87 @@
 package org.ssu.standings.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.ssu.standings.dao.entity.TeamDAO;
+import org.ssu.standings.dao.entity.UniversityDAO;
+import org.ssu.standings.parser.entity.ContestNode;
+
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Contest {
-    private Long id;
-    private List<Submission> submissions;
-    private List<Team> teams;
-    private List<Task> tasks;
+    @JsonProperty("id")
     private Long contestId;
-
+    @JsonProperty("name")
     private String name;
-    private LocalDateTime beginTime;
-    private LocalDateTime endTime;
-    private LocalDateTime frozenTime;
-    private LocalDateTime unfrozenTime;
+    @JsonProperty("duration")
+    private Long duration;
+    @JsonProperty("startTime")
+    private LocalDateTime startTime;
+    @JsonProperty("stopTime")
+    private LocalDateTime stopTime;
+    @JsonProperty("currentTime")
     private LocalDateTime currentTime;
-    private Boolean isFinalResults;
+    @JsonProperty("fogTime")
+    private Long fogTime;
+    @JsonProperty("unfogTime")
+    private Long unfogTime;
+    @JsonProperty("results")
+    private List<ParticipantResult> results;
 
-//    private transient List<Submission> frozenSubmits;
+    @JsonProperty("tasks")
+    private List<Task> tasks;
 
-    public Long getId() {
-        return id;
+    public Contest(Builder builder) {
+        this.contestId = builder.contestId;
+        this.name = builder.name;
+        this.duration = builder.duration;
+        this.startTime = builder.startTime;
+        this.stopTime = builder.stopTime;
+        this.currentTime = builder.currentTime;
+        this.fogTime = builder.fogTime;
+        this.unfogTime = builder.unfogTime;
+        this.results = builder.results.values().stream().sorted().collect(Collectors.toList());
+        this.tasks = builder.tasks;
     }
 
-    public Contest setId(Long id) {
-        this.id = id;
-        return this;
+    public static final class Builder {
+        private Long contestId;
+        private String name;
+        private Long duration;
+        private LocalDateTime startTime;
+        private LocalDateTime stopTime;
+        private LocalDateTime currentTime;
+        private Long fogTime;
+        private Long unfogTime;
+        private List<Task> tasks;
+        private Map<Long, ParticipantResult> results;
+
+        public Builder(ContestNode contest, Map<String, List<TeamDAO>> teams) {
+            Function<String, UniversityDAO> getUniversityForTeam = teamName -> Optional.ofNullable(teams.get(teamName)).map(teamDAOS -> teamDAOS.get(0).getUniversity()).orElse(null);
+            contestId = contest.getContestId();
+            name = contest.getName();
+            duration = contest.getDuration();
+            startTime = contest.getStartTime();
+            stopTime = contest.getStopTime();
+            currentTime = contest.getCurrentTime();
+            fogTime = contest.getFogTime();
+            unfogTime = contest.getUnfogTime();
+            tasks = contest.getProblems().stream().map(Task::new).collect(Collectors.toList());
+
+            results = contest.getParticipants()
+                    .stream()
+                    .map(team -> new Participant.Builder(team, getUniversityForTeam.apply(team.getName())).build())
+                    .collect(Collectors.toMap(Participant::getId, ParticipantResult::new));
+
+            contest.getSubmissions().forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
+        }
+
+        public Contest build() {
+            return new Contest(this);
+        }
     }
-
-    public Boolean getFinalResults() {
-        return isFinalResults;
-    }
-
-    public void setFinalResults(Boolean finalResults) {
-        isFinalResults = finalResults;
-    }
-
-    public List<Submission> getSubmissions() {
-        return submissions.stream().filter(item -> !"CE".equals(item.getStatus())).collect(Collectors.toList());
-    }
-
-    public LocalDateTime getCurrentTime() {
-        return currentTime;
-    }
-
-    public Contest setCurrentTime(LocalDateTime currentTime) {
-        this.currentTime = currentTime;
-        return this;
-    }
-
-    public Contest setSubmissions(List<Submission> submissions) {
-        this.submissions = submissions;
-        return this;
-    }
-
-    public List<Team> getTeams() {
-        return teams;
-    }
-
-    public Contest setTeams(List<Team> teams) {
-        this.teams = teams;
-        return this;
-    }
-
-    public Long getContestId() {
-        return contestId;
-    }
-
-    public Contest setContestId(Long contestId) {
-        this.contestId = contestId;
-        return this;
-    }
-
-    public LocalDateTime getBeginTime() {
-        return beginTime;
-    }
-
-    public Contest setBeginTime(LocalDateTime beginTime) {
-        this.beginTime = beginTime;
-        return this;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public Contest setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-        return this;
-    }
-
-    public LocalDateTime getFrozenTime() {
-        return frozenTime;
-    }
-
-    public Contest setFrozenTime(LocalDateTime frozenTime) {
-        this.frozenTime = frozenTime;
-        return this;
-    }
-
-    public LocalDateTime getUnfrozenTime() {
-        return unfrozenTime;
-    }
-
-    public Contest setUnfrozenTime(LocalDateTime unfrozenTime) {
-        this.unfrozenTime = unfrozenTime;
-        return this;
-    }
-
-    public LocalDateTime getSubmissionTime(Long submissionSeconds) {
-        return beginTime.plusSeconds(submissionSeconds);
-    }
-
-    public Boolean inFrozenTime(LocalDateTime time) {
-        return time.compareTo(frozenTime) > 0 && time.compareTo(endTime) <= 0;
-    }
-
-    public Boolean isFrozen() {
-        return inFrozenTime(currentTime);
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public Contest setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Contest setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public Boolean getIsFinalResults() {
-        return isFinalResults;
-    }
-
-    public Contest setIsFinalResults(Boolean isFinalResults) {
-        this.isFinalResults = isFinalResults;
-        return this;
-    }
-
-//    public Optional<Team> getTeamId(String teamName) {
-//        return teams.stream().filter(team -> team.getName().trim().equals(teamName)).findAny();
-//    }
-//
-//    public List<Submission> getTeamSubmissions(Team team) {
-//        return submissions.stream().filter(submission -> submission.getUserId().equals(team.getTeamIdInContest())).collect(Collectors.toList());
-//    }
-
-//    public List<Submission> getFrozenSubmits() {
-//        return frozenSubmits;
-//    }
-//
-//    public Contest setFrozenSubmits(List<Submission> frozenSubmits) {
-//        this.frozenSubmits = frozenSubmits;
-//        return this;
-//    }
 }

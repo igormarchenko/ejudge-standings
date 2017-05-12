@@ -1,64 +1,43 @@
 package org.ssu.standings.entity;
 
-public class Submission {
-    private Long runId;
-    private Long time;
-    private String status;
-    private Long userId;
-    private Long problemId;
-    private Long languageId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.ssu.standings.parser.entity.SubmissionNode;
 
-    public Long getRunId() {
-        return runId;
+import java.time.LocalDateTime;
+
+public class Submission {
+    @JsonProperty("id")
+    private Long id;
+//    @JsonProperty("uuid")
+    @JsonIgnore
+    private String uuid;
+    @JsonProperty("time")
+    private Long time;
+    @JsonProperty("status")
+    private SubmissionStatus status;
+
+
+    public Submission(SubmissionNode node) {
+        id = node.getId();
+        uuid = node.getRunUuid();
+        time = node.getTime();
+        status = SubmissionStatus.valueOf(node.getStatus());
     }
 
-    public Submission setRunId(Long runId) {
-        this.runId = runId;
-        return this;
+    public Long getId() {
+        return id;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public Long getTime() {
         return time;
     }
 
-    public Submission setTime(Long time) {
-        this.time = time;
-        return this;
-    }
-
-    public String getStatus() {
+    public SubmissionStatus getStatus() {
         return status;
-    }
-
-    public Submission setStatus(String status) {
-        this.status = status;
-        return this;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public Submission setUserId(Long userId) {
-        this.userId = userId;
-        return this;
-    }
-
-    public Long getProblemId() {
-        return problemId;
-    }
-
-    public Submission setProblemId(Long problemId) {
-        this.problemId = problemId;
-        return this;
-    }
-
-    public Long getLanguageId() {
-        return languageId;
-    }
-
-    public Submission setLanguageId(Long languageId) {
-        this.languageId = languageId;
-        return this;
     }
 }
