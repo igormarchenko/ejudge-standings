@@ -8,6 +8,7 @@
                   file="data/university.csv"
                   separator=";"/>
     </changeSet>
+
     <changeSet id="2" author="Igor Marchenko">
         <loadData tableName="teams"
                   file="data/teams.csv"
@@ -38,5 +39,17 @@
             <column name="role" value="ADMIN"/>
             <column name="enabled" value="TRUE"/>
         </insert>
+    </changeSet>
+
+    <changeSet id="5" author="Igor Marchenko">
+        <loadData tableName="university"
+                  file="data/university2017.csv"
+                  separator=";"/>
+    </changeSet>
+
+    <changeSet id="6" author="Igor Marchenko">
+        <loadData tableName="teams"
+                  file="data/teams2017.csv"
+                  separator=";"/>
     </changeSet>
 </databaseChangeLog>
