@@ -2,7 +2,7 @@ package org.ssu.standings.service;
 
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.ssu.standings.dao.entity.StandingsFileDAO;
 import org.ssu.standings.dao.entity.TeamDAO;
 import org.ssu.standings.dao.repository.StandingsFilesRepository;
@@ -12,7 +12,6 @@ import org.ssu.standings.entity.ContestStandingsFileObserver;
 import org.ssu.standings.parser.StandingsFileParser;
 import org.ssu.standings.parser.entity.ContestNode;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 @EnableScheduling
 public class StandingsWatchService {
     @Resource
@@ -33,15 +32,17 @@ public class StandingsWatchService {
     @Resource
     private StandingsFileParser parser;
 
-    private Map<StandingsFileDAO, ContestStandingsFileObserver> observers;
+    private Map<StandingsFileDAO, ContestStandingsFileObserver> observers = null;
 
-    @PostConstruct
-    public void init() {
-        observers = standingsFilesRepository.findAll().stream().collect(Collectors.toMap(Function.identity(), ContestStandingsFileObserver::new));
+    private Map<StandingsFileDAO, ContestStandingsFileObserver> initObservers() {
+        return standingsFilesRepository.findAll().stream().collect(Collectors.toMap(Function.identity(), ContestStandingsFileObserver::new));
     }
 
     @Scheduled(fixedDelay = 1000)
     public void update() {
+        if (observers == null) {
+            observers = initObservers();
+        }
         observers.values().forEach(observer -> {
             try {
                 observer.update();
