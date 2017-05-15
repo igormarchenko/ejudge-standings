@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
-import javax.xml.transform.OutputKeys;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TaskResult {
-    @JsonProperty("penalty")
-    private Long penalty = 0L;
-    @JsonProperty("status")
-    private SubmissionStatus status = SubmissionStatus.EMPTY;
     @JsonIgnore
     private List<Submission> submissions = new ArrayList<>();
 
@@ -37,41 +32,36 @@ public class TaskResult {
 
     @JsonProperty("firstAcceptedSubmissionTime")
     public Long getFirstAcceptedTime() {
-        return submissions
+        Long seconds = submissions
                 .stream()
                 .filter(submission -> submission.getStatus() == SubmissionStatus.OK)
                 .map(Submission::getTime)
                 .sorted()
                 .findFirst()
                 .orElse(0L);
+        return (seconds + 60 - seconds % 60) / 60;
     }
 
-    public Long getPenalty() {
-        return penalty;
-    }
-
+    @JsonProperty("status")
     public SubmissionStatus getStatus() {
-        return status;
+        if (submissions.isEmpty()) return SubmissionStatus.EMPTY;
+        return submissions.stream()
+                .filter(submit -> submit.getStatus() == SubmissionStatus.OK)
+                .findAny()
+                .map(submit -> SubmissionStatus.OK)
+                .orElse(SubmissionStatus.WA);
+    }
+
+    @JsonProperty("penalty")
+    public Long getPenalty() {
+        return isProblemSolved() ? submissionCount() * 20L + getFirstAcceptedTime() : 0L;
     }
 
     public Boolean isProblemSolved() {
-        return getFirstAcceptedTime() > 0;
+        return getStatus() == SubmissionStatus.OK;
     }
 
     public void addNode(SubmissionNode node) {
-        SubmissionStatus submissionStatus = SubmissionStatus.valueOf(node.getStatus());
-        if (submissionStatus != SubmissionStatus.CE) {
-            submissions.add(new Submission(node));
-
-            if (submissionStatus == SubmissionStatus.OK) {
-                penalty = (submissions.size() - 1) * 20 + node.getTime();
-            }
-
-            if(isProblemSolved()) {
-                status = SubmissionStatus.OK;
-            } else {
-                status = submissionStatus;
-            }
-        }
+        submissions.add(new Submission(node));
     }
 }
