@@ -30,7 +30,7 @@ public class TaskResult {
                 .orElse(submissions.size());
     }
 
-    @JsonProperty("firstAcceptedSubmissionTime")
+    @JsonProperty("acceptedTime")
     public Long getFirstAcceptedTime() {
         Long seconds = submissions
                 .stream()
@@ -57,6 +57,7 @@ public class TaskResult {
         return isProblemSolved() ? submissionCount() * 20L + getFirstAcceptedTime() : 0L;
     }
 
+    @JsonIgnore
     public Boolean isProblemSolved() {
         return getStatus() == SubmissionStatus.OK;
     }

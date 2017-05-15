@@ -28,7 +28,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
 
     @JsonProperty("solved")
     public Long solvedProblems() {
-        return results.values().stream().filter(result -> result.getStatus().equals(SubmissionStatus.OK)).count();
+        return results.values().stream().filter(TaskResult::isProblemSolved).count();
     }
 
 
