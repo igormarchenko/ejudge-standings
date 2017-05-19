@@ -1,15 +1,13 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.entity.contestresponse;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.ssu.standings.parser.entity.SubmissionNode;
-
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.*;
+import org.ssu.standings.entity.*;
+import org.ssu.standings.parser.entity.*;
 
 public class Submission {
     @JsonProperty("id")
     private Long id;
-//    @JsonProperty("uuid")
+    //    @JsonProperty("uuid")
     @JsonIgnore
     private String uuid;
     @JsonProperty("time")

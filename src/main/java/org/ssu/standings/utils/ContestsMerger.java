@@ -1,13 +1,5 @@
 package org.ssu.standings.utils;
 
-import org.ssu.standings.dao.entity.TeamDAO;
-import org.ssu.standings.entity.ContestDEPRECATED;
-import org.ssu.standings.entity.Submission;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class ContestsMerger {
 //    public static ContestDEPRECATED merge(List<ContestDEPRECATED> contestDEPRECATEDS) {
 //        ContestDEPRECATED anyContestDEPRECATED = contestDEPRECATEDS.stream().findFirst().orElseThrow(NullPointerException::new);

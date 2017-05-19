@@ -1,4 +1,4 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.updateobserver;
 
 import org.ssu.standings.dao.entity.StandingsFileDAO;
 import org.ssu.standings.updateobserver.FileHandlerFactory;

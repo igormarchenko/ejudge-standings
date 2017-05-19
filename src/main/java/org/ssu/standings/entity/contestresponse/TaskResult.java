@@ -1,14 +1,11 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.entity.contestresponse;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.ssu.standings.parser.entity.SubmissionNode;
+import com.fasterxml.jackson.annotation.*;
+import org.ssu.standings.entity.*;
+import org.ssu.standings.parser.entity.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.*;
 
 public class TaskResult {
     @JsonIgnore

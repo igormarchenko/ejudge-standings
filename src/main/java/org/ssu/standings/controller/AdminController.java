@@ -21,8 +21,6 @@ import java.io.IOException;
 public class AdminController {
     @Resource
     private ApiService apiService;
-    @Resource
-    private StandingsWatchService standingsWatchService;
 
     @RequestMapping(value = {"/teams", "/home", "/universities", "/contests"}, method = RequestMethod.GET)
     @ResponseBody

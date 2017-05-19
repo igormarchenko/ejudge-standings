@@ -1,9 +1,8 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.entity.contestresponse;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.ssu.standings.parser.entity.ProblemNode;
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang3.builder.*;
+import org.ssu.standings.parser.entity.*;
 
 public class Task {
     @JsonProperty("id")

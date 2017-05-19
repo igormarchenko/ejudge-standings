@@ -1,11 +1,10 @@
 package org.ssu.standings.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.ssu.standings.dao.entity.StandingsFileDAO;
+import com.fasterxml.jackson.annotation.*;
+import org.ssu.standings.dao.entity.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 public class ContestInfo {
     @JsonProperty("id")

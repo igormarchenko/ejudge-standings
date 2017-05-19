@@ -1,6 +1,8 @@
 package org.ssu.standings.parser.entity;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class SubmissionNode {
     @JacksonXmlProperty(isAttribute = true, localName = "run_id")
@@ -71,5 +73,43 @@ public class SubmissionNode {
 
     public String getPassedMode() {
         return passedMode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SubmissionNode that = (SubmissionNode) o;
+
+        return new EqualsBuilder()
+                .append(id, that.id)
+                .append(time, that.time)
+                .append(runUuid, that.runUuid)
+                .append(status, that.status)
+                .append(userId, that.userId)
+                .append(problemId, that.problemId)
+                .append(languageId, that.languageId)
+                .append(test, that.test)
+                .append(nsec, that.nsec)
+                .append(passedMode, that.passedMode)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(time)
+                .append(runUuid)
+                .append(status)
+                .append(userId)
+                .append(problemId)
+                .append(languageId)
+                .append(test)
+                .append(nsec)
+                .append(passedMode)
+                .toHashCode();
     }
 }

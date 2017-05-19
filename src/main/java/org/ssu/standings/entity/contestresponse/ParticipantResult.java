@@ -1,11 +1,9 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.entity.contestresponse;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.ssu.standings.parser.entity.SubmissionNode;
+import com.fasterxml.jackson.annotation.*;
+import org.ssu.standings.parser.entity.*;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ParticipantResult implements Comparator<ParticipantResult>, Comparable<ParticipantResult> {
     @JsonProperty("participant")
@@ -21,6 +19,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
         results.putIfAbsent(submit.getProblemId(), new TaskResult());
         results.get(submit.getProblemId()).addNode(submit);
     }
+
     @JsonProperty("penalty")
     public Long getPenalty() {
         return results.values().stream().mapToLong(TaskResult::getPenalty).sum();
@@ -31,6 +30,9 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
         return results.values().stream().filter(TaskResult::isProblemSolved).count();
     }
 
+    public Participant getParticipant() {
+        return participant;
+    }
 
     @Override
     public int compareTo(ParticipantResult o) {
