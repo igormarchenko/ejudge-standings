@@ -5,16 +5,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ssu.standings.dao.entity.ContestDAO;
 import org.ssu.standings.dao.entity.TeamDAO;
 import org.ssu.standings.dao.repository.ContestRepository;
-import org.ssu.standings.dao.repository.StandingsFilesRepository;
-import org.ssu.standings.entity.ContestInfo;
-import org.ssu.standings.dao.entity.StandingsFileDAO;
 import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.dao.repository.TeamRepository;
 import org.ssu.standings.dao.repository.UniversityRepository;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ApiService {
@@ -62,8 +58,8 @@ public class ApiService {
         return -1L;
     }
 
-    @Transactional
-    public ContestInfo saveContest(ContestInfo contestInfo) {
+//    @Transactional
+//    public ContestInfo saveContest(ContestInfo contestInfo) {
 //        Long contestId = Optional.ofNullable(contestInfo.getContestId()).orElse(lastContestId() + 1);
 //        Boolean isFinal = Optional.ofNullable(contestInfo.getIsFinal()).orElse(false);
 //
@@ -83,8 +79,8 @@ public class ApiService {
 //        return new ContestInfo.Builder(contestInfo.getContestId(),
 //                contestInfo.getIsFinal(),
 //                standingsFilesRepository.save(contestInfo.getStandingsFileDAOS().stream().filter(Objects::nonNull).collect(Collectors.toList()))).build();
-        return null;
-    }
+//        return null;
+//    }
 
     @Transactional
     public void deleteContest(Long contestId) {

@@ -19,10 +19,6 @@ public class ContestDataStorage {
     private Map<String, List<TeamDAO>> teams;
     private Map<Long, Map<Long, ParticipantResult>> changes = new HashMap<>();
 
-    public Map<Long, ParticipantResult> getChanges(Long contestId) {
-        return changes.remove(contestId);
-    }
-
     public void setTeams(Map<String, List<TeamDAO>> teams) {
         this.teams = teams;
     }
