@@ -6,7 +6,7 @@ import org.ssu.standings.entity.contestresponse.*;
 import java.util.*;
 
 public class ContestUpdates {
-    @JsonProperty("contestId")
+    @JsonIgnore
     private Long contestId;
     @JsonProperty("updates")
     private Map<Long, ParticipantResult> resultMap;
@@ -14,5 +14,10 @@ public class ContestUpdates {
     public ContestUpdates(Long contestId, Map<Long, ParticipantResult> resultMap) {
         this.contestId = contestId;
         this.resultMap = resultMap;
+    }
+
+    @JsonIgnore
+    public Long getContestId() {
+        return contestId;
     }
 }

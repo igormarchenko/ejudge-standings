@@ -41,11 +41,11 @@ angular.module('ejudgeStandings.controllers', [])
         }
 
         $scope.formatTime = function (minutes) {
-            // var minutes = (seconds + 60 - seconds % 60) / 60;
             return sprintf("%02d:%02d", minutes / 60, minutes % 60);
         };
     }).controller('webSocketController', function ($scope, WebSocketService) {
-    WebSocketService.receive().then(null, null, function(message) {
-        console.log(message);
-    });
+        WebSocketService.initialize(2);
+        WebSocketService.receive().then(null, null, function(message) {
+            console.log(message);
+        });
 });

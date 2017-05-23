@@ -22,7 +22,7 @@ public class WebSocketController {
 
     @EventListener
     public void eventListener(ContestUpdates contestUpdates) throws JsonProcessingException {
-        template.convertAndSend("/updates/get-updates", new ObjectMapper().writeValueAsString(contestUpdates));
+        template.convertAndSend("/updates/get-updates/" + contestUpdates.getContestId(), new ObjectMapper().writeValueAsString(contestUpdates));
     }
 
 //    @MessageMapping("/listener")
