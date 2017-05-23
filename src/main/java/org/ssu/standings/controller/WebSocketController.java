@@ -1,19 +1,13 @@
 package org.ssu.standings.controller;
 
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
-import org.springframework.context.event.*;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.event.EventListener;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.ssu.standings.entity.Message;
-import org.ssu.standings.entity.OutputMessage;
-import org.ssu.standings.event.*;
+import org.ssu.standings.event.ContestUpdates;
 
-import javax.annotation.*;
-import java.util.Date;
+import javax.annotation.Resource;
 
 @Controller
 public class WebSocketController {

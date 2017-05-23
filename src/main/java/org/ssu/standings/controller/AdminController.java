@@ -88,7 +88,7 @@ public class AdminController {
 //            contestInfo = apiService.saveContest(contestInfo);
 //            standingsWatchService.updateWatchers();
 //        } catch (IOException e) {
-            return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().build();
 //        }
 //        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(contestInfo));
     }

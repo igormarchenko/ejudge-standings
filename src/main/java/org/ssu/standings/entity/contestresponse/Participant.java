@@ -1,10 +1,10 @@
 package org.ssu.standings.entity.contestresponse;
 
-import com.fasterxml.jackson.annotation.*;
-import org.ssu.standings.dao.entity.*;
-import org.ssu.standings.parser.entity.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.ssu.standings.dao.entity.UniversityDAO;
+import org.ssu.standings.parser.entity.ParticipantNode;
 
-import java.util.*;
+import java.util.Optional;
 
 public class Participant {
     @JsonProperty("id")

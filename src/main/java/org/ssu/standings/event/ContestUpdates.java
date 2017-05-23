@@ -1,9 +1,10 @@
 package org.ssu.standings.event;
 
-import com.fasterxml.jackson.annotation.*;
-import org.ssu.standings.entity.contestresponse.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.ssu.standings.entity.contestresponse.ParticipantResult;
 
-import java.util.*;
+import java.util.Map;
 
 public class ContestUpdates {
     @JsonIgnore

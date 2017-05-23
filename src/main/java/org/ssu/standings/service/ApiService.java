@@ -4,13 +4,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ssu.standings.dao.entity.ContestDAO;
 import org.ssu.standings.dao.entity.TeamDAO;
-import org.ssu.standings.dao.repository.ContestRepository;
 import org.ssu.standings.dao.entity.UniversityDAO;
+import org.ssu.standings.dao.repository.ContestRepository;
 import org.ssu.standings.dao.repository.TeamRepository;
 import org.ssu.standings.dao.repository.UniversityRepository;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.List;
 
 @Service
 public class ApiService {

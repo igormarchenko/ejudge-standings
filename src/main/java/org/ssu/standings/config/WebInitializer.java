@@ -1,12 +1,9 @@
 package org.ssu.standings.config;
 
-import com.planetj.servlet.filter.compression.CompressingFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import javax.annotation.Resource;
 import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletRegistration;
 import java.nio.charset.StandardCharsets;
 

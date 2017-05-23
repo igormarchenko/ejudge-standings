@@ -1,15 +1,17 @@
 package org.ssu.standings.controller;
 
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.bind.annotation.*;
-import org.ssu.standings.entity.*;
-import org.ssu.standings.entity.contestresponse.*;
-import org.ssu.standings.service.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.ssu.standings.entity.ContestDataStorage;
+import org.ssu.standings.service.ApiService;
 
-import javax.annotation.*;
+import javax.annotation.Resource;
 
 @Controller
 @RequestMapping("/api")

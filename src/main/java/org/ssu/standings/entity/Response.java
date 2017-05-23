@@ -1,4 +1,5 @@
 package org.ssu.standings.entity;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 

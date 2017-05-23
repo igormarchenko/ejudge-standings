@@ -1,14 +1,20 @@
 package org.ssu.standings.entity;
 
-import org.springframework.stereotype.*;
-import org.ssu.standings.dao.entity.*;
-import org.ssu.standings.entity.contestresponse.*;
-import org.ssu.standings.event.*;
-import org.ssu.standings.parser.entity.*;
+import org.springframework.stereotype.Component;
+import org.ssu.standings.dao.entity.TeamDAO;
+import org.ssu.standings.entity.contestresponse.Contest;
+import org.ssu.standings.entity.contestresponse.ParticipantResult;
+import org.ssu.standings.event.ContestUpdates;
+import org.ssu.standings.event.ContestUpdatesEventProducer;
+import org.ssu.standings.parser.entity.ContestNode;
+import org.ssu.standings.parser.entity.SubmissionNode;
 
-import javax.annotation.*;
-import java.util.*;
-import java.util.stream.*;
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class ContestDataStorage {
@@ -59,7 +65,7 @@ public class ContestDataStorage {
             Set<Long> teamsIds = contestSubmissionsChanges.getNewSubmissions().stream().map(SubmissionNode::getUserId).collect(Collectors.toSet());
             Map<Long, ParticipantResult> affectedTeams = getContestData(contestId).getTeamsResults(teamsIds);
             changes.put(contestId, affectedTeams);
-            if(!affectedTeams.isEmpty())
+            if (!affectedTeams.isEmpty())
                 contestUpdatesEventProducer.publishEvent(new ContestUpdates(contestId, affectedTeams));
         }
         return getContestData(contestId);

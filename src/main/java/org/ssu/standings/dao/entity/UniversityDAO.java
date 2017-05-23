@@ -12,7 +12,7 @@ public class UniversityDAO {
     @Id
     @SequenceGenerator(initialValue = 200, name = "universities_seq_id", sequenceName = "universities_seq_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "universities_seq_id")
-    @Column(name ="university_id")
+    @Column(name = "university_id")
     private Long id;
 
     @Column(name = "university_name")
@@ -28,7 +28,6 @@ public class UniversityDAO {
     private String type;
 
     @OneToMany(mappedBy = "university")
-//    @JsonBackReference("team-university")
     @JsonIgnore
     private List<TeamDAO> teamDAOS;
 

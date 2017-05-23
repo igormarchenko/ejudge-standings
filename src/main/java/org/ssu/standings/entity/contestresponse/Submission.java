@@ -1,8 +1,9 @@
 package org.ssu.standings.entity.contestresponse;
 
-import com.fasterxml.jackson.annotation.*;
-import org.ssu.standings.entity.*;
-import org.ssu.standings.parser.entity.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.ssu.standings.entity.SubmissionStatus;
+import org.ssu.standings.parser.entity.SubmissionNode;
 
 public class Submission {
     @JsonProperty("id")

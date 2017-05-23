@@ -1,9 +1,11 @@
 package org.ssu.standings.entity.contestresponse;
 
-import com.fasterxml.jackson.annotation.*;
-import org.ssu.standings.parser.entity.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.ssu.standings.parser.entity.SubmissionNode;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ParticipantResult implements Comparator<ParticipantResult>, Comparable<ParticipantResult> {
     @JsonProperty("participant")

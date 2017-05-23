@@ -1,20 +1,14 @@
 package org.ssu.standings.controller;
 
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.*;
-import org.ssu.standings.entity.*;
-import org.ssu.standings.entity.contestresponse.*;
-import org.ssu.standings.event.*;
-import org.ssu.standings.service.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.*;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Optional;
 
 @RequestMapping("/")
 @Controller

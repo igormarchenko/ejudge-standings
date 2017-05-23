@@ -45,7 +45,7 @@ public class BaylorExportService {
 //        return null;
 //    }
 
-//    private Long calculatePenalty(List<Submission> submissions) {
+    //    private Long calculatePenalty(List<Submission> submissions) {
 //        Map<Long, List<Submission>> acceptedSubmits = submissions.stream()
 //                .filter(item -> item.getStatus().equals("OK"))
 //                .collect(Collectors.groupingBy(Submission::getProblemId));

@@ -1,8 +1,9 @@
 package org.ssu.standings.entity;
 
-import org.ssu.standings.parser.entity.*;
+import org.ssu.standings.parser.entity.SubmissionNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContestSubmissionsChanges {
     private List<SubmissionNode> newSubmissions = new ArrayList<>();

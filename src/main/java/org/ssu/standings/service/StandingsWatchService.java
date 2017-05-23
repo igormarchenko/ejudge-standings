@@ -1,18 +1,22 @@
 package org.ssu.standings.service;
 
-import org.springframework.scheduling.annotation.*;
-import org.springframework.stereotype.*;
-import org.ssu.standings.dao.entity.*;
-import org.ssu.standings.dao.repository.*;
-import org.ssu.standings.entity.*;
-import org.ssu.standings.parser.*;
-import org.ssu.standings.updateobserver.*;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.ssu.standings.dao.entity.StandingsFileDAO;
+import org.ssu.standings.dao.entity.TeamDAO;
+import org.ssu.standings.dao.repository.StandingsFilesRepository;
+import org.ssu.standings.dao.repository.TeamRepository;
+import org.ssu.standings.entity.ContestDataStorage;
+import org.ssu.standings.parser.StandingsFileParser;
+import org.ssu.standings.updateobserver.ContestStandingsFileObserver;
 
-import javax.annotation.*;
-import java.io.*;
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @EnableScheduling

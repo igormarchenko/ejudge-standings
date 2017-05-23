@@ -1,8 +1,8 @@
 package org.ssu.standings.event;
 
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.*;
-import org.springframework.stereotype.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ContestUpdatesEventProducer {
