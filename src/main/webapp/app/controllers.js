@@ -17,9 +17,9 @@ angular.module('ejudgeStandings.controllers', [])
         $scope.display = [];
         $scope.scrollDisabled = true;
 
-        $scope.loadMore = function() {
+        $scope.loadMore = function () {
             var batchSize = 20;
-            if(data.results.length > 0) {
+            if (data.results.length > 0) {
                 for (var i = 0; i < batchSize && i < data.results.length; i++) {
                     $scope.display.push(data.results[i]);
                 }
@@ -33,15 +33,19 @@ angular.module('ejudgeStandings.controllers', [])
             ejudgeApiService.contestData($routeParams.contestId).then(function (response) {
                 data = response.data;
                 $scope.contest = {
-                    'name' : data.name,
-                    'tasks' : data.tasks
+                    'name': data.name,
+                    'tasks': data.tasks
                 };
                 $scope.scrollDisabled = false;
             });
         }
 
-        $scope.formatTime = function(minutes) {
-           // var minutes = (seconds + 60 - seconds % 60) / 60;
+        $scope.formatTime = function (minutes) {
+            // var minutes = (seconds + 60 - seconds % 60) / 60;
             return sprintf("%02d:%02d", minutes / 60, minutes % 60);
         };
+    }).controller('webSocketController', function ($scope, WebSocketService) {
+    WebSocketService.receive().then(null, null, function(message) {
+        console.log(message);
     });
+});

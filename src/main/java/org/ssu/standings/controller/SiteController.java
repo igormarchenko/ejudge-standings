@@ -19,11 +19,6 @@ import java.util.*;
 @RequestMapping("/")
 @Controller
 public class SiteController {
-    @EventListener
-    public void eventListener(ContestUpdates contestUpdates) {
-        System.out.println("update!");
-    }
-
     @RequestMapping(value = "/login-success", method = RequestMethod.POST)
     public String loginSuccess() {
         return "redirect:/admin/home";
@@ -36,7 +31,7 @@ public class SiteController {
         return model;
     }
 
-    @RequestMapping(value = {"/", "/contest/{contestId}"}, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = {"/", "/contest/{contestId}", "/socket"}, produces = "text/plain;charset=UTF-8")
     public ModelAndView homePage(ModelAndView model, @PathVariable Optional<Long> contestId) throws IOException {
         model.setViewName("/home");
         return model;

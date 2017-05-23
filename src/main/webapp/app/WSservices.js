@@ -1,14 +1,13 @@
-angular.module("ejudgeStandings.WebSocketService").service("WebSocketService", function($q, $timeout) {
+angular.module("ejudgeStandings.WebSocketService", []).service("WebSocketService", function($q, $timeout) {
 
     var service = {}, listener = $q.defer(), socket = {
         client: null,
         stomp: null
-    }, messageIds = [];
+    };
 
     service.RECONNECT_TIMEOUT = 30000;
     service.SOCKET_URL = "/listener";
-    service.CHAT_TOPIC = "/topic/message";
-    service.CHAT_BROKER = "/ws/listener";
+    service.UPDATE_LISTENER_URL = "/updates/get-updates";
 
     service.receive = function() {
         return listener.promise;
@@ -21,18 +20,11 @@ angular.module("ejudgeStandings.WebSocketService").service("WebSocketService", f
     };
 
     var getMessage = function(data) {
-        var message = JSON.parse(data), out = {};
-        out.message = message.message;
-        out.time = new Date(message.time);
-        if (_.includes(messageIds, message.id)) {
-            out.self = true;
-            messageIds = _.remove(messageIds, message.id);
-        }
-        return out;
+        return JSON.parse(data);
     };
 
     var startListener = function() {
-        socket.stomp.subscribe(service.CHAT_TOPIC, function(data) {
+        socket.stomp.subscribe(service.UPDATE_LISTENER_URL, function(data) {
             listener.notify(getMessage(data.body));
         });
     };
