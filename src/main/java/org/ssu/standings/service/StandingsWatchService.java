@@ -34,7 +34,7 @@ public class StandingsWatchService {
 
     private void initContestDataFlow() {
         observers = standingsFilesRepository.findAll().stream().collect(Collectors.toMap(Function.identity(), ContestStandingsFileObserver::new));
-
+        //TODO: contest data storage initialization
         Map<String, List<TeamDAO>> teams = teamRepository.findAll().stream().collect(Collectors.groupingBy(TeamDAO::getName));
         contestDataStorage.setTeams(teams);
     }

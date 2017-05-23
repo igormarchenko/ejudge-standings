@@ -44,7 +44,6 @@ public class ApiController {
     @RequestMapping(value = "/init-results/{contestId}", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String getInitResults(@PathVariable Long contestId) throws JsonProcessingException {
-        Contest contestData = contestDataStorage.getContestData(contestId);
-        return new ObjectMapper().writeValueAsString(contestData);
+        return new ObjectMapper().writeValueAsString(contestDataStorage.getContestData(contestId));
     }
 }

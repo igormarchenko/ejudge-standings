@@ -60,7 +60,7 @@ public class ContestDataStorage {
             Map<Long, ParticipantResult> affectedTeams = getContestData(contestId).getTeamsResults(teamsIds);
             changes.put(contestId, affectedTeams);
             if(!affectedTeams.isEmpty())
-                contestUpdatesEventProducer.publishEvent(new ContestUpdates(affectedTeams));
+                contestUpdatesEventProducer.publishEvent(new ContestUpdates(contestId, affectedTeams));
         }
         return getContestData(contestId);
     }

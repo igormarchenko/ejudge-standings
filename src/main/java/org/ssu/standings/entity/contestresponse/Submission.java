@@ -7,7 +7,6 @@ import org.ssu.standings.parser.entity.*;
 public class Submission {
     @JsonProperty("id")
     private Long id;
-    //    @JsonProperty("uuid")
     @JsonIgnore
     private String uuid;
     @JsonProperty("time")

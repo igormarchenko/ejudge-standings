@@ -17,7 +17,7 @@ import org.springframework.web.servlet.view.JstlView;
 import javax.servlet.Filter;
 
 @Configuration
-@ComponentScan({"org.ssu.standings", "org.ssu.standings.utils"})
+@ComponentScan({"org.ssu.standings"})
 @EnableWebMvc
 @Import({ SecurityConfig.class })
 public class MvcConfig extends WebMvcConfigurerAdapter {

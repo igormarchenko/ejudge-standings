@@ -21,7 +21,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan({"org.ssu.standings"})
+@ComponentScan({"org.ssu.standings.dao"})
 @EnableJpaRepositories("org.ssu.standings.dao.repository")
 @PropertySource("classpath:db.properties")
 public class PersistenceConfig {

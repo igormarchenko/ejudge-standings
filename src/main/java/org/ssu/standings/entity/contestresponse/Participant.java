@@ -14,10 +14,12 @@ public class Participant {
     @JsonProperty("university")
     private UniversityDAO university;
 
-    public Participant(Builder builder) {
-        id = builder.id;
-        name = builder.name;
-        university = builder.university;
+    public Participant(ParticipantNode user, UniversityDAO university) {
+        id = user.getId();
+        name = Optional.ofNullable(user.getName())
+                .filter(teamName -> !teamName.isEmpty())
+                .orElse(String.format("team%d", id));
+        this.university = university;
     }
 
     public Long getId() {
@@ -26,23 +28,5 @@ public class Participant {
 
     public String getName() {
         return name;
-    }
-
-    public static final class Builder {
-        private Long id;
-        private String name;
-        private UniversityDAO university;
-
-        public Builder(ParticipantNode user, UniversityDAO university) {
-            id = user.getId();
-            name = Optional.ofNullable(user.getName())
-                    .filter(teamName -> !teamName.isEmpty())
-                    .orElse(String.format("team%d", id));
-            this.university = university;
-        }
-
-        public Participant build() {
-            return new Participant(this);
-        }
     }
 }
