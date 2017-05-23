@@ -43,8 +43,8 @@ angular.module('ejudgeStandings.controllers', [])
         $scope.formatTime = function (minutes) {
             return sprintf("%02d:%02d", minutes / 60, minutes % 60);
         };
-    }).controller('webSocketController', function ($scope, WebSocketService) {
-        WebSocketService.initialize(2);
+    }).controller('webSocketController', function ($scope, $routeParams, WebSocketService) {
+        WebSocketService.initialize($routeParams.contestId);
         WebSocketService.receive().then(null, null, function(message) {
             console.log(message);
         });

@@ -12,7 +12,7 @@ angular.module('ejudgeStandings',
     }).when("/contest/:contestId", {
         templateUrl: "/views/contest-result.html",
         controller: "resultsController"
-    }).when("/socket", {
+    }).when("/socket/:contestId", {
         templateUrl: "/views/socket.html",
         controller: "webSocketController"
     });
