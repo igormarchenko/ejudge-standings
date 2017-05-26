@@ -36,7 +36,7 @@
     <tbody infinite-scroll='loadMore()' infinite-scroll-disabled="scrollDisabled"
            infinite-scroll-use-document-bottom="true">
 
-    <tr ng-repeat="team in display track by $index">
+    <tr ng-repeat="team in display track by $index" ng-animate="'team'">
         <td width="40px">
             <h4>{{$index + 1}}</h4>
         </td>

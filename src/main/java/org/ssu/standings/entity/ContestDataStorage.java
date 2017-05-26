@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.ssu.standings.dao.entity.TeamDAO;
 import org.ssu.standings.entity.contestresponse.Contest;
 import org.ssu.standings.entity.contestresponse.ParticipantResult;
+import org.ssu.standings.entity.contestresponse.ParticipantUpdates;
 import org.ssu.standings.event.ContestUpdates;
 import org.ssu.standings.event.ContestUpdatesEventProducer;
 import org.ssu.standings.parser.entity.ContestNode;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class ContestDataStorage {
@@ -23,7 +25,6 @@ public class ContestDataStorage {
 
     private Map<Long, Contest> contestData = new HashMap<>();
     private Map<String, List<TeamDAO>> teams;
-    private Map<Long, Map<Long, ParticipantResult>> changes = new HashMap<>();
 
     public void setTeams(Map<String, List<TeamDAO>> teams) {
         this.teams = teams;
@@ -43,7 +44,7 @@ public class ContestDataStorage {
     }
 
 
-    public void addContest(Long contestId, ContestNode contest) {
+    private void addContest(Long contestId, ContestNode contest) {
         contestData.put(contestId, new Contest.Builder(contest, teams).build());
     }
 
@@ -51,7 +52,7 @@ public class ContestDataStorage {
         return contestData.get(contestId);
     }
 
-    public Boolean contains(Long contestId) {
+    private Boolean contains(Long contestId) {
         return contestData.containsKey(contestId);
     }
 
@@ -60,13 +61,22 @@ public class ContestDataStorage {
             addContest(contestId, contestNode);
         } else {
             ContestSubmissionsChanges contestSubmissionsChanges = getContestChanges(contestId, contestNode);
+
+            List<ParticipantResult> resultsBeforeUpdate = getContestData(contestId).getResults();
             getContestData(contestId).updateSubmissions(contestSubmissionsChanges.getNewSubmissions());
+            List<ParticipantResult> resultsAfterUpdate = getContestData(contestId).getResults();
 
             Set<Long> teamsIds = contestSubmissionsChanges.getNewSubmissions().stream().map(SubmissionNode::getUserId).collect(Collectors.toSet());
+
+            Map<Long, Integer> placesBeforeUpdate = IntStream.range(0, resultsBeforeUpdate.size()).filter(index -> teamsIds.contains(resultsBeforeUpdate.get(index).getParticipant().getId())).boxed().collect(Collectors.toMap(index -> resultsBeforeUpdate.get(index).getParticipant().getId(), index -> index));
+            Map<Long, Integer> placesAfterUpdate = IntStream.range(0, resultsAfterUpdate.size()).filter(index -> teamsIds.contains(resultsAfterUpdate.get(index).getParticipant().getId())).boxed().collect(Collectors.toMap(index -> resultsAfterUpdate.get(index).getParticipant().getId(), index -> index));
+
             Map<Long, ParticipantResult> affectedTeams = getContestData(contestId).getTeamsResults(teamsIds);
-            changes.put(contestId, affectedTeams);
-            if (!affectedTeams.isEmpty())
-                contestUpdatesEventProducer.publishEvent(new ContestUpdates(contestId, affectedTeams));
+
+            Map<Long, ParticipantUpdates> collect = teamsIds.stream().map(teamId -> new ParticipantUpdates(teamId, affectedTeams.get(teamId), placesBeforeUpdate.get(teamId), placesAfterUpdate.get(teamId))).collect(Collectors.toMap(ParticipantUpdates::getTeamId, team -> team));
+
+            if (!teamsIds.isEmpty())
+                contestUpdatesEventProducer.publishEvent(new ContestUpdates(contestId, collect));
         }
         return getContestData(contestId);
     }

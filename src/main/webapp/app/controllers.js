@@ -11,7 +11,7 @@ angular.module('ejudgeStandings.controllers', [])
             return contests;
         }
     })
-    .controller('resultsController', function ($scope, $routeParams, ejudgeApiService) {
+    .controller('resultsController', function ($scope, $routeParams, ejudgeApiService, WebSocketService) {
         initContestData();
         var data = {};
         $scope.display = [];
@@ -30,6 +30,7 @@ angular.module('ejudgeStandings.controllers', [])
         };
 
         function initContestData() {
+            WebSocketService.initialize($routeParams.contestId);
             ejudgeApiService.contestData($routeParams.contestId).then(function (response) {
                 data = response.data;
                 $scope.contest = {
@@ -43,9 +44,33 @@ angular.module('ejudgeStandings.controllers', [])
         $scope.formatTime = function (minutes) {
             return sprintf("%02d:%02d", minutes / 60, minutes % 60);
         };
-    }).controller('webSocketController', function ($scope, $routeParams, WebSocketService) {
-        WebSocketService.initialize($routeParams.contestId);
-        WebSocketService.receive().then(null, null, function(message) {
-            console.log(message);
+
+        teamUp = function (index) {
+            if (index <= 0 || index >= $scope.display.length)
+                return;
+            var temp = $scope.display[index];
+            $scope.display[index] = $scope.display[index - 1];
+            $scope.display[index - 1] = temp;
+
+        };
+
+        slideTeam = function(startPos, endPos) {
+            var index = startPos;
+            var interval  = setInterval(function() {
+                $scope.$apply(function() {
+                    teamUp(index);
+                });
+                index--;
+                if(index < endPos) clearInterval(interval);
+            }, 1000);
+        };
+
+        WebSocketService.receive().then(null, null, function (response) {
+            angular.forEach(response.updates, function(team) {
+               // console.log(team);
+               $scope.display[team.previousPlace] = team.result;
+               slideTeam(team.previousPlace, team.currentPlace);
+
+            });
         });
-});
+    });
