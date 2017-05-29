@@ -48,10 +48,14 @@ angular.module('ejudgeStandings.controllers', [])
         teamUp = function (index) {
             if (index <= 0 || index >= $scope.display.length)
                 return;
+            var obj = $('#teamrow-' + (index - 1));
+            obj.fadeOut(600, function () {
+                obj.fadeIn(600);
+            });
+
             var temp = $scope.display[index];
             $scope.display[index] = $scope.display[index - 1];
             $scope.display[index - 1] = temp;
-
         };
 
         slideTeam = function(startPos, endPos) {
@@ -62,7 +66,7 @@ angular.module('ejudgeStandings.controllers', [])
                 });
                 index--;
                 if(index < endPos) clearInterval(interval);
-            }, 1000);
+            }, 1200);
         };
 
         WebSocketService.receive().then(null, null, function (response) {
