@@ -1,8 +1,10 @@
 angular.module('ejudgeStandings',
     ['ejudgeStandings.controllers',
         'ejudgeStandings.services',
+        'ejudgeStandings.WebSocketService',
         'ngRoute',
         'ngSanitize',
+        'ngAnimate',
         'infinite-scroll'
     ]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider.when("/", {
@@ -11,6 +13,9 @@ angular.module('ejudgeStandings',
     }).when("/contest/:contestId", {
         templateUrl: "/views/contest-result.html",
         controller: "resultsController"
+    }).when("/socket/:contestId", {
+        templateUrl: "/views/socket.html",
+        controller: "webSocketController"
     });
     $locationProvider.html5Mode({
         enabled: true,

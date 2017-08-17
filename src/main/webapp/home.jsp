@@ -8,6 +8,7 @@
     <script src="../app/app.js"></script>
     <script src="../app/services.js"></script>
     <script src="../app/controllers.js"></script>
+    <script src="../app/WSservices.js"></script>
 </head>
 
 <body>

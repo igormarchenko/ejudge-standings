@@ -11,15 +11,15 @@ angular.module('ejudgeStandings.controllers', [])
             return contests;
         }
     })
-    .controller('resultsController', function ($scope, $routeParams, ejudgeApiService) {
+    .controller('resultsController', function ($scope, $routeParams, ejudgeApiService, WebSocketService) {
         initContestData();
         var data = {};
         $scope.display = [];
         $scope.scrollDisabled = true;
 
-        $scope.loadMore = function() {
+        $scope.loadMore = function () {
             var batchSize = 20;
-            if(data.results.length > 0) {
+            if (data.results.length > 0) {
                 for (var i = 0; i < batchSize && i < data.results.length; i++) {
                     $scope.display.push(data.results[i]);
                 }
@@ -30,18 +30,52 @@ angular.module('ejudgeStandings.controllers', [])
         };
 
         function initContestData() {
+            WebSocketService.initialize($routeParams.contestId);
             ejudgeApiService.contestData($routeParams.contestId).then(function (response) {
                 data = response.data;
                 $scope.contest = {
-                    'name' : data.name,
-                    'tasks' : data.tasks
+                    'name': data.name,
+                    'tasks': data.tasks
                 };
                 $scope.scrollDisabled = false;
             });
         }
 
-        $scope.formatTime = function(seconds) {
-            var minutes = (seconds + 60 - seconds % 60) / 60;
+        $scope.formatTime = function (minutes) {
             return sprintf("%02d:%02d", minutes / 60, minutes % 60);
         };
+
+        slideUp = function(array, index) {
+            var temp = array[index];
+            array[index] = array[index - 1];
+            array[index - 1] = temp;
+        };
+
+        teamUp = function (index, teamId) {
+            if (index > 0 && index < $scope.display.length)
+                slideUp($scope.display, index);
+        };
+
+
+        slideTeam = function (teamId, startPos, endPos) {
+            if(startPos != endPos) {
+                var index = startPos;
+                var interval = setInterval(function () {
+                    $scope.$apply(function () {
+                        teamUp(index, teamId);
+                    });
+                    index--;
+                    if (index <= endPos) clearInterval(interval);
+                }, 1200);
+            }
+        };
+
+        WebSocketService.receive().then(null, null, function (response) {
+            angular.forEach(response.updates, function (team) {
+                console.log(team);
+                $scope.display[team.previousPlace] = team.result;
+                slideTeam(team.id, team.previousPlace, team.currentPlace);
+
+            });
+        });
     });

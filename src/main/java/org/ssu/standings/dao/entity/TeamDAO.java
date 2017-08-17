@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class TeamDAO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="id")
+    @Column(name = "id")
     @JsonProperty("id")
     private Long id;
     @Column(name = "name")

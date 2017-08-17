@@ -1,14 +1,14 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.entity.contestresponse;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.dao.entity.TeamDAO;
 import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.parser.entity.ContestNode;
+import org.ssu.standings.parser.entity.SubmissionNode;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -29,23 +29,48 @@ public class Contest {
     private Long fogTime;
     @JsonProperty("unfogTime")
     private Long unfogTime;
-    @JsonProperty("results")
-    private List<ParticipantResult> results;
-
+    @JsonIgnore
+    private Map<Long, ParticipantResult> results;
     @JsonProperty("tasks")
     private List<Task> tasks;
 
+    @JsonIgnore
+    private Map<String, SubmissionNode> submissions = new HashMap<>();
+
     public Contest(Builder builder) {
-        this.contestId = builder.contestId;
-        this.name = builder.name;
-        this.duration = builder.duration;
-        this.startTime = builder.startTime;
-        this.stopTime = builder.stopTime;
-        this.currentTime = builder.currentTime;
-        this.fogTime = builder.fogTime;
-        this.unfogTime = builder.unfogTime;
-        this.results = builder.results.values().stream().sorted().collect(Collectors.toList());
-        this.tasks = builder.tasks;
+        contestId = builder.contestId;
+        name = builder.name;
+        duration = builder.duration;
+        startTime = builder.startTime;
+        stopTime = builder.stopTime;
+        currentTime = builder.currentTime;
+        fogTime = builder.fogTime;
+        unfogTime = builder.unfogTime;
+        results = builder.results;
+        tasks = builder.tasks;
+        submissions = builder.submissions;
+    }
+
+    @JsonProperty("results")
+    public List<ParticipantResult> getResults() {
+        //TODO: add lazy update
+        return results.values().stream().sorted().collect(Collectors.toList());
+    }
+
+    public Map<String, SubmissionNode> getSubmissions() {
+        return submissions;
+    }
+
+    public Map<Long, ParticipantResult> getTeamsResults(Collection<Long> teams) {
+        return teams.stream().map(teamId -> results.get(teamId)).collect(Collectors.toMap(team -> team.getParticipant().getId(), team -> team));
+    }
+
+    public Contest updateSubmissions(List<SubmissionNode> newSubmissions) {
+        newSubmissions.forEach(submit -> {
+            results.get(submit.getUserId()).pushSubmit(submit);
+            submissions.put(submit.getRunUuid(), submit);
+        });
+        return this;
     }
 
     public static final class Builder {
@@ -59,6 +84,7 @@ public class Contest {
         private Long unfogTime;
         private List<Task> tasks;
         private Map<Long, ParticipantResult> results;
+        private Map<String, SubmissionNode> submissions = new HashMap<>();
 
         public Builder(ContestNode contest, Map<String, List<TeamDAO>> teams) {
             Function<String, UniversityDAO> getUniversityForTeam = teamName -> Optional.ofNullable(teams.get(teamName)).map(teamDAOS -> teamDAOS.get(0).getUniversity()).orElse(null);
@@ -74,10 +100,13 @@ public class Contest {
 
             results = contest.getParticipants()
                     .stream()
-                    .map(team -> new Participant.Builder(team, getUniversityForTeam.apply(team.getName())).build())
+                    .map(team -> new Participant(team, getUniversityForTeam.apply(team.getName())))
                     .collect(Collectors.toMap(Participant::getId, ParticipantResult::new));
 
-            contest.getSubmissions().forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
+            contest.getSubmissions().forEach(submit -> {
+                results.get(submit.getUserId()).pushSubmit(submit);
+                submissions.put(submit.getRunUuid(), submit);
+            });
         }
 
         public Contest build() {

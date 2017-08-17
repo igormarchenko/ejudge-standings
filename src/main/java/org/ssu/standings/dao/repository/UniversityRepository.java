@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import org.ssu.standings.dao.entity.UniversityDAO;
 
 @Repository
-public interface UniversityRepository extends JpaRepository<UniversityDAO, Long>{
+public interface UniversityRepository extends JpaRepository<UniversityDAO, Long> {
 }

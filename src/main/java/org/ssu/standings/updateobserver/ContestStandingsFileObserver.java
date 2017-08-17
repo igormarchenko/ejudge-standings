@@ -1,8 +1,6 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.updateobserver;
 
 import org.ssu.standings.dao.entity.StandingsFileDAO;
-import org.ssu.standings.updateobserver.FileHandlerFactory;
-import org.ssu.standings.updateobserver.Response;
 import org.ssu.standings.updateobserver.handlers.FileHandler;
 
 import java.io.IOException;

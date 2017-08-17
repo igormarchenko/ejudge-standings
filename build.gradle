@@ -31,6 +31,7 @@ bower {
     }
 
     'angular-sanitize'('https://github.com/angular/bower-angular-sanitize.git')
+    'angular-animate'()
     'angular-ui-select'('https://github.com/angular-ui/ui-select.git')
     'ui-router'('0.2.x')
 
@@ -48,16 +49,26 @@ bower {
     'angular-datatables'('0.5.5')
     'sprintf.js'("https://github.com/alexei/sprintf.js.git")
     'ngInfiniteScroll'('1.0.0')
+    'angular-resource'()
+    'semantic-ui'()
+    'sockjs'()
+    'stomp-websocket'()
+    'showdown'()
 }
 
 def scriptFiles = ['bower_components/jquery/dist/jquery.min.js',
 //                   'bower_components/bootstrap/dist/js/bootstrap.min.js',
                    'bower_components/angular/angular.min.js',
+                   'bower_components/angular-animate/angular-animate.js',
+                   'bower_components/angular-resource/angular-resource.js',
+                   'bower_components/sockjs/sockjs.js',
+                   'bower_components/stomp-websocket/lib/stomp.js',
+                   'bower_components/angular-resource/angular-resource.js',
+                   'bower_components/showdown/dist/showdown.js',
 //                   'bower_components/angular-bootstrap/ui-bootstrap.js',
                    'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js',
                    'bower_components/angular-sanitize/angular-sanitize.min.js',
                    'bower_components/angular-route/angular-route.min.js',
-
                    'bower_components/angular-ui-select/dist/select.min.js',
                    'bower_components/ui-router/release/angular-ui-router.js',
                    'bower_components/sprintf.js/dist/sprintf.min.js',

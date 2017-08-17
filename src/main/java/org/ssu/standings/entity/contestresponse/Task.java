@@ -1,4 +1,4 @@
-package org.ssu.standings.entity;
+package org.ssu.standings.entity.contestresponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;

@@ -11,11 +11,12 @@ public class FileReader {
     }
 
     public static FileReader getIntstance() {
-        if(!reader.isPresent())
+        if (!reader.isPresent())
             reader = Optional.of(new FileReader());
 
         return reader.get();
     }
+
     public String readContent(BufferedReader bufferedReader) throws IOException {
         String nextLine;
         StringBuilder content = new StringBuilder();

@@ -1,7 +1,5 @@
 package org.ssu.standings.config;
 
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planetj.servlet.filter.compression.CompressingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,16 +8,15 @@ import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.mvc.WebContentInterceptor;
 import org.springframework.web.servlet.resource.GzipResourceResolver;
-import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 import javax.servlet.Filter;
 
 @Configuration
-@ComponentScan({"org.ssu.standings", "org.ssu.standings.utils"})
+@ComponentScan({"org.ssu.standings"})
 @EnableWebMvc
-@Import({ SecurityConfig.class })
+@Import({SecurityConfig.class})
 public class MvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {

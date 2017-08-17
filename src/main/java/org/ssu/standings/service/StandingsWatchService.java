@@ -2,26 +2,23 @@ package org.ssu.standings.service;
 
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.ssu.standings.dao.entity.StandingsFileDAO;
 import org.ssu.standings.dao.entity.TeamDAO;
 import org.ssu.standings.dao.repository.StandingsFilesRepository;
 import org.ssu.standings.dao.repository.TeamRepository;
-import org.ssu.standings.entity.Contest;
-import org.ssu.standings.entity.ContestStandingsFileObserver;
+import org.ssu.standings.entity.ContestDataStorage;
 import org.ssu.standings.parser.StandingsFileParser;
-import org.ssu.standings.parser.entity.ContestNode;
+import org.ssu.standings.updateobserver.ContestStandingsFileObserver;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 @EnableScheduling
 public class StandingsWatchService {
     @Resource
@@ -33,34 +30,31 @@ public class StandingsWatchService {
     @Resource
     private StandingsFileParser parser;
 
-    private Map<StandingsFileDAO, ContestStandingsFileObserver> observers;
+    @Resource
+    private ContestDataStorage contestDataStorage;
 
-    @PostConstruct
-    public void init() {
+    private Map<StandingsFileDAO, ContestStandingsFileObserver> observers = null;
+
+
+    private void initContestDataFlow() {
         observers = standingsFilesRepository.findAll().stream().collect(Collectors.toMap(Function.identity(), ContestStandingsFileObserver::new));
+        //TODO: contest data storage initialization
+        Map<String, List<TeamDAO>> teams = teamRepository.findAll().stream().collect(Collectors.groupingBy(TeamDAO::getName));
+        contestDataStorage.setTeams(teams);
     }
 
     @Scheduled(fixedDelay = 1000)
     public void update() {
-        observers.values().forEach(observer -> {
+        if (observers == null) {
+            initContestDataFlow();
+        }
+        observers.entrySet().forEach(observer -> {
             try {
-                observer.update();
+                observer.getValue().update();
+                contestDataStorage.updateContest(observer.getKey().getContestId(), parser.parse(observer.getValue().getContent()).orElseThrow(NullPointerException::new));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-    }
-
-    public Contest getContestData(Long contestId) {
-        Map<String, List<TeamDAO>> teams = teamRepository.findAll().stream().collect(Collectors.groupingBy(TeamDAO::getName));
-        List<ContestNode> contestNodes = observers.entrySet()
-                .stream()
-                .filter(observer -> observer.getKey().getContestId().equals(contestId))
-                .map(observer -> parser.parse(observer.getValue().getContent()))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
-
-        return contestNodes.stream().map(node -> new Contest.Builder(node, teams).build()).collect(Collectors.toList()).get(0);
     }
 }
