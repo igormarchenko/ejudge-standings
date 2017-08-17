@@ -14,19 +14,49 @@
     .cell-empty {
         background-color: #8c8c8c;
     }
-    .repeat-enter-setup, .repeat-leave-setup {
-        -webkit-transition:all linear 0.3s;
-        -moz-transition:all linear 0.3s;
-        -ms-transition:all linear 0.3s;
-        -o-transition:all linear 0.3s;
-        transition:all linear 0.3s;
+
+    .animate-repeat {
+        line-height:40px;
+        border-bottom: 1px solid white;
+        -webkit-transition: 1s linear all;
+        transition: 1s linear all;
     }
 
-    .repeat-enter-setup { line-height:0; opacity:0; }
-    .repeat-enter-setup.repeat-enter-start { line-height:20px; opacity:1; }
+    .animate-repeat.ng-move,
+    .animate-repeat.ng-enter,
+    .animate-repeat.ng-leave {
+        -webkit-transition:all linear 1s;
+        transition:all linear 1s;
+    }
 
-    .repeat-leave-setup { opacity:1; line-height:20px; }
-    .repeat-leave-setup.repeat-leave-start { opacity:0; line-height:0; }
+    .animate-repeat.ng-leave.ng-leave-active,
+    .animate-repeat.ng-move,
+    .animate-repeat.ng-enter {
+        opacity:0;
+        max-height:0;
+    }
+
+    .animate-repeat.ng-leave,
+    .animate-repeat.ng-move.ng-move-active,
+    .animate-repeat.ng-enter.ng-enter-active {
+        opacity:1;
+        max-height:40px;
+    }
+
+    .animate-repeat.ng-leave-stagger {
+        -webkit-transition-delay: 0s;
+        transition-delay: 0s;
+
+        -webkit-transition-duration: 0s;
+        transition-duration: 0s;
+    }
+
+    .animate-repeat.ng-enter-stagger {
+        -webkit-transition-delay: 0s;
+        transition-delay: 0s;
+        -webkit-transition-duration: 0s;
+        transition-duration: 0s;
+    }
 
 </style>
 
@@ -36,7 +66,7 @@
     </div>
 </div>
 <div>
-<table class="table table-bordered" id="resultsTable">
+<table class="table table-bordered results-table" id="resultsTable">
     <thead>
     <tr>
         <th>#</th>
@@ -50,7 +80,7 @@
     <tbody infinite-scroll='loadMore()' infinite-scroll-disabled="scrollDisabled"
            infinite-scroll-use-document-bottom="true">
 
-    <tr ng-repeat="team in display track by $index" ng-animate="'repeat'" id = "teamrow-{{$index}}">
+    <tr ng-repeat="team in display track by team.participant.id" id = "teamrow-{{team.participant.id}}" class="animate-repeat">
         <td width="40px">
             <h4>{{$index + 1}}</h4>
         </td>

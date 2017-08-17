@@ -4,6 +4,7 @@ angular.module('ejudgeStandings',
         'ejudgeStandings.WebSocketService',
         'ngRoute',
         'ngSanitize',
+        'ngAnimate',
         'infinite-scroll'
     ]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider.when("/", {

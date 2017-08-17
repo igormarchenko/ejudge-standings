@@ -45,35 +45,36 @@ angular.module('ejudgeStandings.controllers', [])
             return sprintf("%02d:%02d", minutes / 60, minutes % 60);
         };
 
-        teamUp = function (index) {
-            if (index <= 0 || index >= $scope.display.length)
-                return;
-            var obj = $('#teamrow-' + (index - 1));
-            obj.fadeOut(600, function () {
-                obj.fadeIn(600);
-            });
-
-            var temp = $scope.display[index];
-            $scope.display[index] = $scope.display[index - 1];
-            $scope.display[index - 1] = temp;
+        slideUp = function(array, index) {
+            var temp = array[index];
+            array[index] = array[index - 1];
+            array[index - 1] = temp;
         };
 
-        slideTeam = function(startPos, endPos) {
-            var index = startPos;
-            var interval  = setInterval(function() {
-                $scope.$apply(function() {
-                    teamUp(index);
-                });
-                index--;
-                if(index < endPos) clearInterval(interval);
-            }, 1200);
+        teamUp = function (index, teamId) {
+            if (index > 0 && index < $scope.display.length)
+                slideUp($scope.display, index);
+        };
+
+
+        slideTeam = function (teamId, startPos, endPos) {
+            if(startPos != endPos) {
+                var index = startPos;
+                var interval = setInterval(function () {
+                    $scope.$apply(function () {
+                        teamUp(index, teamId);
+                    });
+                    index--;
+                    if (index <= endPos) clearInterval(interval);
+                }, 1200);
+            }
         };
 
         WebSocketService.receive().then(null, null, function (response) {
-            angular.forEach(response.updates, function(team) {
-               // console.log(team);
-               $scope.display[team.previousPlace] = team.result;
-               slideTeam(team.previousPlace, team.currentPlace);
+            angular.forEach(response.updates, function (team) {
+                console.log(team);
+                $scope.display[team.previousPlace] = team.result;
+                slideTeam(team.id, team.previousPlace, team.currentPlace);
 
             });
         });

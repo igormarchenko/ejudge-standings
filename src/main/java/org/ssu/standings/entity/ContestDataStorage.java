@@ -52,12 +52,12 @@ public class ContestDataStorage {
         return contestData.get(contestId);
     }
 
-    private Boolean contains(Long contestId) {
+    private Boolean isContestPresent(Long contestId) {
         return contestData.containsKey(contestId);
     }
 
     public Contest updateContest(Long contestId, ContestNode contestNode) {
-        if (!contains(contestId)) {
+        if (!isContestPresent(contestId)) {
             addContest(contestId, contestNode);
         } else {
             ContestSubmissionsChanges contestSubmissionsChanges = getContestChanges(contestId, contestNode);
@@ -68,8 +68,15 @@ public class ContestDataStorage {
 
             Set<Long> teamsIds = contestSubmissionsChanges.getNewSubmissions().stream().map(SubmissionNode::getUserId).collect(Collectors.toSet());
 
-            Map<Long, Integer> placesBeforeUpdate = IntStream.range(0, resultsBeforeUpdate.size()).filter(index -> teamsIds.contains(resultsBeforeUpdate.get(index).getParticipant().getId())).boxed().collect(Collectors.toMap(index -> resultsBeforeUpdate.get(index).getParticipant().getId(), index -> index));
-            Map<Long, Integer> placesAfterUpdate = IntStream.range(0, resultsAfterUpdate.size()).filter(index -> teamsIds.contains(resultsAfterUpdate.get(index).getParticipant().getId())).boxed().collect(Collectors.toMap(index -> resultsAfterUpdate.get(index).getParticipant().getId(), index -> index));
+            Map<Long, Integer> placesBeforeUpdate = IntStream.range(0, resultsBeforeUpdate.size())
+                    .filter(index -> teamsIds.contains(resultsBeforeUpdate.get(index).getParticipant().getId()))
+                    .boxed()
+                    .collect(Collectors.toMap(index -> resultsBeforeUpdate.get(index).getParticipant().getId(), index -> index));
+
+            Map<Long, Integer> placesAfterUpdate = IntStream.range(0, resultsAfterUpdate.size())
+                    .filter(index -> teamsIds.contains(resultsAfterUpdate.get(index).getParticipant().getId()))
+                    .boxed()
+                    .collect(Collectors.toMap(index -> resultsAfterUpdate.get(index).getParticipant().getId(), index -> index));
 
             Map<Long, ParticipantResult> affectedTeams = getContestData(contestId).getTeamsResults(teamsIds);
 
