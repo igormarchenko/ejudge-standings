@@ -230,10 +230,10 @@ angular.module("standingsPage", ['ui.select', 'ngSanitize', 'ngAnimate', 'sly'])
                     angular.copy($scope.results[teamPosition], $scope.results[teamPosition - 1]);
                     angular.copy(tempTeam, $scope.results[teamPosition]);
 
-                    var obj = $('#team' + $scope.results[teamPosition].contest_team_id);
-                    obj.fadeOut(600, function () {
-                        obj.fadeIn(600);
-                    });
+                    // var obj = $('#team' + $scope.results[teamPosition].contest_team_id);
+                    // obj.fadeOut(600, function () {
+                    //     obj.fadeIn(600);
+                    // });
                     teamPosition--;
                     $scope.$apply();
                 }

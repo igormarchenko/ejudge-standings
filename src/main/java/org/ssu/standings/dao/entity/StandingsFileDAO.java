@@ -2,6 +2,7 @@ package org.ssu.standings.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.istack.internal.NotNull;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -24,6 +25,10 @@ public class StandingsFileDAO {
     @JsonIgnore
     private Long contestId;
 
+    @Column(name = "is_frozen")
+    @NotNull
+    @JsonIgnore
+    private Boolean isFrozen;
 
     public StandingsFileDAO() {
     }
@@ -38,6 +43,10 @@ public class StandingsFileDAO {
 
     public Long getContestId() {
         return contestId;
+    }
+
+    public Boolean getFrozen() {
+        return isFrozen;
     }
 
     @Override

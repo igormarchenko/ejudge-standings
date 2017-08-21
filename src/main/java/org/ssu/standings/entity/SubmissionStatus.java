@@ -9,11 +9,16 @@ public enum SubmissionStatus {
     PE("Presentation Error"),
     RT("Runtime Error"),
     ML("Memory Limit Exceed"),
-    EMPTY("Empty");
+    EMPTY("Empty"),
+    FROZEN("Frozen");
 
     private String status;
 
     SubmissionStatus(String status) {
         this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

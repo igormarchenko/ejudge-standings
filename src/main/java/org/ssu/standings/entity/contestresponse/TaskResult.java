@@ -8,12 +8,13 @@ import org.ssu.standings.parser.entity.SubmissionNode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TaskResult {
     @JsonIgnore
-    private List<Submission> submissions = new ArrayList<>();
+    private List<SubmissionNode> submissions = new ArrayList<>();
 
     public TaskResult() {
     }
@@ -36,7 +37,7 @@ public class TaskResult {
         Long seconds = submissions
                 .stream()
                 .filter(submission -> submission.getStatus() == SubmissionStatus.OK)
-                .map(Submission::getTime)
+                .map(SubmissionNode::getTime)
                 .sorted()
                 .findFirst()
                 .orElse(0L);
@@ -46,11 +47,12 @@ public class TaskResult {
     @JsonProperty("status")
     public SubmissionStatus getStatus() {
         if (submissions.isEmpty()) return SubmissionStatus.EMPTY;
+        if(isProblemSolved()) return  SubmissionStatus.OK;
         return submissions.stream()
-                .filter(submit -> submit.getStatus() == SubmissionStatus.OK)
-                .findAny()
-                .map(submit -> SubmissionStatus.OK)
-                .orElse(SubmissionStatus.WA);
+                .filter(submit -> submit.getStatus() != SubmissionStatus.CE)
+                .map(SubmissionNode::getStatus)
+                .reduce((a, b) -> b)
+                .orElse(SubmissionStatus.EMPTY);
     }
 
     @JsonProperty("penalty")
@@ -58,12 +60,23 @@ public class TaskResult {
         return isProblemSolved() ? submissionCount() * 20L + getFirstAcceptedTime() : 0L;
     }
 
-    @JsonIgnore
-    public Boolean isProblemSolved() {
-        return getStatus() == SubmissionStatus.OK;
+    public List<SubmissionNode> getSubmissions() {
+        return submissions;
     }
 
-    public void addNode(SubmissionNode node) {
-        submissions.add(new Submission(node));
+    @JsonIgnore
+    public Boolean isProblemSolved() {
+        return submissions.stream()
+                .filter(submit -> submit.getStatus() == SubmissionStatus.OK)
+                .count() > 0;
+    }
+
+    public void addSubmission(SubmissionNode submission) {
+        Optional<SubmissionNode> excitingSubmission = submissions.stream().filter(submit -> submit.getRunUuid().equals(submission.getRunUuid())).findFirst();
+        if(excitingSubmission.isPresent()) {
+            excitingSubmission.get().setStatus(submission.getStatus());
+        } else {
+            submissions.add(submission);
+        }
     }
 }

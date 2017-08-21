@@ -34,8 +34,6 @@ public class Contest {
     @JsonProperty("tasks")
     private List<Task> tasks;
 
-    @JsonIgnore
-    private Map<String, SubmissionNode> submissions = new HashMap<>();
 
     public Contest(Builder builder) {
         contestId = builder.contestId;
@@ -48,7 +46,7 @@ public class Contest {
         unfogTime = builder.unfogTime;
         results = builder.results;
         tasks = builder.tasks;
-        submissions = builder.submissions;
+
     }
 
     @JsonProperty("results")
@@ -57,9 +55,6 @@ public class Contest {
         return results.values().stream().sorted().collect(Collectors.toList());
     }
 
-    public Map<String, SubmissionNode> getSubmissions() {
-        return submissions;
-    }
 
     public Map<Long, ParticipantResult> getTeamsResults(Collection<Long> teams) {
         return teams.stream().map(teamId -> results.get(teamId)).collect(Collectors.toMap(team -> team.getParticipant().getId(), team -> team));
@@ -68,9 +63,45 @@ public class Contest {
     public Contest updateSubmissions(List<SubmissionNode> newSubmissions) {
         newSubmissions.forEach(submit -> {
             results.get(submit.getUserId()).pushSubmit(submit);
-            submissions.put(submit.getRunUuid(), submit);
         });
         return this;
+    }
+
+
+    public Long getContestId() {
+        return contestId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getStopTime() {
+        return stopTime;
+    }
+
+    public LocalDateTime getCurrentTime() {
+        return currentTime;
+    }
+
+    public Long getFogTime() {
+        return fogTime;
+    }
+
+    public Long getUnfogTime() {
+        return unfogTime;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
     }
 
     public static final class Builder {
@@ -84,10 +115,10 @@ public class Contest {
         private Long unfogTime;
         private List<Task> tasks;
         private Map<Long, ParticipantResult> results;
-        private Map<String, SubmissionNode> submissions = new HashMap<>();
 
-        public Builder(ContestNode contest, Map<String, List<TeamDAO>> teams) {
-            Function<String, UniversityDAO> getUniversityForTeam = teamName -> Optional.ofNullable(teams.get(teamName)).map(teamDAOS -> teamDAOS.get(0).getUniversity()).orElse(null);
+
+        public Builder(ContestNode contest, Map<String, TeamDAO> teams) {
+            Function<String, UniversityDAO> getUniversityForTeam = teamName -> Optional.ofNullable(teams.get(teamName)).map(TeamDAO::getUniversity).orElse(null);
             contestId = contest.getContestId();
             name = contest.getName();
             duration = contest.getDuration();
@@ -103,10 +134,27 @@ public class Contest {
                     .map(team -> new Participant(team, getUniversityForTeam.apply(team.getName())))
                     .collect(Collectors.toMap(Participant::getId, ParticipantResult::new));
 
-            contest.getSubmissions().forEach(submit -> {
+            withSubmissions(contest.getSubmissions());
+        }
+
+        public Builder(Contest contest) {
+            this.contestId = contest.contestId;
+            this.name = contest.name;
+            this.duration = contest.duration;
+            this.startTime = contest.startTime;
+            this.stopTime = contest.stopTime;
+            this.currentTime = contest.currentTime;
+            this.fogTime = contest.fogTime;
+            this.unfogTime = contest.unfogTime;
+            this.tasks = new ArrayList<>(contest.tasks);
+            this.results = new HashMap<>(contest.results);
+        }
+
+        public Builder withSubmissions(List<SubmissionNode> submissions) {
+            submissions.forEach(submit -> {
                 results.get(submit.getUserId()).pushSubmit(submit);
-                submissions.put(submit.getRunUuid(), submit);
             });
+            return this;
         }
 
         public Contest build() {

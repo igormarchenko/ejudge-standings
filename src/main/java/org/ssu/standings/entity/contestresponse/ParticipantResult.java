@@ -19,7 +19,11 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
 
     public void pushSubmit(SubmissionNode submit) {
         results.putIfAbsent(submit.getProblemId(), new TaskResult());
-        results.get(submit.getProblemId()).addNode(submit);
+        results.get(submit.getProblemId()).addSubmission(submit);
+    }
+
+    public Map<Long, TaskResult> getResults() {
+        return results;
     }
 
     @JsonProperty("penalty")
