@@ -134,7 +134,9 @@ public class Contest {
                     .map(team -> new Participant(team, getUniversityForTeam.apply(team.getName())))
                     .collect(Collectors.toMap(Participant::getId, ParticipantResult::new));
 
-            withSubmissions(contest.getSubmissions());
+            contest.getSubmissions().forEach(submit -> {
+                results.get(submit.getUserId()).pushSubmit(submit);
+            });
         }
 
         public Builder(Contest contest) {
@@ -148,13 +150,6 @@ public class Contest {
             this.unfogTime = contest.unfogTime;
             this.tasks = new ArrayList<>(contest.tasks);
             this.results = new HashMap<>(contest.results);
-        }
-
-        public Builder withSubmissions(List<SubmissionNode> submissions) {
-            submissions.forEach(submit -> {
-                results.get(submit.getUserId()).pushSubmit(submit);
-            });
-            return this;
         }
 
         public Contest build() {

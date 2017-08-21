@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.ssu.standings.entity.SubmissionStatus;
 
-public class SubmissionNode {
+public class SubmissionNode implements Cloneable{
     @JacksonXmlProperty(isAttribute = true, localName = "run_id")
     private Long id;
 
@@ -116,5 +116,14 @@ public class SubmissionNode {
 
     public void setStatus(SubmissionStatus status) {
         this.status = status;
+    }
+
+    public SubmissionNode clone()  {
+        try {
+            return (SubmissionNode) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return this;
     }
 }
