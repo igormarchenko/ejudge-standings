@@ -39,7 +39,7 @@ bower {
         source 'angular-route.js' >> 'angular-route.js'
     }
 
-    'bootstrap'('3.3.x') {
+    'bootstrap'() {
         source 'dist/css/*.min.css' >> 'styles/'
         source 'dist/fonts/**' >> 'fonts/'
         excludes 'jquery'
@@ -54,6 +54,8 @@ bower {
     'sockjs'()
     'stomp-websocket'()
     'showdown'()
+    'moment'()
+    'angular-moment'()
 }
 
 def scriptFiles = ['bower_components/jquery/dist/jquery.min.js',
@@ -65,6 +67,8 @@ def scriptFiles = ['bower_components/jquery/dist/jquery.min.js',
                    'bower_components/stomp-websocket/lib/stomp.js',
                    'bower_components/angular-resource/angular-resource.js',
                    'bower_components/showdown/dist/showdown.js',
+                   'bower_components/moment/min/moment.min.js',
+                   'bower_components/angular-moment/angular-moment.js',
 //                   'bower_components/angular-bootstrap/ui-bootstrap.js',
                    'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js',
                    'bower_components/angular-sanitize/angular-sanitize.min.js',

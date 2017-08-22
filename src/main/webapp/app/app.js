@@ -5,13 +5,14 @@ angular.module('ejudgeStandings',
         'ngRoute',
         'ngSanitize',
         'ngAnimate',
-        'infinite-scroll'
+        'infinite-scroll',
+        'angularMoment'
     ]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider.when("/", {
         templateUrl: "/views/contest-list.html",
         controller: "contestListController"
     }).when("/contest/:contestId", {
-        templateUrl: "/views/contest-result.html",
+        templateUrl: "/views/contest-result.jsp",
         controller: "resultsController"
     }).when("/socket/:contestId", {
         templateUrl: "/views/socket.html",
