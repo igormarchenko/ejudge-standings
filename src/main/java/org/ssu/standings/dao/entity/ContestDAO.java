@@ -24,4 +24,21 @@ public class ContestDAO {
     @OneToMany(targetEntity = StandingsFileDAO.class, mappedBy = "contestId")
     @JsonProperty("standingsFiles")
     private List<StandingsFileDAO> standingsFiles;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Boolean getFinal() {
+        return isFinal;
+    }
+
+    public List<StandingsFileDAO> getStandingsFiles() {
+        return standingsFiles;
+    }
 }

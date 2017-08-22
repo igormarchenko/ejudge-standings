@@ -15,6 +15,9 @@
         background-color: #8c8c8c;
     }
 
+    .cell-frozen {
+        background-color: #2e66b9;
+    }
     .animate-repeat {
         line-height:40px;
         border-bottom: 1px solid white;
@@ -74,7 +77,7 @@
         <th ng-repeat="task in contest.tasks track by $index" style="text-align: center" title="{{task.longName}}">
             {{task.shortName}}
         </th>
-        <th>Solved</th>
+        <th width="50px">Solved</th>
     </tr>
     </thead>
     <tbody infinite-scroll='loadMore()' infinite-scroll-disabled="scrollDisabled"
@@ -91,7 +94,7 @@
         <td ng-repeat="task in ::contest.tasks track by $index"
             width="50px"
             valign="middle"
-            ng-class="{undefined : 'cell-empty', 'EMPTY' : 'cell-empty', 'OK' : 'cell-ok', 'UNKNOWN' : 'cell-unknown', 'WA' : 'cell-wrong', 'TL' : 'cell-wrong', 'RT' : 'cell-wrong', 'PE' : 'cell-wrong', 'ML' : 'cell-wrong', 'SE' : 'cell-wrong'}[team.results[task.id].status]"
+            ng-class="{undefined : 'cell-empty', 'EMPTY' : 'cell-empty', 'OK' : 'cell-ok', 'UNKNOWN' : 'cell-unknown', 'WA' : 'cell-wrong', 'TL' : 'cell-wrong', 'RT' : 'cell-wrong', 'PE' : 'cell-wrong', 'ML' : 'cell-wrong', 'SE' : 'cell-wrong', 'FROZEN' : 'cell-frozen'}[team.results[task.id].status]"
             class="text-center">
             <div ng-switch="team.results[task.id].status">
                 <div ng-switch-when="EMPTY|null|undefined" ng-switch-when-separator="|"></div>
@@ -102,7 +105,8 @@
                         <small> {{formatTime(team.results[task.id].acceptedTime)}}</small>
                     </i>
                 </div>
-                <div ng-switch-when="UNKNOWN"><b>?</b></div>
+                <div ng-switch-when="FROZEN"><b>?</b>
+                </div>
                 <div ng-switch-default><b>-{{team.results[task.id].tries}}</b></div>
             </div>
 

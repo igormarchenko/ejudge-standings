@@ -2,6 +2,7 @@
 <%@ page pageEncoding="utf-8" %>
 <html ng-app="ejudgeStandings">
 <head>
+    <meta charset="UTF-8">
     <title>Standings</title>
     <script src="../static/script.js"></script>
     <link rel="stylesheet" href="../static/style.css"/>

@@ -3,8 +3,9 @@ package org.ssu.standings.parser.entity;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.ssu.standings.entity.SubmissionStatus;
 
-public class SubmissionNode {
+public class SubmissionNode implements Cloneable{
     @JacksonXmlProperty(isAttribute = true, localName = "run_id")
     private Long id;
 
@@ -15,7 +16,7 @@ public class SubmissionNode {
     private String runUuid;
 
     @JacksonXmlProperty(isAttribute = true, localName = "status")
-    private String status;
+    private SubmissionStatus status;
 
     @JacksonXmlProperty(isAttribute = true, localName = "user_id")
     private Long userId;
@@ -47,7 +48,7 @@ public class SubmissionNode {
         return runUuid;
     }
 
-    public String getStatus() {
+    public SubmissionStatus getStatus() {
         return status;
     }
 
@@ -111,5 +112,18 @@ public class SubmissionNode {
                 .append(nsec)
                 .append(passedMode)
                 .toHashCode();
+    }
+
+    public void setStatus(SubmissionStatus status) {
+        this.status = status;
+    }
+
+    public SubmissionNode clone()  {
+        try {
+            return (SubmissionNode) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return this;
     }
 }
