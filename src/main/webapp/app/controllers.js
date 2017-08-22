@@ -29,13 +29,20 @@ angular.module('ejudgeStandings.controllers', [])
             }
         };
 
+        function parseDate(date) {
+            return moment().year(date.year).month(date.monthValue).date(date.dayOfMonth).hour(date.hour).minute(date.minute).second(date.second).toDate();
+        }
         function initContestData() {
             WebSocketService.initialize($routeParams.contestId);
             ejudgeApiService.contestData($routeParams.contestId).then(function (response) {
                 data = response.data;
+
                 $scope.contest = {
                     'name': data.name,
-                    'tasks': data.tasks
+                    'tasks': data.tasks,
+                    'startTime' : parseDate(data.startTime),
+                    'stopTime' : parseDate(data.stopTime),
+                    'currentTime' : parseDate(data.currentTime)
                 };
                 $scope.scrollDisabled = false;
             });

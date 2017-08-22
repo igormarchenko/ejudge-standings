@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,14 +17,15 @@ import java.io.IOException;
 
 @RequestMapping("/admin")
 @Controller
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     @Resource
     private ApiService apiService;
 
-    @RequestMapping(value = {"/teams", "/home", "/universities", "/contests"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/", "/teams", "/home", "/universities", "/contests"}, method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView adminHomePage(ModelAndView model) {
-        model.setViewName("admin");
+        model.setViewName("/admin");
         return model;
     }
 

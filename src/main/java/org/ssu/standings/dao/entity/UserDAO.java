@@ -1,5 +1,7 @@
 package org.ssu.standings.dao.entity;
 
+import org.ssu.standings.dao.UserRole;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,7 +18,7 @@ public class UserDAO {
     private String password;
 
     @Column(name = "role")
-    private String role;
+    private UserRole role;
 
     @Column(name = "enabled")
     private Boolean enabled;

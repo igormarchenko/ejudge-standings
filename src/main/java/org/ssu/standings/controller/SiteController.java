@@ -15,7 +15,7 @@ import java.util.Optional;
 public class SiteController {
     @RequestMapping(value = "/login-success", method = RequestMethod.POST)
     public String loginSuccess() {
-        return "redirect:/admin/home";
+        return "redirect:/";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
