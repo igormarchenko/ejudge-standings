@@ -12,11 +12,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TaskResult {
+public class TaskResult implements Cloneable{
     @JsonIgnore
     private List<SubmissionNode> submissions = new ArrayList<>();
 
-    public TaskResult() {
+    private TaskResult(Builder builder) {
+        submissions = builder.submissions;
     }
 
     @JsonProperty("tries")
@@ -77,6 +78,32 @@ public class TaskResult {
             excitingSubmission.get().setStatus(submission.getStatus());
         } else {
             submissions.add(submission);
+        }
+    }
+
+    @Override
+    public TaskResult clone() {
+        return new TaskResult.Builder(this).build();
+    }
+
+
+    public static final class Builder {
+        private List<SubmissionNode> submissions;
+
+        public Builder() {
+        }
+
+        public Builder(TaskResult copy) {
+            this.submissions = copy.submissions.stream().map(SubmissionNode::clone).collect(Collectors.toList());
+        }
+
+        public Builder withSubmissions(List<SubmissionNode> submissions) {
+            this.submissions = submissions;
+            return this;
+        }
+
+        public TaskResult build() {
+            return new TaskResult(this);
         }
     }
 }

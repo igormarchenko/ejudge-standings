@@ -12,7 +12,11 @@ import org.ssu.standings.parser.entity.ContestNode;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -29,6 +33,7 @@ public class ContestDataStorage {
     private Map<Long, Contest> contestData = new HashMap<>();
     private Map<String, TeamDAO> teams;
     private Map<Long, Boolean> isContestFrozen = new HashMap<>();
+    private BiPredicate<Contest, SubmissionNode> isSubmitFrozen = (contest, submit) -> contest.getStartTime().plusSeconds(submit.getTime()).compareTo(contest.getStopTime().minusSeconds(contest.getFogTime())) > 0;
 
     public void setTeams(Map<String, TeamDAO> teams) {
         this.teams = teams;
@@ -59,11 +64,19 @@ public class ContestDataStorage {
                 .collect(Collectors.toMap(SubmissionNode::getRunUuid, Function.identity()));
     }
 
+    public List<SubmissionNode> getFrozenSubmits(Long contestId) {
+        Contest contest = contestData.get(contestId);
+        return getContestSubmissions(contestId).values().stream()
+                .filter(submit -> isSubmitFrozen.test(contest, submit))
+                .collect(Collectors.toList());
+    }
+
     public Contest getContestData(Long contestId) {
         Contest contest = new Contest.Builder(contestData.get(contestId)).build();
         if (isContestFrozen.get(contestId)) {
-             getContestSubmissions(contestId).values().stream()
-                    .filter(submit -> contest.getStartTime().plusSeconds(submit.getTime()).compareTo(contest.getStopTime().minusSeconds(contest.getFogTime())) > 0)
+            getContestSubmissions(contestId).values().stream()
+                    .filter(submit -> isSubmitFrozen.test(contest, submit))
+//                    .map(SubmissionNode::clone)
                     .forEach(submit -> submit.setStatus(SubmissionStatus.FROZEN));
         }
         return contest;

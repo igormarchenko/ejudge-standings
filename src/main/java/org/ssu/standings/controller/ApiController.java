@@ -3,6 +3,7 @@ package org.ssu.standings.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,5 +48,12 @@ public class ApiController {
     @ResponseBody
     public String getInitResults(@PathVariable Long contestId) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(contestDataStorage.getContestData(contestId));
+    }
+
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('OBSERVER')")
+    @RequestMapping(value = "/frozen-submits/{contestId}", method = RequestMethod.GET,  produces={"application/json; charset=UTF-8"})
+    @ResponseBody
+    public String getFrozenSubmits(@PathVariable Long contestId) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(contestDataStorage.getFrozenSubmits(contestId));
     }
 }

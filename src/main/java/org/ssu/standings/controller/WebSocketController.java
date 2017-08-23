@@ -18,11 +18,4 @@ public class WebSocketController {
     public void eventListener(ContestUpdates contestUpdates) throws JsonProcessingException {
         template.convertAndSend("/updates/get-updates/" + contestUpdates.getContestId(), new ObjectMapper().writeValueAsString(contestUpdates));
     }
-
-//    @MessageMapping("/listener")
-//    @SendTo("/updates/get-updates")
-//    public OutputMessage sendMessage(Message message) {
-//        System.out.println("in method");
-//        return new OutputMessage(message, new Date());
-//    }
 }

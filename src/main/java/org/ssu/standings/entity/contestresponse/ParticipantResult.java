@@ -7,18 +7,21 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParticipantResult implements Comparator<ParticipantResult>, Comparable<ParticipantResult> {
+public class ParticipantResult implements Comparator<ParticipantResult>, Comparable<ParticipantResult>, Cloneable {
     @JsonProperty("participant")
     private Participant participant;
     @JsonProperty("results")
     private Map<Long, TaskResult> results = new HashMap<>();
+
+    public ParticipantResult() {
+    }
 
     public ParticipantResult(Participant participant) {
         this.participant = participant;
     }
 
     public void pushSubmit(SubmissionNode submit) {
-        results.putIfAbsent(submit.getProblemId(), new TaskResult());
+        results.putIfAbsent(submit.getProblemId(), new TaskResult.Builder().build());
         results.get(submit.getProblemId()).addSubmission(submit);
     }
 
@@ -51,5 +54,10 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
             return Long.valueOf(o2.solvedProblems() - o1.solvedProblems()).intValue();
         else
             return Long.valueOf(o1.getPenalty() - o2.getPenalty()).intValue();
+    }
+    @Override
+    public ParticipantResult clone() {
+//        results.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, item -> item.getValue().clone()));
+        return this;
     }
 }
