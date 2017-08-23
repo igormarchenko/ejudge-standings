@@ -36,6 +36,19 @@ public class SubmissionNode implements Cloneable{
     @JacksonXmlProperty(isAttribute = true, localName = "passed_mode")
     private String passedMode;
 
+    private SubmissionNode(Builder builder) {
+        id = builder.id;
+        time = builder.time;
+        runUuid = builder.runUuid;
+        setStatus(builder.status);
+        userId = builder.userId;
+        problemId = builder.problemId;
+        languageId = builder.languageId;
+        test = builder.test;
+        nsec = builder.nsec;
+        passedMode = builder.passedMode;
+    }
+
     public Long getId() {
         return id;
     }
@@ -119,11 +132,90 @@ public class SubmissionNode implements Cloneable{
     }
 
     public SubmissionNode clone()  {
-        try {
-            return (SubmissionNode) super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+        return new SubmissionNode.Builder(this).build();
+    }
+
+
+    public static final class Builder {
+        private Long id;
+        private Long time;
+        private String runUuid;
+        private SubmissionStatus status;
+        private Long userId;
+        private Long problemId;
+        private Long languageId;
+        private Long test;
+        private Long nsec;
+        private String passedMode;
+
+        public Builder() {
         }
-        return this;
+
+        public Builder(SubmissionNode copy) {
+            this.id = copy.id;
+            this.time = copy.time;
+            this.runUuid = copy.runUuid;
+            this.status = copy.status;
+            this.userId = copy.userId;
+            this.problemId = copy.problemId;
+            this.languageId = copy.languageId;
+            this.test = copy.test;
+            this.nsec = copy.nsec;
+            this.passedMode = copy.passedMode;
+        }
+
+        public Builder withId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withTime(Long time) {
+            this.time = time;
+            return this;
+        }
+
+        public Builder withRunUuid(String runUuid) {
+            this.runUuid = runUuid;
+            return this;
+        }
+
+        public Builder withStatus(SubmissionStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder withUserId(Long userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder withProblemId(Long problemId) {
+            this.problemId = problemId;
+            return this;
+        }
+
+        public Builder withLanguageId(Long languageId) {
+            this.languageId = languageId;
+            return this;
+        }
+
+        public Builder withTest(Long test) {
+            this.test = test;
+            return this;
+        }
+
+        public Builder withNsec(Long nsec) {
+            this.nsec = nsec;
+            return this;
+        }
+
+        public Builder withPassedMode(String passedMode) {
+            this.passedMode = passedMode;
+            return this;
+        }
+
+        public SubmissionNode build() {
+            return new SubmissionNode(this);
+        }
     }
 }

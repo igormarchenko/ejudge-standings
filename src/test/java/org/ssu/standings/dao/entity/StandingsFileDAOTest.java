@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class StandingsFileDAOTest {
     @Test
-    public void equals() throws Exception {
+    public void equalsTest() throws Exception {
         StandingsFileDAO standingsFile = new StandingsFileDAO.Builder().withContestId(1L).withId(1L).withIsFrozen(false).withLink("dummy link").build();
 
         StandingsFileDAO equals = new StandingsFileDAO.Builder().withContestId(1L).withId(1L).withIsFrozen(false).withLink("dummy link").build();

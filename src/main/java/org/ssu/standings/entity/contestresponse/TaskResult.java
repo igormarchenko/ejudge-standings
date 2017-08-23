@@ -22,15 +22,21 @@ public class TaskResult implements Cloneable{
 
     @JsonProperty("tries")
     public Integer submissionCount() {
-        return IntStream.range(0, submissions.size())
+        Map<Integer, SubmissionStatus> collect = IntStream.range(0, submissions.size())
                 .boxed()
                 .collect(Collectors.toMap(index -> index, index -> submissions.get(index).getStatus()))
                 .entrySet()
                 .stream()
+                .filter(item -> item.getValue() != SubmissionStatus.CE)
+                .collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue()));
+
+        return       collect.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() != SubmissionStatus.CE)
                 .filter(entry -> entry.getValue() == SubmissionStatus.OK)
                 .findFirst()
                 .map(Map.Entry::getKey)
-                .orElse(submissions.size());
+                .orElse(collect.size());
     }
 
     @JsonProperty("acceptedTime")
@@ -42,7 +48,7 @@ public class TaskResult implements Cloneable{
                 .sorted()
                 .findFirst()
                 .orElse(0L);
-        return (seconds + 60 - seconds % 60) / 60;
+        return (seconds > 0) ? (seconds + 60 - seconds % 60) / 60 : 0L;
     }
 
     @JsonProperty("status")
@@ -58,7 +64,7 @@ public class TaskResult implements Cloneable{
 
     @JsonProperty("penalty")
     public Long getPenalty() {
-        return isProblemSolved() ? submissionCount() * 20L + getFirstAcceptedTime() : 0L;
+        return isProblemSolved() ? (Math.max(submissionCount(), 1) - 1) * 20L + getFirstAcceptedTime() : 0L;
     }
 
     public List<SubmissionNode> getSubmissions() {
