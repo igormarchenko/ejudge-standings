@@ -1,8 +1,6 @@
 package org.ssu.standings.parser.entity;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.ssu.standings.entity.SubmissionStatus;
 
 public class SubmissionNode implements Cloneable{
@@ -35,6 +33,9 @@ public class SubmissionNode implements Cloneable{
 
     @JacksonXmlProperty(isAttribute = true, localName = "passed_mode")
     private String passedMode;
+
+    public SubmissionNode() {
+    }
 
     private SubmissionNode(Builder builder) {
         id = builder.id;
@@ -89,43 +90,43 @@ public class SubmissionNode implements Cloneable{
         return passedMode;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SubmissionNode that = (SubmissionNode) o;
-
-        return new EqualsBuilder()
-                .append(id, that.id)
-                .append(time, that.time)
-                .append(runUuid, that.runUuid)
-                .append(status, that.status)
-                .append(userId, that.userId)
-                .append(problemId, that.problemId)
-                .append(languageId, that.languageId)
-                .append(test, that.test)
-                .append(nsec, that.nsec)
-                .append(passedMode, that.passedMode)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(id)
-                .append(time)
-                .append(runUuid)
-                .append(status)
-                .append(userId)
-                .append(problemId)
-                .append(languageId)
-                .append(test)
-                .append(nsec)
-                .append(passedMode)
-                .toHashCode();
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//
+//        if (o == null || getClass() != o.getClass()) return false;
+//
+//        SubmissionNode that = (SubmissionNode) o;
+//
+//        return new EqualsBuilder()
+//                .append(id, that.id)
+//                .append(time, that.time)
+//                .append(runUuid, that.runUuid)
+//                .append(status, that.status)
+//                .append(userId, that.userId)
+//                .append(problemId, that.problemId)
+//                .append(languageId, that.languageId)
+//                .append(test, that.test)
+//                .append(nsec, that.nsec)
+//                .append(passedMode, that.passedMode)
+//                .isEquals();
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return new HashCodeBuilder(17, 37)
+//                .append(id)
+//                .append(time)
+//                .append(runUuid)
+//                .append(status)
+//                .append(userId)
+//                .append(problemId)
+//                .append(languageId)
+//                .append(test)
+//                .append(nsec)
+//                .append(passedMode)
+//                .toHashCode();
+//    }
 
     public void setStatus(SubmissionStatus status) {
         this.status = status;
@@ -191,26 +192,6 @@ public class SubmissionNode implements Cloneable{
 
         public Builder withProblemId(Long problemId) {
             this.problemId = problemId;
-            return this;
-        }
-
-        public Builder withLanguageId(Long languageId) {
-            this.languageId = languageId;
-            return this;
-        }
-
-        public Builder withTest(Long test) {
-            this.test = test;
-            return this;
-        }
-
-        public Builder withNsec(Long nsec) {
-            this.nsec = nsec;
-            return this;
-        }
-
-        public Builder withPassedMode(String passedMode) {
-            this.passedMode = passedMode;
             return this;
         }
 

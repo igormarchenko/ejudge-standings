@@ -19,6 +19,7 @@ public class TaskResultTest {
     private TaskResult solvedTask;
     private TaskResult emptySubmissionListTask;
     private TaskResult solvedFirstAttemptTask;
+    private TaskResult solvedTaskWithoutCE;
 
     @Before
     public void setUp() throws Exception {
@@ -45,6 +46,16 @@ public class TaskResultTest {
         );
         solvedTask = new TaskResult.Builder().withSubmissions(solvedProblemSubmissions).build();
 
+
+        List<SubmissionNode> solvedProblemWithoutCESubmissions = Arrays.asList(
+                new SubmissionNode.Builder().withStatus(SubmissionStatus.WA).withTime(123L).build(),
+                new SubmissionNode.Builder().withStatus(SubmissionStatus.ML).withTime(123L).build(),
+                new SubmissionNode.Builder().withStatus(SubmissionStatus.PE).withTime(123L).build(),
+                new SubmissionNode.Builder().withStatus(SubmissionStatus.OK).withTime(150L).build(),
+                new SubmissionNode.Builder().withStatus(SubmissionStatus.SE).withTime(1223L).build()
+        );
+        solvedTaskWithoutCE = new TaskResult.Builder().withSubmissions(solvedProblemSubmissions).build();
+
         List<SubmissionNode> solvedFirstAttemptProblemSubmissions = Arrays.asList(
                 new SubmissionNode.Builder().withStatus(SubmissionStatus.OK).withTime(1L).build()
         );
@@ -52,43 +63,128 @@ public class TaskResultTest {
     }
 
     @Test
-    public void submissionCount() throws Exception {
+    public void unsolvedTaskSubmissionCount() {
         Assert.assertThat(unsolvedTask.submissionCount(), is(6));
-        Assert.assertThat(emptySubmissionListTask.submissionCount(), is(0));
-        Assert.assertThat(solvedTask.submissionCount(), is(4));
-        Assert.assertThat(solvedFirstAttemptTask.submissionCount(), is(0));
     }
 
     @Test
-    public void getFirstAcceptedTime() throws Exception {
+    public void emptyTaskSubmissionCount() {
+        Assert.assertThat(emptySubmissionListTask.submissionCount(), is(0));
+    }
+
+    @Test
+    public void solvedTaskSubmissionCount() {
+        Assert.assertThat(solvedTask.submissionCount(), is(4));
+    }
+
+    @Test
+    public void solvedFirstAttemptTaskSubmissionCount() {
+        Assert.assertThat(solvedFirstAttemptTask.submissionCount(), is(1));
+    }
+
+    @Test
+    public void solvedTaskWithoutCESubmissionCount() {
+        Assert.assertThat(solvedTaskWithoutCE.submissionCount(), is(4));
+    }
+
+    @Test
+    public void unsolvedTaskFirstAcceptedTime() {
         Assert.assertThat(unsolvedTask.getFirstAcceptedTime(), is(0L));
+    }
+
+    @Test
+    public void emptyTaskFirstAcceptedTime() {
         Assert.assertThat(emptySubmissionListTask.getFirstAcceptedTime(), is(0L));
+    }
+
+    @Test
+    public void solvedTaskFirstAcceptedTime() {
         Assert.assertThat(solvedTask.getFirstAcceptedTime(), is(3L));
+    }
+
+    @Test
+    public void solvedFirstAttemptTaskFirstAcceptedTime() {
         Assert.assertThat(solvedFirstAttemptTask.getFirstAcceptedTime(), is(1L));
     }
 
     @Test
-    public void getStatus() throws Exception {
+    public void solvedTaskWithoutCEFirstAcceptedTime() {
+        Assert.assertThat(solvedTaskWithoutCE.getFirstAcceptedTime(), is(3L));
+    }
+
+    @Test
+    public void unsolvedTaskStatus() {
         Assert.assertThat(unsolvedTask.getStatus(), is(SubmissionStatus.SE));
+    }
+
+    @Test
+    public void emptyTaskStatus() {
         Assert.assertThat(emptySubmissionListTask.getStatus(), is(SubmissionStatus.EMPTY));
+    }
+
+    @Test
+    public void solvedTaskStatus() {
         Assert.assertThat(solvedTask.getStatus(), is(SubmissionStatus.OK));
+    }
+
+    @Test
+    public void solvedFirstAttemptTaskStatus() {
         Assert.assertThat(solvedFirstAttemptTask.getStatus(), is(SubmissionStatus.OK));
     }
 
     @Test
-    public void getPenalty() throws Exception {
+    public void solvedTaskWithoutCEStatus() {
+        Assert.assertThat(solvedTaskWithoutCE.getStatus(), is(SubmissionStatus.OK));
+    }
+
+    @Test
+    public void unsolvedTaskPenalty() {
         Assert.assertThat(unsolvedTask.getPenalty(), is(0L));
+    }
+
+    @Test
+    public void emptyTaskPenalty() {
         Assert.assertThat(emptySubmissionListTask.getPenalty(), is(0L));
+    }
+
+    @Test
+    public void solvedTaskPenalty() {
         Assert.assertThat(solvedTask.getPenalty(), is(3L + 20L * 3));
+    }
+
+    @Test
+    public void solvedTaskWithoutCEPenalty() {
+        Assert.assertThat(solvedTaskWithoutCE.getPenalty(), is(3L + 20L * 3));
+    }
+
+    @Test
+    public void solvedFirstAttemptTaskPenalty() {
         Assert.assertThat(solvedFirstAttemptTask.getPenalty(), is(1L));
     }
 
     @Test
-    public void isProblemSolved() throws Exception {
+    public void unsolvedTaskIsProblemSolved() {
         Assert.assertThat(unsolvedTask.isProblemSolved(), is(false));
+    }
+
+    @Test
+    public void emptyTaskIsProblemSolved() {
         Assert.assertThat(emptySubmissionListTask.isProblemSolved(), is(false));
-        Assert.assertThat(solvedFirstAttemptTask.isProblemSolved(), is(true));
+    }
+
+    @Test
+    public void solvedTaskIsProblemSolved() {
         Assert.assertThat(solvedTask.isProblemSolved(), is(true));
+    }
+
+    @Test
+    public void solvedTaskWithoutCEIsProblemSolved() {
+        Assert.assertThat(solvedTaskWithoutCE.isProblemSolved(), is(true));
+    }
+
+    @Test
+    public void solvedFirstAttemptTaskIsProblemSolved() {
+        Assert.assertThat(solvedFirstAttemptTask.isProblemSolved(), is(true));
     }
 
     @Test
@@ -117,12 +213,20 @@ public class TaskResultTest {
         Assert.assertThat(taskResult.submissionCount(), is(2));
     }
 
+
+    @Test
+    public void addTaskResultToEmptyList() throws Exception {
+        TaskResult taskResult = new TaskResult.Builder().build();
+        taskResult.addSubmission(new SubmissionNode.Builder().withRunUuid("1").withStatus(SubmissionStatus.WA).withTime(123L).build());
+        Assert.assertThat(taskResult.submissionCount(), is(1));
+    }
+
     @Test
     public void cloneTest() throws Exception {
         TaskResult copy = unsolvedTask.clone();
         Assert.assertNotSame(copy, unsolvedTask);
         Assert.assertNotSame(copy.getSubmissions(), unsolvedTask.getSubmissions());
-        for(int i = 0; i < copy.getSubmissions().size();i++) {
+        for (int i = 0; i < copy.getSubmissions().size(); i++) {
             Assert.assertNotSame(copy.getSubmissions().get(i), unsolvedTask.getSubmissions().get(i));
         }
     }

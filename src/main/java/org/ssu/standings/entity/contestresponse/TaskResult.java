@@ -22,17 +22,17 @@ public class TaskResult implements Cloneable{
 
     @JsonProperty("tries")
     public Integer submissionCount() {
-        Map<Integer, SubmissionStatus> collect = IntStream.range(0, submissions.size())
+        List<SubmissionNode> nodes = submissions.stream().filter(submit -> submit.getStatus() != SubmissionStatus.CE).collect(Collectors.toList());
+
+        Map<Integer, SubmissionStatus> collect = IntStream.range(0, nodes.size())
                 .boxed()
-                .collect(Collectors.toMap(index -> index, index -> submissions.get(index).getStatus()))
+                .collect(Collectors.toMap(index -> index, index -> nodes.get(index).getStatus()))
                 .entrySet()
                 .stream()
-                .filter(item -> item.getValue() != SubmissionStatus.CE)
-                .collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue()));
+                .collect(Collectors.toMap(item -> item.getKey() + 1, item -> item.getValue()));
 
         return       collect.entrySet()
                 .stream()
-                .filter(entry -> entry.getValue() != SubmissionStatus.CE)
                 .filter(entry -> entry.getValue() == SubmissionStatus.OK)
                 .findFirst()
                 .map(Map.Entry::getKey)
@@ -94,7 +94,7 @@ public class TaskResult implements Cloneable{
 
 
     public static final class Builder {
-        private List<SubmissionNode> submissions;
+        private List<SubmissionNode> submissions = new ArrayList<>();
 
         public Builder() {
         }

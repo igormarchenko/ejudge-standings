@@ -131,8 +131,8 @@ public class Contest {
 
             results = contest.getParticipants()
                     .stream()
-                    .map(team -> new Participant(team, getUniversityForTeam.apply(team.getName())))
-                    .collect(Collectors.toMap(Participant::getId, ParticipantResult::new));
+                    .map(team -> new Participant.Builder(team, getUniversityForTeam.apply(team.getName())).build())
+                    .collect(Collectors.toMap(Participant::getId, team -> new ParticipantResult.Builder().withParticipant(team).build()));
 
             contest.getSubmissions().forEach(submit -> {
                 results.get(submit.getUserId()).pushSubmit(submit);

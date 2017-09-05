@@ -14,17 +14,8 @@ public class Participant implements Cloneable{
     @JsonProperty("university")
     private UniversityDAO university;
 
-    public Participant(ParticipantNode user, UniversityDAO university) {
-
-        id = user.getId();
-        name = Optional.ofNullable(user.getName())
-                .filter(teamName -> !teamName.isEmpty())
-                .orElse(String.format("team%d", id));
-        this.university = university;
-    }
-
     private Participant(Builder builder) {
-        setId(builder.id);
+        this.id = builder.id;
         name = builder.name;
         university = builder.university;
     }
@@ -33,20 +24,18 @@ public class Participant implements Cloneable{
         return id;
     }
 
-    public Participant setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
     public String getName() {
         return name;
     }
 
-    @Override
-    public Participant clone() {
-        return new Participant.Builder().withId(id).withName(name).withUniversity(university.clone()).build();
+    public UniversityDAO getUniversity() {
+        return university;
     }
 
+    @Override
+    public Participant clone() {
+        return new Participant.Builder().withId(id).withName(name).withUniversity((university != null) ? university.clone() : null).build();
+    }
 
     public static final class Builder {
         private Long id;
@@ -56,18 +45,26 @@ public class Participant implements Cloneable{
         public Builder() {
         }
 
-        public Builder withId(Long val) {
-            id = val;
+        public Builder(ParticipantNode user, UniversityDAO university) {
+            id = user.getId();
+            name = Optional.ofNullable(user.getName())
+                    .filter(teamName -> !teamName.isEmpty())
+                    .orElse(String.format("team%d", id));
+            this.university = university;
+        }
+
+        public Builder withId(Long id) {
+            this.id = id;
             return this;
         }
 
-        public Builder withName(String val) {
-            name = val;
+        public Builder withName(String name) {
+            this.name = name;
             return this;
         }
 
-        public Builder withUniversity(UniversityDAO val) {
-            university = val;
+        public Builder withUniversity(UniversityDAO university) {
+            this.university = university;
             return this;
         }
 

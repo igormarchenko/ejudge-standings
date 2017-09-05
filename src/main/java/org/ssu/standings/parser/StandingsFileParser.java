@@ -6,18 +6,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Component;
 import org.ssu.standings.parser.entity.ContestNode;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Optional;
 
 @Component
 public class StandingsFileParser {
-    private XmlMapper mapper;
-
-    @PostConstruct
-    private void init() {
-        mapper = (XmlMapper) new XmlMapper().registerModule(new Jdk8Module()).registerModule(new JavaTimeModule());
-    }
+    private XmlMapper mapper = (XmlMapper) new XmlMapper().registerModule(new Jdk8Module()).registerModule(new JavaTimeModule());
 
     public Optional<ContestNode> parse(String content) {
         try {

@@ -13,11 +13,9 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
     @JsonProperty("results")
     private Map<Long, TaskResult> results = new HashMap<>();
 
-    public ParticipantResult() {
-    }
-
-    public ParticipantResult(Participant participant) {
-        this.participant = participant;
+    private ParticipantResult(Builder builder) {
+        participant = builder.participant;
+        results = builder.results;
     }
 
     public void pushSubmit(SubmissionNode submit) {
@@ -57,7 +55,29 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
     }
     @Override
     public ParticipantResult clone() {
-//        results.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, item -> item.getValue().clone()));
-        return this;
+        return new ParticipantResult.Builder(this).build();
+    }
+
+
+    public static final class Builder {
+        private Participant participant;
+        private Map<Long, TaskResult> results  = new HashMap<>();
+
+        public Builder() {
+        }
+
+        public Builder(ParticipantResult copy) {
+            this.participant = (copy.participant == null) ? null : copy.participant.clone();
+            this.results.putAll(copy.getResults());
+        }
+
+        public Builder withParticipant(Participant participant) {
+            this.participant = participant;
+            return this;
+        }
+
+        public ParticipantResult build() {
+            return new ParticipantResult(this);
+        }
     }
 }

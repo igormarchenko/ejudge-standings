@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class ContestNode {
@@ -60,6 +61,8 @@ public class ContestNode {
     }
 
     public Long getDuration() {
+        if(duration == null)
+            return ChronoUnit.SECONDS.between(startTime, stopTime);
         return duration;
     }
 
@@ -68,6 +71,8 @@ public class ContestNode {
     }
 
     public LocalDateTime getStopTime() {
+        if(stopTime== null)
+            return startTime.plusSeconds(duration);
         return stopTime;
     }
 
