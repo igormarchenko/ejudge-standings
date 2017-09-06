@@ -32,7 +32,7 @@ public class HTTPFileHandler implements FileHandler {
 
         return new Response.Builder()
                 .withLastModified(response.getLastModified())
-                .withContent(FileReader.getIntstance().readContent(new BufferedReader(new InputStreamReader(response.getInputStream()))))
+                .withContent(FileReader.getInstance().readContent(new BufferedReader(new InputStreamReader(response.getInputStream()))))
                 .build();
     }
 

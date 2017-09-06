@@ -191,25 +191,25 @@ public class TaskResultTest {
     public void addSubmission() throws Exception {
         List<SubmissionNode> submissions = Arrays.asList(
                 new SubmissionNode.Builder().withRunUuid("1").withStatus(SubmissionStatus.CE).withTime(123L).build(),
-                new SubmissionNode.Builder().withRunUuid("2").withStatus(SubmissionStatus.WA).withTime(123L).build(),
-                new SubmissionNode.Builder().withRunUuid("3").withStatus(SubmissionStatus.TL).withTime(123L).build(),
-                new SubmissionNode.Builder().withRunUuid("4").withStatus(SubmissionStatus.ML).withTime(123L).build(),
-                new SubmissionNode.Builder().withRunUuid("5").withStatus(SubmissionStatus.PE).withTime(123L).build(),
-                new SubmissionNode.Builder().withRunUuid("6").withStatus(SubmissionStatus.RT).withTime(123L).build(),
-                new SubmissionNode.Builder().withRunUuid("7").withStatus(SubmissionStatus.SE).withTime(123L).build()
+                new SubmissionNode.Builder().withRunUuid("2").withStatus(SubmissionStatus.WA).withTime(124L).build(),
+                new SubmissionNode.Builder().withRunUuid("3").withStatus(SubmissionStatus.TL).withTime(125L).build(),
+                new SubmissionNode.Builder().withRunUuid("4").withStatus(SubmissionStatus.ML).withTime(126L).build(),
+                new SubmissionNode.Builder().withRunUuid("5").withStatus(SubmissionStatus.PE).withTime(127L).build(),
+                new SubmissionNode.Builder().withRunUuid("6").withStatus(SubmissionStatus.RT).withTime(128L).build(),
+                new SubmissionNode.Builder().withRunUuid("7").withStatus(SubmissionStatus.SE).withTime(129L).build()
         ).stream().collect(Collectors.toList());
         TaskResult taskResult = new TaskResult.Builder().withSubmissions(submissions).build();
 
-        taskResult.addSubmission(new SubmissionNode.Builder().withRunUuid("8").withStatus(SubmissionStatus.CE).withTime(123L).build());
+        taskResult.addSubmission(new SubmissionNode.Builder().withRunUuid("8").withStatus(SubmissionStatus.CE).withTime(130L).build());
 
         Assert.assertThat(taskResult.submissionCount(), is(6));
 
-        taskResult.addSubmission(new SubmissionNode.Builder().withRunUuid("9").withStatus(SubmissionStatus.WA).withTime(123L).build());
-        taskResult.addSubmission(new SubmissionNode.Builder().withRunUuid("10").withStatus(SubmissionStatus.ML).withTime(123L).build());
+        taskResult.addSubmission(new SubmissionNode.Builder().withRunUuid("9").withStatus(SubmissionStatus.WA).withTime(131L).build());
+        taskResult.addSubmission(new SubmissionNode.Builder().withRunUuid("10").withStatus(SubmissionStatus.ML).withTime(132L).build());
 
         Assert.assertThat(taskResult.submissionCount(), is(8));
 
-        taskResult.addSubmission(new SubmissionNode.Builder().withRunUuid("3").withStatus(SubmissionStatus.OK).withTime(123L).build());
+        taskResult.addSubmission(new SubmissionNode.Builder().withRunUuid("3").withStatus(SubmissionStatus.OK).withTime(125L).build());
         Assert.assertThat(taskResult.submissionCount(), is(2));
     }
 

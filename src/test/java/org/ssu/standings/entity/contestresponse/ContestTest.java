@@ -116,16 +116,30 @@ public class ContestTest {
 
     @Test
     public void addSingleSuccessfullSubmission() throws Exception {
+        Contest copy = new Contest.Builder(contest).build();
+
         SubmissionNode submissionNode = new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(1L).withRunUuid("1").withStatus(SubmissionStatus.OK).withTime(60 * 250L).withUserId(1L).build();
-        contest.updateSubmissions(Arrays.asList(submissionNode));
-        Assert.assertThat(contest.getResults().get(3).getParticipant().getId(), is(1L));
+        copy.updateSubmissions(Arrays.asList(submissionNode));
+        Assert.assertThat(copy.getResults().get(3).getParticipant().getId(), is(1L));
     }
 
     @Test
     public void addSingleWrongSubmission() throws Exception {
+        Contest copy = new Contest.Builder(contest).build();
+
         SubmissionNode submissionNode = new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(2L).withRunUuid("1").withStatus(SubmissionStatus.WA).withTime(60 * 250L).withUserId(1L).build();
-        contest.updateSubmissions(Arrays.asList(submissionNode));
-        Assert.assertThat(contest.getResults().get(3).getParticipant().getId(), is(1L));
+        copy.updateSubmissions(Arrays.asList(submissionNode));
+        Assert.assertThat(copy.getResults().get(3).getParticipant().getId(), is(1L));
+    }
+
+
+    @Test
+    public void addRejudgedSubmission() throws Exception {
+        Contest copy = new Contest.Builder(contest).build();
+
+        SubmissionNode submissionNode = new MockedObjectGenerator().defaultSubmissionNode().withId(2L).withProblemId(1L).withRunUuid("2").withStatus(SubmissionStatus.OK).withTime(60 * 100L).withUserId(3L).build();
+        copy.updateSubmissions(Arrays.asList(submissionNode));
+        Assert.assertThat(copy.getResults().get(2).getParticipant().getId(), is(3L));
     }
 
     @Test

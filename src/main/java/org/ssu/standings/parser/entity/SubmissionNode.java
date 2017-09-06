@@ -90,44 +90,6 @@ public class SubmissionNode implements Cloneable{
         return passedMode;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        SubmissionNode that = (SubmissionNode) o;
-//
-//        return new EqualsBuilder()
-//                .append(id, that.id)
-//                .append(time, that.time)
-//                .append(runUuid, that.runUuid)
-//                .append(status, that.status)
-//                .append(userId, that.userId)
-//                .append(problemId, that.problemId)
-//                .append(languageId, that.languageId)
-//                .append(test, that.test)
-//                .append(nsec, that.nsec)
-//                .append(passedMode, that.passedMode)
-//                .isEquals();
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return new HashCodeBuilder(17, 37)
-//                .append(id)
-//                .append(time)
-//                .append(runUuid)
-//                .append(status)
-//                .append(userId)
-//                .append(problemId)
-//                .append(languageId)
-//                .append(test)
-//                .append(nsec)
-//                .append(passedMode)
-//                .toHashCode();
-//    }
-
     public void setStatus(SubmissionStatus status) {
         this.status = status;
     }
@@ -165,11 +127,6 @@ public class SubmissionNode implements Cloneable{
             this.passedMode = copy.passedMode;
         }
 
-        public Builder withId(Long id) {
-            this.id = id;
-            return this;
-        }
-
         public Builder withTime(Long time) {
             this.time = time;
             return this;
@@ -182,11 +139,6 @@ public class SubmissionNode implements Cloneable{
 
         public Builder withStatus(SubmissionStatus status) {
             this.status = status;
-            return this;
-        }
-
-        public Builder withUserId(Long userId) {
-            this.userId = userId;
             return this;
         }
 

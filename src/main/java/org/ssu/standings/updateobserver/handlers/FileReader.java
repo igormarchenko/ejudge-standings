@@ -2,19 +2,13 @@ package org.ssu.standings.updateobserver.handlers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Optional;
 
 public class FileReader {
-    private static Optional<FileReader> reader = Optional.empty();
-
     private FileReader() {
     }
 
-    public static FileReader getIntstance() {
-        if (!reader.isPresent())
-            reader = Optional.of(new FileReader());
-
-        return reader.get();
+    public static FileReader getInstance() {
+        return SingletonHolder.fileReader;
     }
 
     public String readContent(BufferedReader bufferedReader) throws IOException {
@@ -24,5 +18,9 @@ public class FileReader {
             content.append(nextLine);
         }
         return content.toString();
+    }
+
+    private static final class SingletonHolder {
+        private static final FileReader fileReader = new FileReader();
     }
 }

@@ -6,13 +6,13 @@ import org.ssu.standings.entity.SubmissionStatus;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TaskResult implements Cloneable{
+public class TaskResult implements Cloneable {
     @JsonIgnore
     private List<SubmissionNode> submissions = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public class TaskResult implements Cloneable{
                 .stream()
                 .collect(Collectors.toMap(item -> item.getKey() + 1, item -> item.getValue()));
 
-        return       collect.entrySet()
+        return collect.entrySet()
                 .stream()
                 .filter(entry -> entry.getValue() == SubmissionStatus.OK)
                 .findFirst()
@@ -54,7 +54,7 @@ public class TaskResult implements Cloneable{
     @JsonProperty("status")
     public SubmissionStatus getStatus() {
         if (submissions.isEmpty()) return SubmissionStatus.EMPTY;
-        if(isProblemSolved()) return  SubmissionStatus.OK;
+        if (isProblemSolved()) return SubmissionStatus.OK;
         return submissions.stream()
                 .filter(submit -> submit.getStatus() != SubmissionStatus.CE)
                 .map(SubmissionNode::getStatus)
@@ -79,12 +79,9 @@ public class TaskResult implements Cloneable{
     }
 
     public void addSubmission(SubmissionNode submission) {
-        Optional<SubmissionNode> excitingSubmission = submissions.stream().filter(submit -> submit.getRunUuid().equals(submission.getRunUuid())).findFirst();
-        if(excitingSubmission.isPresent()) {
-            excitingSubmission.get().setStatus(submission.getStatus());
-        } else {
-            submissions.add(submission);
-        }
+        submissions.removeIf(submit -> submit.getRunUuid().equals(submission.getRunUuid()));
+        submissions.add(submission);
+        submissions = submissions.stream().sorted(Comparator.comparing(SubmissionNode::getTime)).collect(Collectors.toList());
     }
 
     @Override
