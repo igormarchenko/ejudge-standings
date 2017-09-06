@@ -67,7 +67,6 @@ public class Contest {
         return this;
     }
 
-
     public Long getContestId() {
         return contestId;
     }
@@ -134,9 +133,7 @@ public class Contest {
                     .map(team -> new Participant.Builder(team, getUniversityForTeam.apply(team.getName())).build())
                     .collect(Collectors.toMap(Participant::getId, team -> new ParticipantResult.Builder().withParticipant(team).build()));
 
-            contest.getSubmissions().forEach(submit -> {
-                results.get(submit.getUserId()).pushSubmit(submit);
-            });
+            contest.getSubmissions().forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
         }
 
         public Builder(Contest contest) {
@@ -149,7 +146,7 @@ public class Contest {
             this.fogTime = contest.fogTime;
             this.unfogTime = contest.unfogTime;
             this.tasks = new ArrayList<>(contest.tasks);
-            this.results = new HashMap<>(contest.results);
+            this.results = contest.results.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue().clone() ));
         }
 
         public Contest build() {
