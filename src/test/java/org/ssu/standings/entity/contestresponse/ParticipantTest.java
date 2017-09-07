@@ -1,10 +1,13 @@
 package org.ssu.standings.entity.contestresponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.parser.entity.ParticipantNode;
+
+import java.io.IOException;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
@@ -37,8 +40,11 @@ public class ParticipantTest {
     public void getNameTest() throws Exception {
         Participant participant = new Participant.Builder(participantNode, university).build();
         Assert.assertThat(participant.getName(), is("Test username"));
+    }
 
-        participant = new Participant.Builder(participantNodeWithNullName, university).build();
+    @Test
+    public void getNullNameTest() throws Exception {
+        Participant participant = new Participant.Builder(participantNodeWithNullName, university).build();
         Assert.assertThat(participant.getName(), is(String.format("team%d", participant.getId())));
     }
 
@@ -47,6 +53,22 @@ public class ParticipantTest {
         Participant participant = new Participant.Builder(participantNode, university).build();
         Participant clone = participant.clone();
         Assert.assertNotSame(participant.getUniversity(), clone.getUniversity());
+    }
+
+    @Test
+    public void serializeToJsonTest() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Participant participant = new Participant.Builder(participantNode, university).build();
+        String actualJson = mapper.writeValueAsString(participant);
+
+        Assert.assertThat(mapper.readTree(actualJson).size(), is(3));
+
+        Assert.assertNotNull(mapper.readTree(actualJson).get("id"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("name"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("university"));
+
+        Assert.assertThat(mapper.readTree(actualJson).get("id").asInt(), is(12));
+        Assert.assertThat(mapper.readTree(actualJson).get("name").asText(), is("Test username"));
     }
 
 }

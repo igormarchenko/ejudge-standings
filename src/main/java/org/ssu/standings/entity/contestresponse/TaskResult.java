@@ -31,6 +31,7 @@ public class TaskResult implements Cloneable {
                 .stream()
                 .collect(Collectors.toMap(item -> item.getKey() + 1, item -> item.getValue()));
 
+
         return collect.entrySet()
                 .stream()
                 .filter(entry -> entry.getValue() == SubmissionStatus.OK)

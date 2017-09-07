@@ -1,11 +1,13 @@
 package org.ssu.standings.entity.contestresponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ssu.standings.entity.SubmissionStatus;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -117,4 +119,22 @@ public class ParticipantResultTest {
         Assert.assertNotSame(clone.getResults(), result.getResults());
     }
 
+
+    @Test
+    public void serializeToJsonTest() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String actualJson = mapper.writeValueAsString(result);
+
+        Assert.assertThat(mapper.readTree(actualJson).size(), is(4));
+
+        Assert.assertNotNull(mapper.readTree(actualJson).get("participant"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("results"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("penalty"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("solved"));
+
+
+        Assert.assertThat(mapper.readTree(actualJson).get("results").size() > 0, is(true));
+        Assert.assertThat(mapper.readTree(actualJson).get("penalty").asInt(), is(70));
+        Assert.assertThat(mapper.readTree(actualJson).get("solved").asInt(), is(3));
+    }
 }

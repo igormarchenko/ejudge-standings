@@ -1,11 +1,13 @@
 package org.ssu.standings.entity.contestresponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ssu.standings.entity.SubmissionStatus;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -229,6 +231,28 @@ public class TaskResultTest {
         for (int i = 0; i < copy.getSubmissions().size(); i++) {
             Assert.assertNotSame(copy.getSubmissions().get(i), unsolvedTask.getSubmissions().get(i));
         }
+    }
+
+    @Test
+    public void serializeToJsonTest() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        String actualJson = mapper.writeValueAsString(solvedTask);
+
+        Assert.assertThat(mapper.readTree(actualJson).size(), is(4));
+
+        Assert.assertNotNull(mapper.readTree(actualJson).get("tries"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("acceptedTime"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("status"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("penalty"));
+
+
+        Assert.assertThat(mapper.readTree(actualJson).get("tries").asInt(), is(4));
+        Assert.assertThat(mapper.readTree(actualJson).get("acceptedTime").asInt(),is(3));
+        Assert.assertThat(mapper.readTree(actualJson).get("status").asText(), is("OK"));
+        Assert.assertThat(mapper.readTree(actualJson).get("penalty").asInt(), is(63));
+
+
     }
 
 }
