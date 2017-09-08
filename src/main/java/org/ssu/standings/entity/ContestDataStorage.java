@@ -68,6 +68,7 @@ public class ContestDataStorage {
     }
 
     public Contest getContestData(Long contestId) {
+        if(!contestData.containsKey(contestId)) return null;
         Contest contest = new Contest.Builder(contestData.get(contestId)).build();
         if (isContestFrozen.get(contestId)) {
             getContestSubmissions(contestId).values().stream()
@@ -110,6 +111,7 @@ public class ContestDataStorage {
                     .map(teamId -> new ParticipantUpdates(teamId, affectedTeamsResults.get(teamId), placesBeforeUpdate.get(teamId), placesAfterUpdate.get(teamId)))
                     .collect(Collectors.toMap(ParticipantUpdates::getTeamId, team -> team));
 
+            addContest(contestId, dataFromStandingsFile);
             if (!affectedTeamsIds.isEmpty())
                 contestUpdatesEventProducer.publishEvent(new ContestUpdates(contestId, updatedResults));
         }

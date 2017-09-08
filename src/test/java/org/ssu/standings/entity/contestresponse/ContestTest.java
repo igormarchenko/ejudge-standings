@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.ssu.standings.MockedObjectGenerator;
 import org.ssu.standings.entity.SubmissionStatus;
+import org.ssu.standings.parser.entity.ParticipantNode;
+import org.ssu.standings.parser.entity.ProblemNode;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
 import java.io.IOException;
@@ -20,9 +22,52 @@ import static org.hamcrest.Matchers.isOneOf;
 public class ContestTest {
 
     public Contest getContest() {
-        return new MockedObjectGenerator().defaultMockedContest();
-    }
 
+        List<ProblemNode> problemNodes = Arrays.asList(
+                new MockedObjectGenerator().defaultProblemNode().withId(1L).withLongName("Test task 1").withShortName("A").build(),
+                new MockedObjectGenerator().defaultProblemNode().withId(2L).withLongName("Test task 2").withShortName("B").build(),
+                new MockedObjectGenerator().defaultProblemNode().withId(3L).withLongName("Test task 3").withShortName("C").build()
+        );
+
+        List<ParticipantNode> participantNodes = Arrays.asList(
+                new MockedObjectGenerator().defaultParticipantNode().withId(1L).withName("Test team 1").build(),
+                new MockedObjectGenerator().defaultParticipantNode().withId(2L).withName("Test team 2").build(),
+                new MockedObjectGenerator().defaultParticipantNode().withId(3L).withName("Test team 3").build(),
+                new MockedObjectGenerator().defaultParticipantNode().withId(4L).withName("Test team 4").build(),
+                new MockedObjectGenerator().defaultParticipantNode().withId(5L).withName("Test team 5").build()
+        );
+
+
+        List<SubmissionNode> submissionNodes = Arrays.asList(
+                new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(1L).withRunUuid("1").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(2L).build(),
+
+                new MockedObjectGenerator().defaultSubmissionNode().withId(2L).withProblemId(1L).withRunUuid("2").withStatus(SubmissionStatus.WA).withTime(60 * 100L).withUserId(3L).build(),
+
+                new MockedObjectGenerator().defaultSubmissionNode().withId(3L).withProblemId(1L).withRunUuid("3").withStatus(SubmissionStatus.WA).withTime(60 * 20L).withUserId(4L).build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(4L).withProblemId(1L).withRunUuid("4").withStatus(SubmissionStatus.OK).withTime(60 * 80L).withUserId(4L).build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(5L).withProblemId(2L).withRunUuid("5").withStatus(SubmissionStatus.OK).withTime(60 * 100L).withUserId(4L).build(),
+
+                new MockedObjectGenerator().defaultSubmissionNode().withId(6L).withProblemId(1L).withRunUuid("6").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(7L).withProblemId(2L).withRunUuid("7").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).build()
+        );
+
+        return new Contest.Builder(
+                new MockedObjectGenerator().defaultContestNode()
+                        .withId(1L)
+                        .withDuration(3600L)
+                        .withName("Test contest")
+                        .withFogTime(100L)
+                        .withUnfogTime(200L)
+                        .withCurrentTime(LocalDateTime.of(2018, 4, 25, 4, 57, 10))
+                        .withStartTime(LocalDateTime.of(2017, 3, 25, 3, 57, 10))
+                        .withStopTime(LocalDateTime.of(2017, 3, 25, 8, 57, 10))
+                        .withSubmissions(submissionNodes)
+                        .withParticipants(participantNodes)
+                        .withProblems(problemNodes)
+                        .build(),
+                new MockedObjectGenerator().getTeamList()
+        ).build();
+    }
 
 
     @Test
