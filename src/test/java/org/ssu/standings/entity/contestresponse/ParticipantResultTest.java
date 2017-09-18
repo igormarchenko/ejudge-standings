@@ -48,7 +48,7 @@ public class ParticipantResultTest {
         ParticipantResult participantResult = result.clone();
 
         participantResult.pushSubmit(new SubmissionNode.Builder().withRunUuid("13").withProblemId(1L).withTime(200L).withStatus(SubmissionStatus.OK).build());
-        Assert.assertThat(participantResult.solvedProblems(), is(4L));
+        Assert.assertThat(participantResult.solvedProblems(), is(4));
         Assert.assertThat(participantResult.getPenalty(), is(114L));
     }
 
@@ -64,12 +64,12 @@ public class ParticipantResultTest {
 
     @Test
     public void solvedProblemsTest() throws Exception {
-        Assert.assertThat(result.solvedProblems(), is(3L));
+        Assert.assertThat(result.solvedProblems(), is(3));
     }
 
     @Test
     public void emptyResultSolvedProblemsTest() throws Exception {
-        Assert.assertThat(new ParticipantResult.Builder().withParticipant(null).build().solvedProblems(), is(0L));
+        Assert.assertThat(new ParticipantResult.Builder().withParticipant(null).build().solvedProblems(), is(0));
     }
 
     @Test
