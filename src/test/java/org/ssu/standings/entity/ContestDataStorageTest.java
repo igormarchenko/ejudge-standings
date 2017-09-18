@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.ssu.standings.MockedObjectGenerator;
 import org.ssu.standings.entity.contestresponse.Contest;
+import org.ssu.standings.entity.contestresponse.ParticipantResult;
 import org.ssu.standings.parser.entity.ContestNode;
 import org.ssu.standings.parser.entity.ParticipantNode;
 import org.ssu.standings.parser.entity.ProblemNode;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
+
 
 public class ContestDataStorageTest {
     private List<ProblemNode> problemNodes = Arrays.asList(
@@ -212,8 +214,27 @@ public class ContestDataStorageTest {
     }
 
     @Test
-    @Ignore
+
     public void addNewSubmissionsTest() {
+
+        ContestNode contest = getContestNode();
+        ContestDataStorage storage = new ContestDataStorage();
+        storage.setTeams(new MockedObjectGenerator().getTeamList());
+        storage.updateContest(contest.getContestId(), contest, false);
+
+        List<SubmissionNode> updatedSubmissions = new ArrayList<>(submissionNodes);
+        updatedSubmissions.add(new MockedObjectGenerator().defaultSubmissionNode().withId(8L).withProblemId(4L).withRunUuid("8").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).build());
+        ContestNode updatedContest = getDefaultMockedContestBuilder().withSubmissions(updatedSubmissions).build();
+
+        storage.updateContest(contest.getContestId(), updatedContest, false);
+        Contest contestData = storage.getContestData(contest.getContestId());
+        Map<Long, ParticipantResult> teamResults = contestData.getTeamsResults(Arrays.asList(5L));
+        Assert.assertThat(teamResults.get(5L).solvedProblems(), is(3L));
+
+        Assert.assertThat(teamResults.get(5L).getResults().get(4L).getStatus(), is(SubmissionStatus.OK));
+        Assert.assertThat(teamResults.get(5L).getResults().get(4L).getPenalty(), is(151L));
+        Assert.assertThat(teamResults.get(5L).getResults().get(4L).submissionCount(), is(1));
+
 
     }
 
@@ -265,6 +286,12 @@ public class ContestDataStorageTest {
     @Test
     @Ignore
     public void getFrozenResultsOnUnfrozenContestTest() {
+
+    }
+
+    @Test
+    @Ignore
+    public void readNewStandingsFileFromTheSameSource() {
 
     }
 }

@@ -31,6 +31,9 @@ public class UniversityDAO implements Cloneable {
     @JsonIgnore
     private List<TeamDAO> teamDAOS;
 
+    public UniversityDAO() {
+    }
+
     private UniversityDAO(Builder builder) {
         id = builder.id;
         name = builder.name;

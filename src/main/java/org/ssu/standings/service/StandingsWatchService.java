@@ -49,7 +49,7 @@ public class StandingsWatchService {
         //TODO: contest data storage initialization
         Map<String, TeamDAO> teams = teamRepository.findAll()
                 .stream()
-                .collect(Collectors.toMap(TeamDAO::getName, Function.identity()));
+                .collect(Collectors.toMap(TeamDAO::getName, Function.identity(), (existingTeam, newTeam) -> existingTeam));
 
         contestDataStorage.setTeams(teams);
     }
