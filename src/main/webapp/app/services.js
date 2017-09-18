@@ -16,5 +16,17 @@ angular.module('ejudgeStandings.services', [])
             });
         };
 
+        apiService.sendBaylorFileContent = function (contestId, content) {
+            return $http({
+                method: 'POST',
+                url: '/api/baylor-export/' + contestId,
+                data : {
+                    'content' : content
+                }
+            });
+        };
+
+
+
         return apiService;
     });

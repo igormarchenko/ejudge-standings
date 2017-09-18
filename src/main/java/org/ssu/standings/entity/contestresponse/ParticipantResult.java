@@ -33,8 +33,8 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
     }
 
     @JsonProperty("solved")
-    public Long solvedProblems() {
-        return results.values().stream().filter(TaskResult::isProblemSolved).count();
+    public Integer solvedProblems() {
+        return ((Long) results.values().stream().filter(TaskResult::isProblemSolved).count()).intValue();
     }
 
     public Participant getParticipant() {

@@ -1,6 +1,7 @@
 angular.module('ejudgeStandings.controllers', [])
     .controller('contestListController', function ($scope, ejudgeApiService) {
         $scope.contests = initTeams();
+
         function initTeams() {
             var contests = {};
             ejudgeApiService.contestList().then(function (response) {
@@ -9,6 +10,17 @@ angular.module('ejudgeStandings.controllers', [])
                 });
             });
             return contests;
+        }
+    })
+    .controller('baylorExportController', function ($scope, $routeParams, ejudgeApiService) {
+        $scope.content = "";
+        $scope.result = "";
+        $scope.sendBaylorData = function () {
+            ejudgeApiService.sendBaylorFileContent($routeParams.contestId, $scope.content).then(
+                function(response) {
+                    $scope.result = response.data;
+                }
+            );
         }
     })
     .controller('resultsController', function ($scope, $routeParams, ejudgeApiService, WebSocketService) {
@@ -32,6 +44,7 @@ angular.module('ejudgeStandings.controllers', [])
         function parseDate(date) {
             return moment().year(date.year).month(date.monthValue).date(date.dayOfMonth).hour(date.hour).minute(date.minute).second(date.second).toDate();
         }
+
         function initContestData() {
             WebSocketService.initialize($routeParams.contestId);
             ejudgeApiService.contestData($routeParams.contestId).then(function (response) {
@@ -40,9 +53,9 @@ angular.module('ejudgeStandings.controllers', [])
                 $scope.contest = {
                     'name': data.name,
                     'tasks': data.tasks,
-                    'startTime' : parseDate(data.startTime),
-                    'stopTime' : parseDate(data.stopTime),
-                    'currentTime' : parseDate(data.currentTime)
+                    'startTime': parseDate(data.startTime),
+                    'stopTime': parseDate(data.stopTime),
+                    'currentTime': parseDate(data.currentTime)
                 };
                 $scope.scrollDisabled = false;
             });
@@ -52,7 +65,7 @@ angular.module('ejudgeStandings.controllers', [])
             return sprintf("%02d:%02d", minutes / 60, minutes % 60);
         };
 
-        slideUp = function(array, index) {
+        slideUp = function (array, index) {
             var temp = array[index];
             array[index] = array[index - 1];
             array[index - 1] = temp;
@@ -65,7 +78,7 @@ angular.module('ejudgeStandings.controllers', [])
 
 
         slideTeam = function (teamId, startPos, endPos) {
-            if(startPos != endPos) {
+            if (startPos != endPos) {
                 var index = startPos;
                 var interval = setInterval(function () {
                     $scope.$apply(function () {
