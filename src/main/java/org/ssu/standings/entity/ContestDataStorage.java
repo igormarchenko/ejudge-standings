@@ -69,14 +69,18 @@ public class ContestDataStorage {
 
     public Contest getContestData(Long contestId) {
         if(!contestData.containsKey(contestId)) return null;
-        Contest contest = new Contest.Builder(contestData.get(contestId)).build();
+        Contest storedContest = contestData.get(contestId);
+        Contest.Builder contest = new Contest.Builder(storedContest);
+
         if (isContestFrozen.get(contestId)) {
-            getContestSubmissions(contestId).values().stream()
-                    .filter(submit -> isSubmitFrozen.test(contest, submit))
-//                    .map(SubmissionNode::clone)
-                    .forEach(submit -> submit.setStatus(SubmissionStatus.FROZEN));
+            List<SubmissionNode> nodes = getContestSubmissions(contestId).values().stream()
+                    .filter(submit -> isSubmitFrozen.test(storedContest, submit))
+                    .peek(submit -> submit.setStatus(SubmissionStatus.FROZEN))
+                    .collect(Collectors.toList());
+
+            contest.withSubmissions(nodes);
         }
-        return contest;
+        return contest.build();
     }
 
     private Boolean isContestPresent(Long contestId) {
@@ -91,7 +95,7 @@ public class ContestDataStorage {
             ContestSubmissionsChanges contestSubmissionsChanges = getDifferenceWithContest(contestId, dataFromStandingsFile);
 
             List<ParticipantResult> resultsBeforeUpdate = contestData.get(contestId).getResults();
-            //TODO: add rejudged submissions
+
             getContestData(contestId).updateSubmissions(contestSubmissionsChanges.getNewSubmissions());
             List<ParticipantResult> resultsAfterUpdate = contestData.get(contestId).getResults();
 

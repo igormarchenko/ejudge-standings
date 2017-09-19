@@ -13,12 +13,16 @@ import java.util.Optional;
 public class StandingsFileParser {
     private XmlMapper mapper = (XmlMapper) new XmlMapper().registerModule(new Jdk8Module()).registerModule(new JavaTimeModule());
 
-    public Optional<ContestNode> parse(String content) {
+    public Optional<ContestNode> parse(String content) throws IllegalArgumentException{
+        Optional<ContestNode> result = Optional.empty();
         try {
-            return Optional.of(mapper.readValue(content, ContestNode.class));
+            result = Optional.of(mapper.readValue(content, ContestNode.class));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return Optional.empty();
+        if(result.isPresent() && result.get().getStopTime() == null && result.get().getDuration() == null) {
+            throw new IllegalArgumentException();
+        }
+        return result;
     }
 }

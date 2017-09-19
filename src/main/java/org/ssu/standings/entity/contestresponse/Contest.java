@@ -136,6 +136,10 @@ public class Contest {
             contest.getSubmissions().forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
         }
 
+        public Builder withSubmissions(List<SubmissionNode> submissions) {
+            submissions.forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
+            return this;
+        }
         public Builder(Contest contest) {
             this.contestId = contest.contestId;
             this.name = contest.name;

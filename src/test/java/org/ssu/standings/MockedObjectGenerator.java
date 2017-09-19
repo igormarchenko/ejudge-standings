@@ -1,5 +1,6 @@
 package org.ssu.standings;
 
+import org.mockito.Mockito;
 import org.ssu.standings.dao.entity.TeamDAO;
 import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.entity.SubmissionStatus;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -188,7 +190,9 @@ public class MockedObjectGenerator {
         }
 
         public MockedSubmissionNodeBuilder withStatus(SubmissionStatus status) {
-            when(mockedSubmissionNode.getStatus()).thenReturn(status);
+            when(mockedSubmissionNode.getStatus()).thenCallRealMethod();
+            doCallRealMethod().when(mockedSubmissionNode).setStatus(Mockito.any(SubmissionStatus.class));
+            mockedSubmissionNode.setStatus(status);
             return this;
         }
 

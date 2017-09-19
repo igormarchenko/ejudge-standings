@@ -42,13 +42,13 @@ public class DefaultObjects {
     public MockedObjectGenerator.MockedContestNodeBuilder getDefaultMockedContestBuilder() {
         return new MockedObjectGenerator().defaultContestNode()
                 .withId(1L)
-                .withDuration(3600L)
+                .withDuration(10800L)
                 .withName("Test contest")
-                .withFogTime(100L)
-                .withUnfogTime(200L)
+                .withFogTime(3600L)
+                .withUnfogTime(7200L)
                 .withCurrentTime(LocalDateTime.of(2018, 4, 25, 4, 57, 10))
                 .withStartTime(LocalDateTime.of(2017, 3, 25, 3, 57, 10))
-                .withStopTime(LocalDateTime.of(2017, 3, 25, 8, 57, 10))
+                .withStopTime(LocalDateTime.of(2017, 3, 25, 6, 57, 10))
                 .withSubmissions(submissionNodes)
                 .withParticipants(participantNodes)
                 .withProblems(problemNodes);

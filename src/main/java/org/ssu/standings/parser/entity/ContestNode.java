@@ -61,7 +61,7 @@ public class ContestNode {
     }
 
     public Long getDuration() {
-        if(duration == null)
+        if(duration == null && stopTime != null)
             return ChronoUnit.SECONDS.between(startTime, stopTime);
         return duration;
     }
@@ -71,7 +71,7 @@ public class ContestNode {
     }
 
     public LocalDateTime getStopTime() {
-        if(stopTime== null)
+        if(stopTime== null && duration != null)
             return startTime.plusSeconds(duration);
         return stopTime;
     }
