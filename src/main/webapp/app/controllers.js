@@ -23,7 +23,7 @@ angular.module('ejudgeStandings.controllers', [])
             );
         }
     })
-    .controller('resultsController', function ($scope, $routeParams, ejudgeApiService, WebSocketService) {
+    .controller('resultsController', function ($scope, $routeParams, $window, ejudgeApiService, WebSocketService) {
         initContestData();
         var data = {};
         $scope.display = [];
@@ -41,6 +41,14 @@ angular.module('ejudgeStandings.controllers', [])
             }
         };
 
+        $scope.filterTeams = function() {
+            console.log('filter');
+        };
+
+        $scope.redirectToExportPage = function() {
+
+            $window.location.href = '/baylor-export/' + $routeParams.contestId;
+        };
         function parseDate(date) {
             return moment().year(date.year).month(date.monthValue).date(date.dayOfMonth).hour(date.hour).minute(date.minute).second(date.second).toDate();
         }
