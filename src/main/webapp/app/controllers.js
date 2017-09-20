@@ -12,7 +12,7 @@ angular.module('ejudgeStandings.controllers', [])
             return contests;
         }
     })
-    .controller('baylorExportController', function ($scope, $routeParams, ejudgeApiService) {
+    .controller('baylorExportController', function ($scope, $routeParams, $window, ejudgeApiService) {
         $scope.content = "";
         $scope.result = "";
         $scope.sendBaylorData = function () {
@@ -21,7 +21,12 @@ angular.module('ejudgeStandings.controllers', [])
                     $scope.result = response.data;
                 }
             );
-        }
+        };
+
+        $scope.redirectToContestPage = function() {
+            $window.location.href = '/contest/' + $routeParams.contestId;
+        };
+
     })
     .controller('resultsController', function ($scope, $routeParams, $window, ejudgeApiService, WebSocketService) {
         initContestData();
@@ -46,7 +51,6 @@ angular.module('ejudgeStandings.controllers', [])
         };
 
         $scope.redirectToExportPage = function() {
-
             $window.location.href = '/baylor-export/' + $routeParams.contestId;
         };
         function parseDate(date) {
