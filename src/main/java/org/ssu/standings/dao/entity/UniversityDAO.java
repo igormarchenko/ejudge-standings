@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "university")
-public class UniversityDAO {
+public class UniversityDAO implements Cloneable {
     @Id
     @SequenceGenerator(initialValue = 200, name = "universities_seq_id", sequenceName = "universities_seq_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "universities_seq_id")
@@ -31,46 +31,88 @@ public class UniversityDAO {
     @JsonIgnore
     private List<TeamDAO> teamDAOS;
 
-    public Long getId() {
-        return id;
+    public UniversityDAO() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    private UniversityDAO(Builder builder) {
+        id = builder.id;
+        name = builder.name;
+        region = builder.region;
+        type = builder.type;
+        teamDAOS = builder.teamDAOS;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public UniversityDAO setName(String name) {
-        this.name = name;
-        return this;
-    }
-
     public String getRegion() {
         return region;
-    }
-
-    public UniversityDAO setRegion(String region) {
-        this.region = region;
-        return this;
     }
 
     public String getType() {
         return type;
     }
 
-    public UniversityDAO setType(String type) {
-        this.type = type;
-        return this;
-    }
-
     public List<TeamDAO> getTeamDAOS() {
         return teamDAOS;
     }
 
-    public void setTeamDAOS(List<TeamDAO> teamDAOS) {
-        this.teamDAOS = teamDAOS;
+    @Override
+    public UniversityDAO clone() {
+        return new Builder().withId(id).withName(name).withRegion(region).withType(type).build();
+    }
+
+
+    public static final class Builder {
+        private Long id;
+        private String name;
+        private String region;
+        private String type;
+        private List<TeamDAO> teamDAOS;
+
+        public Builder() {
+        }
+
+        public Builder(UniversityDAO copy) {
+            this.id = copy.id;
+            this.name = copy.name;
+            this.region = copy.region;
+            this.type = copy.type;
+            this.teamDAOS = copy.teamDAOS;
+        }
+
+        public Builder withId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withRegion(String region) {
+            this.region = region;
+            return this;
+        }
+
+        public Builder withType(String type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder withTeamDAOS(List<TeamDAO> teamDAOS) {
+            this.teamDAOS = teamDAOS;
+            return this;
+        }
+
+        public UniversityDAO build() {
+            return new UniversityDAO(this);
+        }
     }
 }

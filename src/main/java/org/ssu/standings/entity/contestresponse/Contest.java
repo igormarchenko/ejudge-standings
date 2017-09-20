@@ -67,7 +67,6 @@ public class Contest {
         return this;
     }
 
-
     public Long getContestId() {
         return contestId;
     }
@@ -131,14 +130,16 @@ public class Contest {
 
             results = contest.getParticipants()
                     .stream()
-                    .map(team -> new Participant(team, getUniversityForTeam.apply(team.getName())))
-                    .collect(Collectors.toMap(Participant::getId, ParticipantResult::new));
+                    .map(team -> new Participant.Builder(team, getUniversityForTeam.apply(team.getName())).build())
+                    .collect(Collectors.toMap(Participant::getId, team -> new ParticipantResult.Builder().withParticipant(team).build()));
 
-            contest.getSubmissions().forEach(submit -> {
-                results.get(submit.getUserId()).pushSubmit(submit);
-            });
+            contest.getSubmissions().forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
         }
 
+        public Builder withSubmissions(List<SubmissionNode> submissions) {
+            submissions.forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
+            return this;
+        }
         public Builder(Contest contest) {
             this.contestId = contest.contestId;
             this.name = contest.name;
@@ -149,7 +150,7 @@ public class Contest {
             this.fogTime = contest.fogTime;
             this.unfogTime = contest.unfogTime;
             this.tasks = new ArrayList<>(contest.tasks);
-            this.results = new HashMap<>(contest.results);
+            this.results = contest.results.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue().clone() ));
         }
 
         public Contest build() {

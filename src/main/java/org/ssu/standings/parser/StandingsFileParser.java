@@ -6,25 +6,23 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Component;
 import org.ssu.standings.parser.entity.ContestNode;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Optional;
 
 @Component
 public class StandingsFileParser {
-    private XmlMapper mapper;
+    private XmlMapper mapper = (XmlMapper) new XmlMapper().registerModule(new Jdk8Module()).registerModule(new JavaTimeModule());
 
-    @PostConstruct
-    private void init() {
-        mapper = (XmlMapper) new XmlMapper().registerModule(new Jdk8Module()).registerModule(new JavaTimeModule());
-    }
-
-    public Optional<ContestNode> parse(String content) {
+    public Optional<ContestNode> parse(String content) throws IllegalArgumentException{
+        Optional<ContestNode> result = Optional.empty();
         try {
-            return Optional.of(mapper.readValue(content, ContestNode.class));
+            result = Optional.of(mapper.readValue(content, ContestNode.class));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return Optional.empty();
+        if(result.isPresent() && result.get().getStopTime() == null && result.get().getDuration() == null) {
+            throw new IllegalArgumentException();
+        }
+        return result;
     }
 }

@@ -24,7 +24,7 @@ public class LocalFileHandler implements FileHandler {
 
         return new Response.Builder()
                 .withLastModified(file.lastModified())
-                .withContent(FileReader.getIntstance().readContent(new BufferedReader(new java.io.FileReader(file.getPath()))))
+                .withContent(FileReader.getInstance().readContent(new BufferedReader(new java.io.FileReader(file.getPath()))))
                 .build();
     }
 }

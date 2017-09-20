@@ -36,9 +36,9 @@ sudo apt-get install npm
 &nbsp;&nbsp;*contest* &ndash; contest id (must be equals for all standings in one contest).<br />
 &nbsp;&nbsp;*final* &ndash; when it sets true displayed unfreezed stanings table. When value is false - table is freezed.<br />
 
-*team-university-file* &ndash;	file with mapping from team to university.<br />
-*university-type-file* &ndash; file with mapping university to its region.<br />
-*baylor-teams-file* &ndash; file which exported from baylor web-site. Using for upload results to baylor servers.<br />
+*teamDAO-universityDAO-file* &ndash;	file with mapping from teamDAO to universityDAO.<br />
+*universityDAO-type-file* &ndash; file with mapping universityDAO to its region.<br />
+*baylor-teamDAOS-file* &ndash; file which exported from baylor web-site. Using for upload results to baylor servers.<br />
 Examples of files provided in "examples" directory.
 
 ###Useful URL

@@ -6,30 +6,38 @@ import org.ssu.standings.entity.SubmissionStatus;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TaskResult {
+public class TaskResult implements Cloneable {
     @JsonIgnore
     private List<SubmissionNode> submissions = new ArrayList<>();
 
-    public TaskResult() {
+    private TaskResult(Builder builder) {
+        submissions = builder.submissions;
     }
 
     @JsonProperty("tries")
     public Integer submissionCount() {
-        return IntStream.range(0, submissions.size())
+        List<SubmissionNode> nodes = submissions.stream().filter(submit -> submit.getStatus() != SubmissionStatus.CE).collect(Collectors.toList());
+
+        Map<Integer, SubmissionStatus> collect = IntStream.range(0, nodes.size())
                 .boxed()
-                .collect(Collectors.toMap(index -> index, index -> submissions.get(index).getStatus()))
+                .collect(Collectors.toMap(index -> index, index -> nodes.get(index).getStatus()))
                 .entrySet()
+                .stream()
+                .collect(Collectors.toMap(item -> item.getKey() + 1, item -> item.getValue()));
+
+
+        return collect.entrySet()
                 .stream()
                 .filter(entry -> entry.getValue() == SubmissionStatus.OK)
                 .findFirst()
                 .map(Map.Entry::getKey)
-                .orElse(submissions.size());
+                .orElse(collect.size());
     }
 
     @JsonProperty("acceptedTime")
@@ -41,13 +49,13 @@ public class TaskResult {
                 .sorted()
                 .findFirst()
                 .orElse(0L);
-        return (seconds + 60 - seconds % 60) / 60;
+        return (seconds > 0) ? (seconds + 60 - seconds % 60) / 60 : 0L;
     }
 
     @JsonProperty("status")
     public SubmissionStatus getStatus() {
         if (submissions.isEmpty()) return SubmissionStatus.EMPTY;
-        if(isProblemSolved()) return  SubmissionStatus.OK;
+        if (isProblemSolved()) return SubmissionStatus.OK;
         return submissions.stream()
                 .filter(submit -> submit.getStatus() != SubmissionStatus.CE)
                 .map(SubmissionNode::getStatus)
@@ -57,7 +65,7 @@ public class TaskResult {
 
     @JsonProperty("penalty")
     public Long getPenalty() {
-        return isProblemSolved() ? submissionCount() * 20L + getFirstAcceptedTime() : 0L;
+        return isProblemSolved() ? (Math.max(submissionCount(), 1) - 1) * 20L + getFirstAcceptedTime() : 0L;
     }
 
     public List<SubmissionNode> getSubmissions() {
@@ -72,11 +80,34 @@ public class TaskResult {
     }
 
     public void addSubmission(SubmissionNode submission) {
-        Optional<SubmissionNode> excitingSubmission = submissions.stream().filter(submit -> submit.getRunUuid().equals(submission.getRunUuid())).findFirst();
-        if(excitingSubmission.isPresent()) {
-            excitingSubmission.get().setStatus(submission.getStatus());
-        } else {
-            submissions.add(submission);
+        submissions.removeIf(submit -> submit.getRunUuid().equals(submission.getRunUuid()));
+        submissions.add(submission);
+        submissions = submissions.stream().sorted(Comparator.comparing(SubmissionNode::getTime)).collect(Collectors.toList());
+    }
+
+    @Override
+    public TaskResult clone() {
+        return new TaskResult.Builder(this).build();
+    }
+
+
+    public static final class Builder {
+        private List<SubmissionNode> submissions = new ArrayList<>();
+
+        public Builder() {
+        }
+
+        public Builder(TaskResult copy) {
+            this.submissions = copy.submissions.stream().map(SubmissionNode::clone).collect(Collectors.toList());
+        }
+
+        public Builder withSubmissions(List<SubmissionNode> submissions) {
+            this.submissions = submissions;
+            return this;
+        }
+
+        public TaskResult build() {
+            return new TaskResult(this);
         }
     }
 }

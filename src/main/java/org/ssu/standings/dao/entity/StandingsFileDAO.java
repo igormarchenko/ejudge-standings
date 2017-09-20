@@ -31,6 +31,13 @@ public class StandingsFileDAO {
     public StandingsFileDAO() {
     }
 
+    private StandingsFileDAO(Builder builder) {
+        id = builder.id;
+        link = builder.link;
+        contestId = builder.contestId;
+        isFrozen = builder.isFrozen;
+    }
+
     public Long getId() {
         return id;
     }
@@ -59,6 +66,7 @@ public class StandingsFileDAO {
                 .append(id, that.id)
                 .append(link, that.link)
                 .append(contestId, that.contestId)
+                .append(isFrozen, that.isFrozen)
                 .isEquals();
     }
 
@@ -69,5 +77,47 @@ public class StandingsFileDAO {
                 .append(link)
                 .append(contestId)
                 .toHashCode();
+    }
+
+
+    public static final class Builder {
+        private Long id;
+        private String link;
+        private Long contestId;
+        private Boolean isFrozen;
+
+        public Builder() {
+        }
+
+        public Builder(StandingsFileDAO copy) {
+            this.id = copy.id;
+            this.link = copy.link;
+            this.contestId = copy.contestId;
+            this.isFrozen = copy.isFrozen;
+        }
+
+        public Builder withId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withLink(String link) {
+            this.link = link;
+            return this;
+        }
+
+        public Builder withContestId(Long contestId) {
+            this.contestId = contestId;
+            return this;
+        }
+
+        public Builder withIsFrozen(Boolean isFrozen) {
+            this.isFrozen = isFrozen;
+            return this;
+        }
+
+        public StandingsFileDAO build() {
+            return new StandingsFileDAO(this);
+        }
     }
 }

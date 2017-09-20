@@ -42,17 +42,13 @@ public class StandingsWatchService {
     private Map<Long, ContestDAO> contests = null;
 
     private void initContestDataFlow() {
-
         contests = contestRepository.findAll().stream().collect(Collectors.toMap(ContestDAO::getId, Function.identity()));
         observers = standingsFilesRepository.findAll().stream().collect(Collectors.toMap(Function.identity(), ContestStandingsFileObserver::new));
 
-        //TODO: contest data storage initialization
         Map<String, TeamDAO> teams = teamRepository.findAll()
                 .stream()
-                .collect(Collectors.groupingBy(TeamDAO::getName))
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, team -> team.getValue().get(0)));
+                .collect(Collectors.toMap(TeamDAO::getName, Function.identity(), (existingTeam, newTeam) -> existingTeam));
+
         contestDataStorage.setTeams(teams);
     }
 

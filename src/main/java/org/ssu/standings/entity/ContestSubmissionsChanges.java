@@ -27,7 +27,7 @@ public class ContestSubmissionsChanges {
     }
 
     public void addNewSubmission(List<SubmissionNode> submissions) {
-        submissions.forEach(submission -> newSubmissions.add(submission));
+        newSubmissions.addAll(submissions);
     }
 
     public void addRejudgedSubmission(SubmissionNode submission) {
@@ -35,7 +35,7 @@ public class ContestSubmissionsChanges {
     }
 
     public void addRejudgedSubmission(List<SubmissionNode> submissions) {
-        submissions.forEach(submission -> changedSubmissions.add(submission));
+        changedSubmissions.addAll(submissions);
     }
 
     public Boolean hasChanges() {
