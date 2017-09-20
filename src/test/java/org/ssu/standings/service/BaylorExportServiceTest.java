@@ -105,4 +105,18 @@ public class BaylorExportServiceTest {
         Assert.assertThat(results.get(1).getTeamName(), is("Test team 2"));
         Assert.assertThat(results.get(2).getTeamName(), is("Test team 3"));
     }
+
+    @Test
+    public void emptyFileTest() throws NoSuchFieldException, IllegalAccessException {
+        String baylorFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><icpc></icpc>";
+        Long contestId = 1L;
+
+        BaylorResults baylorResults = baylorExportService.getContestResults(contestId, baylorFile);
+        Class aClass = BaylorResults.class;
+        Field teams = aClass.getDeclaredField("teams");
+        teams.setAccessible(true);
+        List<TeamResultsInBaylor> results = (List<TeamResultsInBaylor>) teams.get(baylorResults);
+        Assert.assertThat(results.size(), is(0));
+
+    }
 }

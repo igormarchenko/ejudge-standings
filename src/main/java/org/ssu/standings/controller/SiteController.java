@@ -25,7 +25,7 @@ public class SiteController {
         return model;
     }
 
-    @RequestMapping(value = {"/", "/contest/{contestId}", "/socket/{contestId}", "/baylor-export/{contestId}"}, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = {"/", "/contest/{contestId}", "/socket/{contestId}", "/baylor-export/{contestId}"}, produces = "text/plain;charset=UTF-8", method = RequestMethod.GET)
     public ModelAndView homePage(ModelAndView model, @PathVariable Optional<Long> contestId) throws IOException {
         model.setViewName("/home");
         return model;
