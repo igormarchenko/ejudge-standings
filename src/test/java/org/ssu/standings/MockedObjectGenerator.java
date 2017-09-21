@@ -14,9 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class MockedObjectGenerator {
 
@@ -52,6 +50,7 @@ public class MockedObjectGenerator {
 
     public class MockedContestNodeBuilder {
         private ContestNode contestNode;
+
         public MockedContestNodeBuilder() {
             this.contestNode = mock(ContestNode.class);
         }
@@ -93,6 +92,7 @@ public class MockedObjectGenerator {
             when(contestNode.getStartTime()).thenReturn(value);
             return this;
         }
+
         public MockedContestNodeBuilder withStopTime(LocalDateTime value) {
             when(contestNode.getStopTime()).thenReturn(value);
             return this;
@@ -112,10 +112,12 @@ public class MockedObjectGenerator {
             when(contestNode.getSubmissions()).thenReturn(value);
             return this;
         }
+
         public ContestNode build() {
             return contestNode;
         }
     }
+
     public class MockedProblemNodeBuilder {
 
         private ProblemNode mockedProblemNode;
@@ -205,6 +207,7 @@ public class MockedObjectGenerator {
             when(mockedSubmissionNode.getProblemId()).thenReturn(problemId);
             return this;
         }
+
 
         public SubmissionNode build() {
             return mockedSubmissionNode;

@@ -67,6 +67,50 @@
 
 </style>
 
+<script type="text/ng-template" id="dialog1.tmpl.html">
+    <md-dialog
+            style="width: 800px;"
+            aria-label="Filter teams">
+        <form ng-cloak>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Filter teams</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="/static/images/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+
+            <md-dialog-content style="max-width:800px;max-height:810px;">
+                <div class="md-dialog-content">
+                    <md-input-container style="width:500px;">
+                        <label>Region</label>
+                        <md-select name="regionSelected" ng-model="regionSelected" multiple="true">
+                            <md-option ng-value="region" ng-repeat="region in regions">{{region}}</md-option>
+
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container style="width:500px;">
+                        <label>University type</label>
+                        <md-select name="selectedUniversityType" ng-model="selectedUniversityType" multiple="true">
+                            <md-option ng-value="type" ng-repeat="type in universityTypes">{{type}}</md-option>
+
+                        </md-select>
+                    </md-input-container>
+
+                </div>
+            </md-dialog-content>
+
+            <md-dialog-actions layout="row">
+                <md-button ng-click="applyFilter()">
+                    Apply filter
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>
 
 <div class="row">
     <div class="col-md-10">
@@ -76,10 +120,11 @@
 
     <sec:authorize access="hasAnyAuthority('ADMIN', 'OBSERVER')">
         <div class="pull-right" style="margin-right:20px;">
-            <button type="button" class="btn btn-light" style="margin-top:30px; height: 40px;"  ng-click="unfreeze()">
+            <button type="button" class="btn btn-light" style="margin-top:30px; height: 40px;" ng-click="unfreeze()">
                 <i class="fa fa-snowflake-o" style="font-size:24px; cursor: pointer;"></i>
             </button>
-            <button type="button" class="btn btn-light" style="margin-top:30px; height: 40px;" ng-click="redirectToExportPage()">
+            <button type="button" class="btn btn-light" style="margin-top:30px; height: 40px;"
+                    ng-click="redirectToExportPage()">
                 <span class="glyphicon glyphicon-export"></span>
             </button>
         </div>

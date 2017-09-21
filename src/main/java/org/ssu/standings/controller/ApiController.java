@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.ssu.standings.entity.ContestDataStorage;
@@ -56,7 +55,6 @@ public class ApiController {
     @RequestMapping(value = "/frozen-submits/{contestId}", method = RequestMethod.GET, produces = {"application/json; charset=UTF-8"})
     @ResponseBody
     public String getFrozenSubmits(@PathVariable Long contestId) throws JsonProcessingException {
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         return new ObjectMapper().writeValueAsString(contestDataStorage.getFrozenSubmits(contestId));
     }
 

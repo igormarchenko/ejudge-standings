@@ -103,7 +103,7 @@ public class ApiControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "observer", roles = {"OBSERVER"})
+    @WithMockUser(username = "observer", authorities = {"OBSERVER"})
     public void getFrozenSubmitsWithObserver() throws Exception {
         mockMvc.perform(get("/api/frozen-submits/1"))
                 .andExpect(status().isOk());
@@ -111,7 +111,7 @@ public class ApiControllerTest {
 
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getFrozenSubmitsWithAdmin() throws Exception {
         mockMvc.perform(get("/api/frozen-submits/1"))
                 .andExpect(status().isOk());
@@ -130,7 +130,7 @@ public class ApiControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void exportBaylorFromAdmin() throws Exception {
         Map<String, String> data = new HashMap<>();
         data.put("content", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><icpc></icpc>");
@@ -141,7 +141,7 @@ public class ApiControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "observer", roles = {"OBSERVER"})
+    @WithMockUser(username = "observer", authorities = {"OBSERVER"})
     public void exportBaylorFromObserver() throws Exception {
         Map<String, String> data = new HashMap<>();
         data.put("content", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><icpc></icpc>");
