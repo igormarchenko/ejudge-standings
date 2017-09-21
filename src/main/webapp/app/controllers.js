@@ -35,7 +35,8 @@ angular.module('ejudgeStandings.controllers', [])
         $scope.scrollDisabled = true;
         $scope.universities = [];
         $scope.regions = [];
-        $scope.universityTypes = [];
+        $scope.selectedUniversityTypes = [];
+        $scope.selectedRegions = [];
 
         $scope.loadMore = function () {
             var batchSize = 20;
@@ -50,9 +51,9 @@ angular.module('ejudgeStandings.controllers', [])
         };
 
         $scope.filterTeams = function () {
-            console.log('filter');
             $mdDialog.show({
-                controller: ResultsController,
+                scope: $scope,
+                preserveScope: true,
                 templateUrl: 'dialog1.tmpl.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose: true,
@@ -60,12 +61,39 @@ angular.module('ejudgeStandings.controllers', [])
             });
         };
 
+
         $scope.redirectToExportPage = function () {
             $window.location.href = '/baylor-export/' + $routeParams.contestId;
         };
 
         function parseDate(date) {
             return moment().year(date.year).month(date.monthValue).date(date.dayOfMonth).hour(date.hour).minute(date.minute).second(date.second).toDate();
+        }
+
+        $scope.teamDisplay = function(team) {
+            var result = false;
+            if(team.participant.university) {
+                var data = team.participant.university;
+                if($scope.selectedRegions.indexOf(data.region) !== -1) result =  true;
+                if($scope.selectedUniversityTypes.indexOf(data.type) !== -1) result =  true;
+            }
+            return result;
+        };
+
+        function initContestData() {
+            WebSocketService.initialize($routeParams.contestId);
+            ejudgeApiService.contestData($routeParams.contestId).then(function (response) {
+                data = response.data;
+                generateUniversityData(data);
+                $scope.contest = {
+                    'name': data.name,
+                    'tasks': data.tasks,
+                    'startTime': parseDate(data.startTime),
+                    'stopTime': parseDate(data.stopTime),
+                    'currentTime': parseDate(data.currentTime)
+                };
+                $scope.scrollDisabled = false;
+            });
         }
 
         function generateUniversityData(data) {
@@ -84,25 +112,8 @@ angular.module('ejudgeStandings.controllers', [])
             $scope.regions = $.unique(regions).sort();
             $scope.universityTypes = $.unique(universityTypes).sort();
 
-            // console.log(universities);
-            // console.log(regions);
-            // console.log(universityTypes);
-        }
-
-        function initContestData() {
-            WebSocketService.initialize($routeParams.contestId);
-            ejudgeApiService.contestData($routeParams.contestId).then(function (response) {
-                data = response.data;
-                generateUniversityData(data);
-                $scope.contest = {
-                    'name': data.name,
-                    'tasks': data.tasks,
-                    'startTime': parseDate(data.startTime),
-                    'stopTime': parseDate(data.stopTime),
-                    'currentTime': parseDate(data.currentTime)
-                };
-                $scope.scrollDisabled = false;
-            });
+            $scope.selectedRegions = $scope.regions.slice();
+            $scope.selectedUniversityTypes = $scope.universityTypes.slice();
         }
 
         $scope.formatTime = function (minutes) {
@@ -119,7 +130,6 @@ angular.module('ejudgeStandings.controllers', [])
             if (index > 0 && index < $scope.display.length)
                 slideUp($scope.display, index);
         };
-
 
         slideTeam = function (teamId, startPos, endPos) {
             if (startPos != endPos) {
@@ -144,13 +154,12 @@ angular.module('ejudgeStandings.controllers', [])
         };
 
         $scope.applyFilter = function () {
-            console.log('apply');
+            $scope.cancel();
         };
 
 
         WebSocketService.receive().then(null, null, function (response) {
             angular.forEach(response.updates, function (team) {
-                console.log(team);
                 $scope.display[team.previousPlace] = team.result;
                 slideTeam(team.id, team.previousPlace, team.currentPlace);
 

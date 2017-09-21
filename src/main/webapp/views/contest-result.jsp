@@ -86,15 +86,15 @@
                 <div class="md-dialog-content">
                     <md-input-container style="width:500px;">
                         <label>Region</label>
-                        <md-select name="regionSelected" ng-model="regionSelected" multiple="true">
-                            <md-option ng-value="region" ng-repeat="region in regions">{{region}}</md-option>
 
+                        <md-select multiple="true" ng-model = "selectedRegions">
+                            <md-option ng-value="region" ng-repeat="region in regions">{{region}}</md-option>
                         </md-select>
                     </md-input-container>
 
                     <md-input-container style="width:500px;">
                         <label>University type</label>
-                        <md-select name="selectedUniversityType" ng-model="selectedUniversityType" multiple="true">
+                        <md-select ng-model="selectedUniversityTypes" multiple="true">
                             <md-option ng-value="type" ng-repeat="type in universityTypes">{{type}}</md-option>
 
                         </md-select>
@@ -155,7 +155,7 @@
         <tbody infinite-scroll='loadMore()' infinite-scroll-disabled="scrollDisabled"
                infinite-scroll-use-document-bottom="true">
 
-        <tr ng-repeat="team in display track by team.participant.id" id="teamrow-{{team.participant.id}}"
+        <tr ng-repeat="team in display | filter:teamDisplay track by team.participant.id" id="teamrow-{{team.participant.id}}"
             class="animate-repeat">
             <td width="40px">
                 <h4>{{$index + 1}}</h4>
