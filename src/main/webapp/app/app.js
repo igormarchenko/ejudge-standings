@@ -6,7 +6,10 @@ angular.module('ejudgeStandings',
         'ngSanitize',
         'ngAnimate',
         'infinite-scroll',
-        'angularMoment'
+        'angularMoment',
+        'ngMaterial',
+        'ngMessages',
+        'material.svgAssetsCache'
     ]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider.when("/", {
         templateUrl: "/views/contest-list.html",

@@ -75,6 +75,8 @@ public class ContestDataStorage {
         if (isContestFrozen.get(contestId)) {
             List<SubmissionNode> nodes = getContestSubmissions(contestId).values().stream()
                     .filter(submit -> isSubmitFrozen.test(storedContest, submit))
+//                    .map(submit -> new SubmissionNode.Builder(submit).withStatus(SubmissionStatus.FROZEN).build())
+//                    .map(SubmissionNode::clone)
                     .peek(submit -> submit.setStatus(SubmissionStatus.FROZEN))
                     .collect(Collectors.toList());
 

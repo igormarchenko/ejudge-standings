@@ -1,5 +1,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page pageEncoding="utf-8" %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <style>
     .cell-ok {
         background-color: #2b9e2b;
@@ -66,16 +68,74 @@
 
 </style>
 
+<script type="text/ng-template" id="dialog1.tmpl.html">
+    <md-dialog
+            style="width: 800px;"
+            aria-label="Filter teams">
+        <form ng-cloak>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Filter teams</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="/static/images/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+
+            <md-dialog-content style="max-width:800px;max-height:810px;">
+                <div class="md-dialog-content">
+                    <md-input-container style="width:500px;">
+                        <label>Region</label>
+
+                        <md-select multiple="true" ng-model="selectedRegions">
+                            <md-option ng-value="region" ng-repeat="region in regions">{{region}}</md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container style="width:500px;">
+                        <label>University type</label>
+                        <md-select ng-model="selectedUniversityTypes" multiple="true">
+                            <md-option ng-value="type" ng-repeat="type in universityTypes">{{type}}</md-option>
+
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container style="width:500px;">
+                        <label>University</label>
+                        <md-select ng-model="selectedUniversities" multiple="true">
+                            <md-option ng-value="university" ng-repeat="university in universities">{{university}}
+                            </md-option>
+
+                        </md-select>
+                    </md-input-container>
+
+                </div>
+            </md-dialog-content>
+
+            <md-dialog-actions layout="row">
+                <md-button ng-click="applyFilter()">
+                    Apply filter
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>
 
 <div class="row">
     <div class="col-md-10">
         <h2>{{contest.name}}</h2>
     </div>
 
+
     <sec:authorize access="hasAnyAuthority('ADMIN', 'OBSERVER')">
         <div class="pull-right" style="margin-right:20px;">
-            <button type="button" class="btn btn-light" style="margin-top:30px;" data-toggle="modal"
-                    data-target="#settings-modal">Unfreeze
+            <button type="button" class="btn btn-light" style="margin-top:30px; height: 40px;" ng-click="unfreeze()">
+                <i class="fa fa-snowflake-o" style="font-size:24px; cursor: pointer;"></i>
+            </button>
+            <button type="button" class="btn btn-light" style="margin-top:30px; height: 40px;"
+                    ng-click="redirectToExportPage()">
+                <span class="glyphicon glyphicon-export"></span>
             </button>
         </div>
     </sec:authorize>
@@ -84,6 +144,7 @@
 
 <div class="row">
     <div class="col-md-10">
+        <h4>Contest start time: {{contest.startTime | amDateFormat:'HH:mm:ss DD.MM.YYYY'}}</h4>
         <h4>Contest stop time: {{contest.stopTime | amDateFormat:'HH:mm:ss DD.MM.YYYY'}}</h4>
     </div>
 </div>
@@ -93,7 +154,8 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>Team</th>
+            <th>Team <span class="glyphicon glyphicon-filter pull-right" style="cursor:pointer;"
+                           ng-click="filterTeams()"></span></th>
             <th ng-repeat="task in contest.tasks track by $index" style="text-align: center" title="{{task.longName}}">
                 {{task.shortName}}
             </th>
@@ -101,12 +163,15 @@
         </tr>
         </thead>
         <tbody infinite-scroll='loadMore()' infinite-scroll-disabled="scrollDisabled"
+               infinite-scroll-distance="50"
                infinite-scroll-use-document-bottom="true">
 
-        <tr ng-repeat="team in display track by team.participant.id" id="teamrow-{{team.participant.id}}"
+        <tr ng-repeat="team in display | filter:teamDisplay track by team.participant.id"
+            id="teamrow-{{team.participant.id}}"
             class="animate-repeat">
             <td width="40px">
-                <h4>{{$index + 1}}</h4>
+                <h4 ng-if = "filterApplied">{{$index + 1}} <em>({{team.place}})</em></h4>
+                <h4 ng-if = "!filterApplied">{{$index + 1}}</h4>
             </td>
             <td width="450px">
                 <b>{{team.participant.name}}</b> <br/>
