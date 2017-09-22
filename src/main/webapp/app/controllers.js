@@ -40,6 +40,7 @@ angular.module('ejudgeStandings.controllers', [])
         $scope.selectedUniversities = [];
         $scope.filterApplied = false;
 
+
         $scope.loadMore = function () {
             var batchSize = 100;
             if (data.results.length > 0) {
@@ -47,8 +48,10 @@ angular.module('ejudgeStandings.controllers', [])
                     $scope.display.push(data.results[i]);
                 }
                 data.results.splice(0, Math.min(batchSize, data.results.length));
+                return true;
             } else {
                 $scope.scrollDisabled = true;
+                return false;
             }
         };
 
@@ -62,7 +65,6 @@ angular.module('ejudgeStandings.controllers', [])
                 fullscreen: true
             });
         };
-
 
         $scope.redirectToExportPage = function () {
             $window.location.href = '/baylor-export/' + $routeParams.contestId;
@@ -103,6 +105,11 @@ angular.module('ejudgeStandings.controllers', [])
                 };
                 $scope.scrollDisabled = false;
             });
+
+            var interval = setInterval(function () {
+                if(!$scope.loadMore())clearInterval(interval);
+                $scope.$apply();
+            }, 700);
         }
 
         function generateUniversityData(data) {
