@@ -37,9 +37,11 @@ angular.module('ejudgeStandings.controllers', [])
         $scope.regions = [];
         $scope.selectedUniversityTypes = [];
         $scope.selectedRegions = [];
+        $scope.selectedUniversities = [];
+        $scope.filterApplied = false;
 
         $scope.loadMore = function () {
-            var batchSize = 20;
+            var batchSize = 100;
             if (data.results.length > 0) {
                 for (var i = 0; i < batchSize && i < data.results.length; i++) {
                     $scope.display.push(data.results[i]);
@@ -70,14 +72,21 @@ angular.module('ejudgeStandings.controllers', [])
             return moment().year(date.year).month(date.monthValue).date(date.dayOfMonth).hour(date.hour).minute(date.minute).second(date.second).toDate();
         }
 
-        $scope.teamDisplay = function(team) {
-            var result = false;
-            if(team.participant.university) {
-                var data = team.participant.university;
-                if($scope.selectedRegions.indexOf(data.region) !== -1) result =  true;
-                if($scope.selectedUniversityTypes.indexOf(data.type) !== -1) result =  true;
+        $scope.teamDisplay = function (team) {
+            $scope.filterApplied = !($scope.selectedUniversityTypes.length === 0 &&
+                $scope.selectedRegions.length === 0 &&
+                $scope.selectedUniversities.length === 0);
+
+            if(!$scope.filterApplied){
+                return true;
             }
-            return result;
+            if (team.participant.university) {
+                var data = team.participant.university;
+                if ($scope.selectedRegions.indexOf(data.region) !== -1) return true;
+                if ($scope.selectedUniversityTypes.indexOf(data.type) !== -1) return true;
+                if ($scope.selectedUniversities.indexOf(data.name) !== -1) return true;
+            }
+            return false;
         };
 
         function initContestData() {
@@ -111,9 +120,6 @@ angular.module('ejudgeStandings.controllers', [])
             $scope.universities = $.unique(universities).sort();
             $scope.regions = $.unique(regions).sort();
             $scope.universityTypes = $.unique(universityTypes).sort();
-
-            $scope.selectedRegions = $scope.regions.slice();
-            $scope.selectedUniversityTypes = $scope.universityTypes.slice();
         }
 
         $scope.formatTime = function (minutes) {
@@ -154,6 +160,7 @@ angular.module('ejudgeStandings.controllers', [])
         };
 
         $scope.applyFilter = function () {
+            $scope.filterApplied = true;
             $scope.cancel();
         };
 

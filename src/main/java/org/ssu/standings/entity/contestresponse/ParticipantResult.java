@@ -12,10 +12,13 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
     private Participant participant;
     @JsonProperty("results")
     private Map<Long, TaskResult> results = new HashMap<>();
+    @JsonProperty("place")
+    private Integer place;
 
     private ParticipantResult(Builder builder) {
         participant = builder.participant;
         results = builder.results;
+        place = builder.place;
     }
 
     public void pushSubmit(SubmissionNode submit) {
@@ -62,6 +65,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
     public static final class Builder {
         private Participant participant;
         private Map<Long, TaskResult> results  = new HashMap<>();
+        private Integer place;
 
         public Builder() {
         }
@@ -69,6 +73,11 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
         public Builder(ParticipantResult copy) {
             this.participant = (copy.participant == null) ? null : copy.participant.clone();
             this.results.putAll(copy.getResults());
+        }
+
+        public Builder withPlace(Integer place) {
+            this.place = place;
+            return this;
         }
 
         public Builder withParticipant(Participant participant) {

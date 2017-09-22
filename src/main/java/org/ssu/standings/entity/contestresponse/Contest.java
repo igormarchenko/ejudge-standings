@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Contest {
     @JsonProperty("id")
@@ -52,7 +53,10 @@ public class Contest {
     @JsonProperty("results")
     public List<ParticipantResult> getResults() {
         //TODO: add lazy update
-        return results.values().stream().sorted().collect(Collectors.toList());
+        List<ParticipantResult> results = this.results.values().stream().sorted().collect(Collectors.toList());
+        return IntStream.range(0, results.size())
+                .mapToObj(index -> new ParticipantResult.Builder(results.get(index)).withPlace(index + 1).build())
+                .collect(Collectors.toList());
     }
 
 

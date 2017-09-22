@@ -1,6 +1,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page pageEncoding="utf-8" %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <style>
     .cell-ok {
         background-color: #2b9e2b;
@@ -87,7 +88,7 @@
                     <md-input-container style="width:500px;">
                         <label>Region</label>
 
-                        <md-select multiple="true" ng-model = "selectedRegions">
+                        <md-select multiple="true" ng-model="selectedRegions">
                             <md-option ng-value="region" ng-repeat="region in regions">{{region}}</md-option>
                         </md-select>
                     </md-input-container>
@@ -96,6 +97,15 @@
                         <label>University type</label>
                         <md-select ng-model="selectedUniversityTypes" multiple="true">
                             <md-option ng-value="type" ng-repeat="type in universityTypes">{{type}}</md-option>
+
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container style="width:500px;">
+                        <label>University</label>
+                        <md-select ng-model="selectedUniversities" multiple="true">
+                            <md-option ng-value="university" ng-repeat="university in universities">{{university}}
+                            </md-option>
 
                         </md-select>
                     </md-input-container>
@@ -153,12 +163,15 @@
         </tr>
         </thead>
         <tbody infinite-scroll='loadMore()' infinite-scroll-disabled="scrollDisabled"
+               infinite-scroll-distance="50"
                infinite-scroll-use-document-bottom="true">
 
-        <tr ng-repeat="team in display | filter:teamDisplay track by team.participant.id" id="teamrow-{{team.participant.id}}"
+        <tr ng-repeat="team in display | filter:teamDisplay track by team.participant.id"
+            id="teamrow-{{team.participant.id}}"
             class="animate-repeat">
             <td width="40px">
-                <h4>{{$index + 1}}</h4>
+                <h4 ng-if = "filterApplied">{{$index + 1}} <em>({{team.place}})</em></h4>
+                <h4 ng-if = "!filterApplied">{{$index + 1}}</h4>
             </td>
             <td width="450px">
                 <b>{{team.participant.name}}</b> <br/>
