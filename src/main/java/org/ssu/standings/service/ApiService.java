@@ -11,6 +11,7 @@ import org.ssu.standings.dao.repository.UniversityRepository;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ApiService {
@@ -22,6 +23,9 @@ public class ApiService {
 
     @Resource
     private UniversityRepository universityRepository;
+
+    @Resource
+    private StandingsWatchService watchService;
 
     public List<TeamDAO> teamList() {
         return teamRepository.findAll();
@@ -35,13 +39,20 @@ public class ApiService {
         return teamRepository.save(teamDAO);
     }
 
-    public void removeTeam(Long teamId) {
+    public void deleteTeam(Long teamId) {
         teamRepository.delete(teamId);
     }
 
 
-    public void removeUniversity(Long universityId) {
+    public void deleteUniversity(Long universityId) {
+        List<TeamDAO> teams = universityRepository.findOne(universityId).getTeamDAOS();
+        List<TeamDAO> updatedteamList = teams.stream()
+                .map(team -> new TeamDAO.Builder(team).withUniversity(null).build())
+                .collect(Collectors.toList());
+        teamRepository.save(updatedteamList);
+
         universityRepository.delete(universityId);
+        watchService.initContestDataFlow();
     }
 
     public UniversityDAO saveUniversity(UniversityDAO universityDAO) {

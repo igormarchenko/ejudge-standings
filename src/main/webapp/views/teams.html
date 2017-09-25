@@ -15,10 +15,10 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="teamDAO in teamDAOS track by $index">
-        <td>{{teamDAO.id}}</td>
-        <td>{{teamDAO.name}}</td>
-        <td>{{teamDAO.universityDAO.name}}</td>
+    <tr ng-repeat="team in team track by $index">
+        <td>{{team.id}}</td>
+        <td>{{team.name}}</td>
+        <td>{{team.university.name}}</td>
         <td>
             <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editTeam(teamDAO.id)"></span>
             <span class="glyphicon glyphicon-remove glyph" aria-hidden="true" ng-click="removeTeam(teamDAO.id)"></span>

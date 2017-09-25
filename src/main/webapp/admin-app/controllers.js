@@ -25,7 +25,6 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
                     $scope.universities[university.id] = university;
                 });
             });
-
         }
 
         dtColumnDefs = [
@@ -74,6 +73,10 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
             });
         }
 
+        $scope.showModalDialogForUniversity = function(universityId) {
+            angular.copy($scope.universities[universityId], $scope.selectedUniversity);
+            $('#deleteUniversityModal').modal('show');
+        };
         $scope.editUniversity = function (universityId) {
             angular.copy($scope.universities[universityId], $scope.selectedUniversity);
             $('#editUniversity').modal('show');
@@ -91,6 +94,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         $scope.removeUniversity = function (universityId) {
             ejudgeStandingsApiService.removeUniversity(universityId).then(function () {
                 delete $scope.universities[universityId];
+                $('#deleteUniversityModal').modal('hide');
             });
         };
 

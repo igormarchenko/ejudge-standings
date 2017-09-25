@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,7 +16,6 @@ import java.io.IOException;
 
 @RequestMapping("/admin")
 @Controller
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     @Resource
     private ApiService apiService;
@@ -32,8 +30,7 @@ public class AdminController {
     @RequestMapping(value = "/deleteteam/{teamId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity removeTeam(@PathVariable Long teamId) {
-        apiService.removeTeam(teamId);
-//        standingsWatchService.updateWatchers();
+        apiService.deleteTeam(teamId);
         return ResponseEntity.ok().build();
     }
 
@@ -41,15 +38,13 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity removeContest(@PathVariable Long contestId) {
         apiService.deleteContest(contestId);
-//        standingsWatchService.updateWatchers();
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/deleteuniversity/{universityId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity removeUniversity(@PathVariable Long universityId) {
-        apiService.removeUniversity(universityId);
-//        standingsWatchService.updateWatchers();
+        apiService.deleteUniversity(universityId);
         return ResponseEntity.ok().build();
     }
 

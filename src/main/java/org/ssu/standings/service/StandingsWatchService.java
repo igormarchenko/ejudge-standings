@@ -41,7 +41,7 @@ public class StandingsWatchService {
 
     private Map<Long, ContestDAO> contests = null;
 
-    private void initContestDataFlow() {
+    public void initContestDataFlow() {
         contests = contestRepository.findAll().stream().collect(Collectors.toMap(ContestDAO::getId, Function.identity()));
         observers = standingsFilesRepository.findAll().stream().collect(Collectors.toMap(Function.identity(), ContestStandingsFileObserver::new));
 

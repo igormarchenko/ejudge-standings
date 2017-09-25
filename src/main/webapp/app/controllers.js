@@ -106,10 +106,6 @@ angular.module('ejudgeStandings.controllers', [])
                 $scope.scrollDisabled = false;
             });
 
-            var interval = setInterval(function () {
-                if(!$scope.loadMore())clearInterval(interval);
-                $scope.$apply();
-            }, 700);
         }
 
         function generateUniversityData(data) {
@@ -171,6 +167,13 @@ angular.module('ejudgeStandings.controllers', [])
             $scope.cancel();
         };
 
+        $scope.discardFilter = function () {
+            $scope.filterApplied = false;
+            $scope.selectedUniversityTypes.length = [];
+            $scope.selectedRegions.length = [];
+            $scope.selectedUniversities.length = [];
+            // $scope.cancel();
+        };
 
         WebSocketService.receive().then(null, null, function (response) {
             angular.forEach(response.updates, function (team) {
