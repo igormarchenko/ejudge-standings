@@ -3,6 +3,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         $scope.teams = initTeams();
         $scope.universities = universityList();
         $scope.selectedTeam = {};
+        $scope.displayedUniversities = [];
 
         var emptyTeam = {
             'name': null,
@@ -23,8 +24,10 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
                 $scope.universities = {};
                 angular.forEach(response.data, function (university) {
                     $scope.universities[university.id] = university;
+                    $scope.displayedUniversities.push(university);
                 });
             });
+
         }
 
         dtColumnDefs = [
@@ -39,10 +42,14 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
             $('#editTeam').modal('show');
         };
 
-
+        $scope.showModalDialogForTeam = function(teamId) {
+            angular.copy($scope.teams[teamId], $scope.selectedTeam);
+            $('#deleteTeamModal').modal('show');
+        };
         $scope.removeTeam = function (teamId) {
-            ejudgeStandingsApiService.removeTeam(teamId).success(function () {
+            ejudgeStandingsApiService.removeTeam(teamId).then(function () {
                 delete $scope.teams[teamId];
+                $('#deleteTeamModal').modal('hide');
             });
         };
 
@@ -58,6 +65,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
     .controller('universityController', function ($scope, ejudgeStandingsApiService, DTOptionsBuilder, DTColumnDefBuilder) {
         $scope.universities = universityList();
         $scope.selectedUniversity = {};
+
         var emptyUniversity = {
             'name': null,
             'region': null,

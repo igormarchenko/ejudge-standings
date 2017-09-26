@@ -5,6 +5,29 @@
         font-size: 13pt;
     }
 </style>
+
+
+<div class="modal" id="deleteTeamModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete team</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure to delete {{selectedTeam.name}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" ng-click="removeTeam(selectedTeam.id)">Delete team</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <table datatable="ng" dt-options="" dt-column-defs="dtColumnDefs" class="row-border hover">
     <thead>
     <tr>
@@ -15,13 +38,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="team in team track by $index">
+    <tr ng-repeat="team in teams track by $index">
         <td>{{team.id}}</td>
         <td>{{team.name}}</td>
         <td>{{team.university.name}}</td>
         <td>
-            <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editTeam(teamDAO.id)"></span>
-            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true" ng-click="removeTeam(teamDAO.id)"></span>
+            <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editTeam(team.id)"></span>
+            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true" ng-click="showModalDialogForTeam(team.id)"></span>
         </td>
     </tr>
     </tbody>
@@ -29,7 +52,7 @@
 
 
 <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editTeam">
-    Add new teamDAO
+    Add new team
 </button>
 
 
@@ -50,10 +73,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="universityDAO" class="col-sm-2 control-label">University</label>
+                        <label for="university" class="col-sm-2 control-label">University</label>
                         <div class="col-sm-10">
-                            <select id="universityDAO" class="form-control" ng-model="selectedTeam.universityDAO"
-                                    ng-options="universityDAO.name for universityDAO in universities track by universityDAO.id">
+                            <select id="university" class="form-control" ng-model="selectedTeam.university"
+                                    ng-options="university.name for university in displayedUniversities | orderBy :'name' track by university.id">
                         </select>
                         </div>
                     </div>

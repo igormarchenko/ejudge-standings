@@ -15,9 +15,9 @@
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="/admin/team">Teams Info</a></li>
+                <li><a href="/admin/teams">Teams Info</a></li>
                 <li><a href="/admin/universities">Universities</a></li>
-                <li><a href="/admin/contestDEPRECATEDS">Contests</a></li>
+                <li><a href="/admin/contests">Contests</a></li>
             </ul>
         </div>
     </div>

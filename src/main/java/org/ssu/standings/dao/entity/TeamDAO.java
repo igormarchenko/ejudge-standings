@@ -17,7 +17,7 @@ public class TeamDAO {
 
     @ManyToOne
     @JoinColumn(name = "university_id")
-    @JsonProperty("universityDAO")
+    @JsonProperty("university")
     private UniversityDAO university;
 
     public TeamDAO() {
