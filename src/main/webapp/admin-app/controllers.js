@@ -109,7 +109,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
     })
     .controller('contestsEditorController', function ($scope, ejudgeStandingsApiService, DTOptionsBuilder, DTColumnDefBuilder) {
         $scope.contests = contestList();
-        $scope.selectedContest = {'is_final': false, 'external_files': []};
+        $scope.selectedContest = {'is_final': false, 'standingsFiles': []};
 
         function contestList() {
             ejudgeStandingsApiService.contestList().then(function (response) {
@@ -126,12 +126,13 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         };
 
         $scope.removeURL = function (index) {
-            delete $scope.selectedContest.external_files[index];
+            delete $scope.selectedContest.standingsFiles[index];
         };
 
         $scope.addUrl = function () {
-            $scope.selectedContest.external_files.push({
-                'is_final': $scope.selectedContest.is_final,
+            console.log($scope.selectedContest.standingsFiles);
+            $scope.selectedContest.standingsFiles.push({
+                'frozen': $scope.selectedContest.is_final,
                 'contest_id': $scope.selectedContest.id
             });
         };
@@ -141,7 +142,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
                 $scope.contests[response.data.id] = {};
                 angular.copy(response.data, $scope.contests[response.data.id]);
                 $('#editContest').modal('hide');
-                angular.copy({'is_final': false, 'external_files': []}, $scope.selectedContest);
+                angular.copy({'is_final': false, 'standingsFiles': []}, $scope.selectedContest);
             });
         };
 

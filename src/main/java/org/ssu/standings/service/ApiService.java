@@ -59,6 +59,14 @@ public class ApiService {
         return universityRepository.save(universityDAO);
     }
 
+    public ContestDAO saveContest(ContestDAO contest) {
+        if(contest.getId() != null)
+            contestRepository.delete(contest.getId());
+        return contestRepository.save(contest);
+//        contestRepository.flush();
+//        return contest;
+    }
+
     public List<ContestDAO> contestList() {
         return contestRepository.findAll();
     }

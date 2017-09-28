@@ -40,8 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class ApiControllerTest {
     private MockMvc mockMvc;
-    //    @Autowired
-//    private FilterChainProxy springSecurityFilterChain;
+
     @Autowired
     private WebApplicationContext context;
 
@@ -63,7 +62,6 @@ public class ApiControllerTest {
 
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
-//                .standaloneSetup(apiController)
                 .apply(springSecurity())
                 .build();
     }

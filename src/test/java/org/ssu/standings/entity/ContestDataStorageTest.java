@@ -303,7 +303,6 @@ public class ContestDataStorageTest {
     }
 
     @Test
-    @Ignore
     public void getFrozenResultsOnFrozenContestTest() {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
         ContestDataStorage storage = new ContestDataStorage();

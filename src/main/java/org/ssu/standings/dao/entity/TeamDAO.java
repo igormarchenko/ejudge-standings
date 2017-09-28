@@ -1,6 +1,7 @@
 package org.ssu.standings.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 import javax.persistence.*;
 
@@ -12,7 +13,9 @@ public class TeamDAO {
     @Column(name = "id")
     @JsonProperty("id")
     private Long id;
+
     @Column(name = "name")
+    @JsonProperty(value = "name", required = true)
     private String name;
 
     @ManyToOne
