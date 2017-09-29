@@ -1,7 +1,12 @@
 package org.ssu.standings.dao.entity;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.IOException;
+
+import static org.hamcrest.Matchers.is;
 
 public class StandingsFileDAOTest {
     @Test
@@ -38,6 +43,27 @@ public class StandingsFileDAOTest {
         Assert.assertNotEquals(standingsFile, inkIsNull);
 
         Assert.assertNotEquals(standingsFile, nullObject);
+    }
+
+
+    @Test
+    public void serializeToJsonTest() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        StandingsFileDAO standingsFileDAO = new StandingsFileDAO.Builder().withContestId(1L).withId(2L).withIsFrozen(true).withLink("Link").build();
+
+
+        String actualJson = mapper.writeValueAsString(standingsFileDAO);
+        Assert.assertThat(mapper.readTree(actualJson).size(), is(4));
+
+        Assert.assertNotNull(mapper.readTree(actualJson).get("id"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("link"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("contest_id"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("frozen"));
+
+        Assert.assertThat(mapper.readTree(actualJson).get("id").asInt(), is(2));
+        Assert.assertThat(mapper.readTree(actualJson).get("link").asText(), is("Link"));
+        Assert.assertThat(mapper.readTree(actualJson).get("contest_id").asInt(), is(1));
+        Assert.assertThat(mapper.readTree(actualJson).get("frozen").asText(), is("true"));
     }
 
 }
