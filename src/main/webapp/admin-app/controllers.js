@@ -42,7 +42,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
             $('#editTeam').modal('show');
         };
 
-        $scope.showModalDialogForTeam = function(teamId) {
+        $scope.showModalDialogForTeam = function (teamId) {
             angular.copy($scope.teams[teamId], $scope.selectedTeam);
             $('#deleteTeamModal').modal('show');
         };
@@ -81,7 +81,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
             });
         }
 
-        $scope.showModalDialogForUniversity = function(universityId) {
+        $scope.showModalDialogForUniversity = function (universityId) {
             angular.copy($scope.universities[universityId], $scope.selectedUniversity);
             $('#deleteUniversityModal').modal('show');
         };

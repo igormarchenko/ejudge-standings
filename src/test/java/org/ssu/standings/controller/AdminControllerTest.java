@@ -256,30 +256,6 @@ public class AdminControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void saveTeamWithoutTeamNameTest() throws Exception {
-        UniversityDAO universityDAO = new UniversityDAO.Builder().withId(1L).withType("Technical").withRegion("North").withName("Test university").build();
-        TeamDAO teamDAO = new TeamDAO.Builder().withId(1L).withUniversity(universityDAO).build();
-        Map<String, TeamDAO> data = new HashMap<>();
-        data.put("data", teamDAO);
-        String teamJSON = new ObjectMapper().writeValueAsString(data);
-        mockMvc.perform(post("/admin/saveteam").content(teamJSON).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void saveTeamWithoutTeamIdTest() throws Exception {
-        UniversityDAO universityDAO = new UniversityDAO.Builder().withId(1L).withType("Technical").withRegion("North").withName("Test university").build();
-        TeamDAO teamDAO = new TeamDAO.Builder().withName("Test").withUniversity(universityDAO).build();
-        Map<String, TeamDAO> data = new HashMap<>();
-        data.put("data", teamDAO);
-        String teamJSON = new ObjectMapper().writeValueAsString(data);
-        mockMvc.perform(post("/admin/saveteam").content(teamJSON).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void saveTeamWithoutUniversityTest() throws Exception {
         TeamDAO teamDAO = new TeamDAO.Builder().withId(1L).withName("Test").build();
         Map<String, TeamDAO> data = new HashMap<>();
@@ -324,39 +300,6 @@ public class AdminControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void saveUniversityWithoutUniversityName() throws Exception {
-        UniversityDAO universityDAO = new UniversityDAO.Builder().withId(1L).withType("Technical").withRegion("North").build();
-        Map<String, UniversityDAO> data = new HashMap<>();
-        data.put("data", universityDAO);
-        String teamJSON = new ObjectMapper().writeValueAsString(data);
-        mockMvc.perform(post("/admin/saveuniversity").content(teamJSON).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void saveUniversityWithoutUniversityType() throws Exception {
-        UniversityDAO universityDAO = new UniversityDAO.Builder().withId(1L).withRegion("North").withName("Test university").build();
-        Map<String, UniversityDAO> data = new HashMap<>();
-        data.put("data", universityDAO);
-        String teamJSON = new ObjectMapper().writeValueAsString(data);
-        mockMvc.perform(post("/admin/saveuniversity").content(teamJSON).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void saveUniversityWithoutUniversityRegion() throws Exception {
-        UniversityDAO universityDAO = new UniversityDAO.Builder().withId(1L).withType("Technical").withName("Test university").build();
-        Map<String, UniversityDAO> data = new HashMap<>();
-        data.put("data", universityDAO);
-        String teamJSON = new ObjectMapper().writeValueAsString(data);
-        mockMvc.perform(post("/admin/saveuniversity").content(teamJSON).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void saveContestForAdminUser() throws Exception {
         ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withIsFinal(true).withName("Test").build();
         Map<String, ContestDAO> data = new HashMap<>();
@@ -386,38 +329,5 @@ public class AdminControllerTest {
         String teamJSON = new ObjectMapper().writeValueAsString(data);
         mockMvc.perform(post("/admin/savecontest").content(teamJSON).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is3xxRedirection());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void saveContestWithoutName() throws Exception {
-        ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withIsFinal(true).build();
-        Map<String, ContestDAO> data = new HashMap<>();
-        data.put("data", contestDAO);
-        String teamJSON = new ObjectMapper().writeValueAsString(data);
-        mockMvc.perform(post("/admin/savecontest").content(teamJSON).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void saveContestWithoutId() throws Exception {
-        ContestDAO contestDAO = new ContestDAO.Builder().withName("Test").withIsFinal(true).build();
-        Map<String, ContestDAO> data = new HashMap<>();
-        data.put("data", contestDAO);
-        String teamJSON = new ObjectMapper().writeValueAsString(data);
-        mockMvc.perform(post("/admin/savecontest").content(teamJSON).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void saveContestWithoutFinal() throws Exception {
-        ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withName("Test").build();
-        Map<String, ContestDAO> data = new HashMap<>();
-        data.put("data", contestDAO);
-        String teamJSON = new ObjectMapper().writeValueAsString(data);
-        mockMvc.perform(post("/admin/savecontest").content(teamJSON).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
     }
 }

@@ -59,6 +59,7 @@ public class ApiService {
         return universityRepository.save(universityDAO);
     }
 
+    @Transactional
     public ContestDAO saveContest(ContestDAO contest) {
         if(contest.getId() != null)
             contestRepository.delete(contest.getId());

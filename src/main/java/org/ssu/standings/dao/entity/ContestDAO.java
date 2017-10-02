@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,9 +24,12 @@ public class ContestDAO {
     @JsonProperty("is_final")
     private Boolean isFinal;
 
-    @OneToMany(targetEntity = StandingsFileDAO.class, mappedBy = "contestId", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty("standingsFiles")
-    private List<StandingsFileDAO> standingsFiles;
+    private List<StandingsFileDAO> standingsFiles = new ArrayList<>();
+
+    public ContestDAO() {
+    }
 
     private ContestDAO(Builder builder) {
         id = builder.id;

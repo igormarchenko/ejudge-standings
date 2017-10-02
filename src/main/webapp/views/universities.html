@@ -66,11 +66,11 @@
                 <h4 class="modal-title" id="editUniversityLabel">University Edit</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" name="universityForm" novalidate>
                     <div class="form-group">
                         <label for="universityName" class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="universityName" ng-model = "selectedUniversity.name" name="universityName" placeholder="University Name">
+                            <input type="text" class="form-control" name = "universityName" id="universityName" ng-model = "selectedUniversity.name" name="universityName" placeholder="University Name" required>
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@
             </div>
             <div class="modal-footer">
 
-                <button type="button" class="btn btn-primary" ng-click="saveSelectedUniversity()">Save changes</button>
+                <button type="button" class="btn btn-primary" ng-disabled="universityForm.$invalid" ng-click="saveSelectedUniversity()">Save changes</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
