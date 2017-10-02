@@ -3,10 +3,7 @@ package org.ssu.standings.config;
 import liquibase.integration.spring.SpringLiquibase;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -26,11 +23,20 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan({"org.ssu.standings.dao"})
 @EnableJpaRepositories("org.ssu.standings.dao.repository")
-@PropertySource("classpath:db.properties")
 public class PersistenceConfig {
+    @Configuration
+    @Profile("default")
+    @PropertySource("classpath:db.properties")
+    class Defaults {}
+
+
+    @Configuration
+    @Profile("test")
+    @PropertySource("classpath:test.properties")
+    class Overrides {}
+
     @Resource
     private Environment environment;
-
 
     @Bean(name = "dataSource")
     DataSource getDataSource() {
@@ -49,7 +55,6 @@ public class PersistenceConfig {
 
         sessionFactory.setPackagesToScan("org.ssu.standings.dao.entity");
         sessionFactory.setHibernateProperties(new Properties() {{
-            setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
             setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
             setProperty("hibernate.globally_quoted_identifiers", "true");
             setProperty("hibernate.show_sql", "true");
@@ -92,6 +97,7 @@ public class PersistenceConfig {
     }
 
     @Bean
+    @Profile("default")
     public SpringLiquibase liquibase() {
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setChangeLog("classpath:liquibase-changeLog.xml");

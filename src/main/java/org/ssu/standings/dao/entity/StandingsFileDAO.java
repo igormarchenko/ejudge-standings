@@ -22,7 +22,7 @@ public class StandingsFileDAO {
 
 
     @ManyToOne
-    @JoinColumn(name = "contest_id")
+    @JoinColumn(name = "contest_id", nullable = false)
     @JsonProperty("contest_id")
     @JsonBackReference
     private ContestDAO contest;
