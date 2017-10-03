@@ -20,12 +20,10 @@ public class StandingsFileDAO {
     @JsonProperty("link")
     private String link;
 
-
-    @ManyToOne
-    @JoinColumn(name = "contest_id")
+    @Column(name = "contest_id")
     @JsonProperty("contest_id")
     @JsonBackReference
-    private ContestDAO contest;
+    private Long contestId;
 
     @Column(name = "is_frozen", nullable = false)
     @JsonProperty("frozen")
@@ -37,7 +35,7 @@ public class StandingsFileDAO {
     private StandingsFileDAO(Builder builder) {
         id = builder.id;
         link = builder.link;
-        contest = builder.contest;
+        contestId = builder.contestId;
         isFrozen = builder.isFrozen;
     }
 
@@ -50,7 +48,7 @@ public class StandingsFileDAO {
     }
 
     public Long getContestId() {
-        return contest.getId();
+        return contestId;
     }
 
     public Boolean getFrozen() {
@@ -68,7 +66,7 @@ public class StandingsFileDAO {
         return new EqualsBuilder()
                 .append(id, that.id)
                 .append(link, that.link)
-                .append(contest, that.contest)
+                .append(contestId, that.contestId)
                 .append(isFrozen, that.isFrozen)
                 .isEquals();
     }
@@ -78,7 +76,7 @@ public class StandingsFileDAO {
         return new HashCodeBuilder(17, 37)
                 .append(id)
                 .append(link)
-                .append(contest)
+                .append(contestId)
                 .toHashCode();
     }
 
@@ -86,7 +84,7 @@ public class StandingsFileDAO {
     public static final class Builder {
         private Long id;
         private String link;
-        private ContestDAO contest;
+        private Long contestId;
         private Boolean isFrozen;
 
         public Builder() {
@@ -95,7 +93,7 @@ public class StandingsFileDAO {
         public Builder(StandingsFileDAO copy) {
             this.id = copy.id;
             this.link = copy.link;
-            this.contest = copy.contest;
+            this.contestId = copy.contestId;
             this.isFrozen = copy.isFrozen;
         }
 
@@ -109,8 +107,8 @@ public class StandingsFileDAO {
             return this;
         }
 
-        public Builder withContestId(ContestDAO contest) {
-            this.contest = contest;
+        public Builder withContest(Long contestId) {
+            this.contestId = contestId;
             return this;
         }
 

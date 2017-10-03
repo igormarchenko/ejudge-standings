@@ -187,8 +187,8 @@ public class ApiServiceTest{
         contestRepository.deleteAll();
         standingsFilesRepository.deleteAll();
         ContestDAO contest = new ContestDAO.Builder().withIsFinal(false).withName("Test contest").build();
-        StandingsFileDAO standingsFileDAOFirst = new StandingsFileDAO.Builder().withLink("test link 1").withIsFrozen(false).withContestId(contest).build();
-        StandingsFileDAO standingsFileDAOSecond = new StandingsFileDAO.Builder().withLink("test link 2").withIsFrozen(true).withContestId(contest).build();
+        StandingsFileDAO standingsFileDAOFirst = new StandingsFileDAO.Builder().withLink("test link 1").withIsFrozen(false).withContest(contest.getId()).build();
+        StandingsFileDAO standingsFileDAOSecond = new StandingsFileDAO.Builder().withLink("test link 2").withIsFrozen(true).withContest(contest.getId()).build();
         Class clazz = contest.getClass();
         Field standingsFilesField = clazz.getDeclaredField("standingsFiles");
         standingsFilesField.setAccessible(true);
@@ -211,6 +211,55 @@ public class ApiServiceTest{
 
         Assert.assertThat(contests.get(0).getStandingsFiles().get(1).getLink(), is("test link 2"));
         Assert.assertThat(contests.get(0).getStandingsFiles().get(1).getFrozen(), is(true));
+    }
+
+    @Test
+    @DatabaseSetup("/database-data.xml")
+    public void updateExcitingContestWithoutDeletionTest() {
+        ContestDAO contest = apiService.contestList().get(0);
+        List<StandingsFileDAO> standingsFiles = contest.getStandingsFiles();
+
+        StandingsFileDAO updatedFirstFile = new StandingsFileDAO.Builder(standingsFiles.get(0)).withIsFrozen(false).withLink("updated link 1").build();
+        StandingsFileDAO updatedSecondFile = new StandingsFileDAO.Builder(standingsFiles.get(1)).withIsFrozen(true).withLink("updated link 2").build();
+
+        contest = new ContestDAO.Builder(contest).withIsFinal(false).withName("Updated test contest").withStandingsFiles(Arrays.asList(updatedFirstFile, updatedSecondFile)).build();
+
+        apiService.saveContest(contest);
+        Assert.assertThat(apiService.contestList().size(), is(1));
+        ContestDAO savedContest = apiService.contestList().get(0);
+        Assert.assertThat(savedContest.getId(), is(contest.getId()));
+        Assert.assertThat(savedContest.getName(), is(contest.getName()));
+        List<StandingsFileDAO> files = standingsFilesRepository.findAll();
+        Assert.assertThat(files.size(), is(2));
+
+        Assert.assertThat(files.get(0).getLink(), is(updatedFirstFile.getLink()));
+        Assert.assertThat(files.get(0).getFrozen(), is(updatedFirstFile.getFrozen()));
+
+        Assert.assertThat(files.get(1).getLink(), is(updatedSecondFile.getLink()));
+        Assert.assertThat(files.get(1).getFrozen(), is(updatedSecondFile.getFrozen()));
+    }
+
+    @Test
+    @DatabaseSetup("/database-data.xml")
+    public void updateExcitingContestWithDeletionStandingsFilesTest() {
+        ContestDAO contest = apiService.contestList().get(0);
+        List<StandingsFileDAO> standingsFiles = contest.getStandingsFiles();
+
+        StandingsFileDAO updatedFirstFile = new StandingsFileDAO.Builder(standingsFiles.get(0)).withIsFrozen(false).withLink("updated link 1").build();
+
+        contest = new ContestDAO.Builder(contest).withIsFinal(false).withName("Updated test contest").withStandingsFiles(Arrays.asList(updatedFirstFile)).build();
+
+        apiService.saveContest(contest);
+        Assert.assertThat(apiService.contestList().size(), is(1));
+        ContestDAO savedContest = apiService.contestList().get(0);
+        Assert.assertThat(savedContest.getId(), is(contest.getId()));
+        Assert.assertThat(savedContest.getName(), is(contest.getName()));
+        List<StandingsFileDAO> files = standingsFilesRepository.findAll();
+        Assert.assertThat(files.size(), is(1));
+
+        Assert.assertThat(files.get(0).getLink(), is(updatedFirstFile.getLink()));
+        Assert.assertThat(files.get(0).getFrozen(), is(updatedFirstFile.getFrozen()));
+
     }
 
     @Test

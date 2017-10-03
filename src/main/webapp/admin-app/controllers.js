@@ -126,14 +126,12 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         };
 
         $scope.removeURL = function (index) {
-            delete $scope.selectedContest.standingsFiles[index];
+            $scope.selectedContest.standingsFiles.splice(index, 1);
         };
 
         $scope.addUrl = function () {
-            console.log($scope.selectedContest.standingsFiles);
             $scope.selectedContest.standingsFiles.push({
-                'frozen': $scope.selectedContest.is_final,
-                'contest_id': $scope.selectedContest.id
+                'frozen': $scope.selectedContest.is_final
             });
         };
 

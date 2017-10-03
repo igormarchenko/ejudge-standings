@@ -57,22 +57,13 @@ public class StandingsWatchService {
         if (contests == null) {
             initContestDataFlow();
         }
-        for (Map.Entry<StandingsFileDAO, ContestStandingsFileObserver> observer: observers.entrySet()) {
+        observers.entrySet().forEach(observer -> {
             try {
                 observer.getValue().update();
                 contestDataStorage.updateContest(observer.getKey().getContestId(), parser.parse(observer.getValue().getContent()).orElseThrow(NullPointerException::new), observer.getKey().getFrozen());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-        }
-//        observers.entrySet().forEach(observer -> {
-//            try {
-//                observer.getValue().update();
-//                contestDataStorage.updateContest(observer.getKey().getContestId(), parser.parse(observer.getValue().getContent()).orElseThrow(NullPointerException::new), observer.getKey().getFrozen());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        });
+        });
     }
 }

@@ -6,5 +6,5 @@ import org.ssu.standings.dao.entity.StandingsFileDAO;
 
 @Repository
 public interface StandingsFilesRepository extends JpaRepository<StandingsFileDAO, Long> {
-
+    void deleteAllByContestId(Long contestId);
 }

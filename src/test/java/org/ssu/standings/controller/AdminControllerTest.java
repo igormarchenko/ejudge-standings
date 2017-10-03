@@ -26,6 +26,7 @@ import org.ssu.standings.service.ApiService;
 import org.ssu.standings.service.StandingsWatchService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -301,7 +302,7 @@ public class AdminControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void saveContestForAdminUser() throws Exception {
-        ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withIsFinal(true).withName("Test").build();
+        ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withIsFinal(true).withStandingsFiles(new ArrayList<>()).withName("Test").build();
         Map<String, ContestDAO> data = new HashMap<>();
         data.put("data", contestDAO);
         String teamJSON = new ObjectMapper().writeValueAsString(data);

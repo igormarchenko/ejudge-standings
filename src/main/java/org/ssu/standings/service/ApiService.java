@@ -6,6 +6,7 @@ import org.ssu.standings.dao.entity.ContestDAO;
 import org.ssu.standings.dao.entity.TeamDAO;
 import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.dao.repository.ContestRepository;
+import org.ssu.standings.dao.repository.StandingsFilesRepository;
 import org.ssu.standings.dao.repository.TeamRepository;
 import org.ssu.standings.dao.repository.UniversityRepository;
 
@@ -23,6 +24,9 @@ public class ApiService {
 
     @Resource
     private UniversityRepository universityRepository;
+
+    @Resource
+    private StandingsFilesRepository standingsFilesRepository;
 
     @Resource
     private StandingsWatchService watchService;
@@ -61,11 +65,9 @@ public class ApiService {
 
     @Transactional
     public ContestDAO saveContest(ContestDAO contest) {
-//        if(contest.getId() != null)
-//            contestRepository.delete(contest.getId());
+        if(contest.getId() != null)
+            standingsFilesRepository.deleteAllByContestId(contest.getId());
         return contestRepository.save(contest);
-//        contestRepository.flush();
-//        return contest;
     }
 
     public List<ContestDAO> contestList() {

@@ -15,7 +15,6 @@
     </tr>
     </thead>
     <tbody>
-    {{contests}}
     <tr ng-repeat="contest in contests track by $index">
         <td>{{contest.id}}</td>
         <td>
@@ -36,8 +35,6 @@
     Add new contest
 </button>
 
-{{selectedContest}}
-
 <div class="modal fade" id="editContest" tabindex="-1" role="dialog" aria-labelledby="editContestLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -56,13 +53,13 @@
                     </div>
 
                     <table>
-                        <thead>
+                        <thead ng-if = "selectedContest.standingsFiles.length">
                             <th class="text-center">URL</th>
                             <th>Frozen</th>
                             <th><th>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="url in selectedContest.standingsFiles track by $index">
+                        <tr ng-repeat="url in selectedContest.standingsFiles track by $index" id="standingsFile{{$index}}">
                             <td class="col-sm-9">
                                 <input type="text" class="form-control" id="universityName + $index"
                                        ng-model="selectedContest.standingsFiles[$index].link"
@@ -80,24 +77,6 @@
                         </tr>
                         </tbody>
                     </table>
-                    <div class="form-group" ng-repeat="url in selectedContest.standingsFiles track by $index"
-                         ng-if="url">
-                        <!--<label for="universityName + $index" class="col-sm-2 control-label">URL</label>-->
-                        <!--<div class="col-sm-7">-->
-                        <!--<input type="text" class="form-control" id="universityName + $index"-->
-                        <!--ng-model="selectedContest.standingsFiles[$index].link" name="standingsFiles[$index]"-->
-                        <!--placeholder="URL">-->
-                        <!--</div>-->
-
-
-                        <div class="col-sm-1">
-                            <!--<input type="checkbox" class="form-check-input" id="final+$index" ng-model="selectedContest.standingsFiles[$index].final">-->
-
-                        </div>
-                        <!--<span class="glyphicon glyphicon-remove glyph col-sm-1" style="font-size:20px; padding-top:5px;"-->
-                        <!--aria-hidden="true" ng-click="removeURL($index)"></span>-->
-                    </div>
-
                 </form>
                 <div class="row">
                     <button type="button" class="btn btn-primary btn-xs pull-right"

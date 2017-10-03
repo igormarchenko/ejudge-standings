@@ -16,6 +16,8 @@ import org.ssu.standings.service.StandingsWatchService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequestMapping("/admin")
 @Controller
@@ -36,6 +38,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity removeTeam(@PathVariable Long teamId) {
         apiService.deleteTeam(teamId);
+        watchService.initContestDataFlow();
         return ResponseEntity.ok().build();
     }
 
@@ -43,6 +46,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity removeContest(@PathVariable Long contestId) {
         apiService.deleteContest(contestId);
+        watchService.initContestDataFlow();
         return ResponseEntity.ok().build();
     }
 
@@ -50,6 +54,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity removeUniversity(@PathVariable Long universityId) {
         apiService.deleteUniversity(universityId);
+        watchService.initContestDataFlow();
         return ResponseEntity.ok().build();
     }
 
@@ -87,15 +92,15 @@ public class AdminController {
     @RequestMapping(value = "/savecontest", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveContest(@RequestBody ObjectNode data) throws JsonProcessingException {
-        ContestDAO contestDAO;
-
+        ContestDAO result;
         try {
-            contestDAO = new ObjectMapper().readValue(data.get("data").toString(), ContestDAO.class);
-            contestDAO = apiService.saveContest(contestDAO);
+            ContestDAO contestDAO = new ObjectMapper().readValue(data.get("data").toString(), ContestDAO.class);
+            contestDAO = new ContestDAO.Builder(contestDAO).withStandingsFiles(contestDAO.getStandingsFiles().stream().filter(Objects::nonNull).collect(Collectors.toList())).build();
+            result = apiService.saveContest(contestDAO);
             watchService.initContestDataFlow();
         } catch (IOException e) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(contestDAO));
+        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(result));
     }
 }

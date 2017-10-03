@@ -52,7 +52,6 @@ public class Contest {
 
     @JsonProperty("results")
     public List<ParticipantResult> getResults() {
-        //TODO: add lazy update
         List<ParticipantResult> results = this.results.values().stream().sorted().collect(Collectors.toList());
         return IntStream.range(0, results.size())
                 .mapToObj(index -> new ParticipantResult.Builder(results.get(index)).withPlace(index + 1).build())
