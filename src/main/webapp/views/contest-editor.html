@@ -5,6 +5,31 @@
         font-size: 13pt;
     }
 </style>
+
+<div class="modal" id="deleteContestModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete contest
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure to delete {{selectedContest.name}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" ng-click="removeContest(selectedContest.id)">Delete
+                    contest
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <table datatable="ng" dt-options="" dt-column-defs="dtColumnDefs" class="row-border hover">
     <thead>
     <tr>
@@ -18,7 +43,7 @@
     <tbody>
     <tr ng-repeat="contest in contests track by $index">
         <td>{{contest.id}}</td>
-        <td><a href = "/contest/{{contest.id}}" target="_blank">{{contest.name}}</a></td>
+        <td><a href="/contest/{{contest.id}}" target="_blank">{{contest.name}}</a></td>
         <td>
             <span ng-repeat="file in contest.standingsFiles track by $index">{{file.link}}<br/></span>
         </td>
@@ -26,14 +51,15 @@
         <td>
             <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editContest(contest.id)"></span>
             <span class="glyphicon glyphicon-remove glyph" aria-hidden="true"
-                  ng-click="removeContest(contest.id)"></span>
+                  ng-click="showModalDialogForContest(contest.id)"></span>
         </td>
     </tr>
     </tbody>
 </table>
 
 
-<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editContest">
+<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editContest"
+        ng-click="clearContest()">
     Add new contest
 </button>
 
@@ -44,10 +70,13 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title col-md-11" id="editContestLabel">
+                    <b>
                     <input type="text" class="form-control"
                            ng-model="selectedContest.name"
                            name="name"
+                           style="font-size:18px;"
                            placeholder="Contest Name">
+                    </b>
                 </h4>
             </div>
 
@@ -89,7 +118,7 @@
                     </table>
                 </form>
                 <div class="row">
-                    <button type="button" class="btn btn-primary btn-xs pull-right"
+                    <button type="button" class="btn btn-info btn-xs pull-right"
                             style="margin-bottom: 3px; margin-right: 11px;" ng-click="addUrl()">Add
                         URL
                     </button>

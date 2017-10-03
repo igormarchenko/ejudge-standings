@@ -11,10 +11,11 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete team</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h4 class="modal-title">Delete team
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </h4>
             </div>
             <div class="modal-body">
                 <p>Are you sure to delete {{selectedTeam.name}}?</p>
@@ -44,14 +45,15 @@
         <td>{{team.university.name}}</td>
         <td>
             <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editTeam(team.id)"></span>
-            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true" ng-click="showModalDialogForTeam(team.id)"></span>
+            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true"
+                  ng-click="showModalDialogForTeam(team.id)"></span>
         </td>
     </tr>
     </tbody>
 </table>
 
 
-<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editTeam">
+<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editTeam" ng-click="clearSelectedTeam()">
     Add new team
 </button>
 
@@ -60,7 +62,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="editTeamLabel">User Edit</h4>
             </div>
             <div class="modal-body">
@@ -68,7 +71,8 @@
                     <div class="form-group">
                         <label for="teamName" class="col-sm-2 control-label">Team Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="teamName" ng-model = "selectedTeam.name" name="teamName" placeholder="Team Name" required>
+                            <input type="text" class="form-control" id="teamName" ng-model="selectedTeam.name"
+                                   name="teamName" placeholder="Team Name" required>
                         </div>
                     </div>
 
@@ -77,14 +81,16 @@
                         <div class="col-sm-10">
                             <select id="university" class="form-control" ng-model="selectedTeam.university"
                                     ng-options="university.name for university in displayedUniversities | orderBy :'name' track by university.id">
-                        </select>
+                            </select>
                         </div>
                     </div>
 
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-disabled="teamForm.$invalid" ng-click="saveSelectedTeam()">Save changes</button>
+                <button type="button" class="btn btn-primary" ng-disabled="teamForm.$invalid"
+                        ng-click="saveSelectedTeam()">Save changes
+                </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>

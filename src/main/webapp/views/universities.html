@@ -10,16 +10,19 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete university</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h4 class="modal-title">Delete university
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </h4>
             </div>
             <div class="modal-body">
                 <p>Are you sure to delete {{selectedUniversity.name}}?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" ng-click="removeUniversity(selectedUniversity.id)">Delete university</button>
+                <button type="button" class="btn btn-danger" ng-click="removeUniversity(selectedUniversity.id)">Delete
+                    university
+                </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -45,15 +48,17 @@
         <td>{{university.type}}</td>
         <td>
 
-            <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editUniversity(university.id)"></span>
-            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true" ng-click="showModalDialogForUniversity(university.id)" ></span>
+            <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true"
+                  ng-click="editUniversity(university.id)"></span>
+            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true"
+                  ng-click="showModalDialogForUniversity(university.id)"></span>
         </td>
     </tr>
     </tbody>
 </table>
 
 
-<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editUniversity">
+<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editUniversity" ng-click="clearSelectedUniversity()">
     Add new university
 </button>
 
@@ -62,7 +67,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="editUniversityLabel">University Edit</h4>
             </div>
             <div class="modal-body">
@@ -70,7 +76,9 @@
                     <div class="form-group">
                         <label for="universityName" class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name = "universityName" id="universityName" ng-model = "selectedUniversity.name" name="universityName" placeholder="University Name" required>
+                            <input type="text" class="form-control" name="universityName" id="universityName"
+                                   ng-model="selectedUniversity.name" name="universityName"
+                                   placeholder="University Name" required>
                         </div>
                     </div>
 
@@ -78,12 +86,12 @@
                         <label for="region" class="col-sm-2 control-label">Region</label>
                         <div class="col-sm-10">
                             <select id="region" class="form-control" ng-model="selectedUniversity.region">
-                                <option value = "Center">Center</option>
-                                <option value = "East">East</option>
-                                <option value = "North">North</option>
-                                <option value = "South">South</option>
-                                <option value = "South-West">South-West</option>
-                                <option value = "West">West</option>
+                                <option value="Center">Center</option>
+                                <option value="East">East</option>
+                                <option value="North">North</option>
+                                <option value="South">South</option>
+                                <option value="South-West">South-West</option>
+                                <option value="West">West</option>
                             </select>
                         </div>
                     </div>
@@ -108,7 +116,9 @@
             </div>
             <div class="modal-footer">
 
-                <button type="button" class="btn btn-primary" ng-disabled="universityForm.$invalid" ng-click="saveSelectedUniversity()">Save changes</button>
+                <button type="button" class="btn btn-primary" ng-disabled="universityForm.$invalid"
+                        ng-click="saveSelectedUniversity()">Save changes
+                </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
