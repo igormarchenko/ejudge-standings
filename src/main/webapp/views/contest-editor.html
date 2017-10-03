@@ -9,6 +9,7 @@
     <thead>
     <tr>
         <th>ID</th>
+        <th>Contest title</th>
         <th>External files</th>
         <th>Is results final</th>
         <th></th>
@@ -17,6 +18,7 @@
     <tbody>
     <tr ng-repeat="contest in contests track by $index">
         <td>{{contest.id}}</td>
+        <td><a href = "/contest/{{contest.id}}" target="_blank">{{contest.name}}</a></td>
         <td>
             <span ng-repeat="file in contest.standingsFiles track by $index">{{file.link}}<br/></span>
         </td>
@@ -41,25 +43,33 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="editContestLabel">Contest Edit</h4>
+                <h4 class="modal-title col-md-11" id="editContestLabel">
+                    <input type="text" class="form-control"
+                           ng-model="selectedContest.name"
+                           name="name"
+                           placeholder="Contest Name">
+                </h4>
             </div>
 
             <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label class="checkbox-inline" style="padding-left: 35px;">
-                            <input type="checkbox" id="is_final" ng-model="selectedContest.is_final" value="true"> Is contest results final?
+                            <input type="checkbox" id="is_final" ng-model="selectedContest.is_final" value="true"> Is
+                            contest results final?
                         </label>
                     </div>
 
                     <table>
-                        <thead ng-if = "selectedContest.standingsFiles.length">
-                            <th class="text-center">URL</th>
-                            <th>Frozen</th>
-                            <th><th>
+                        <thead ng-if="selectedContest.standingsFiles.length">
+                        <th class="text-center">URL</th>
+                        <th>Frozen</th>
+                        <th>
+                        <th>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="url in selectedContest.standingsFiles track by $index" id="standingsFile{{$index}}">
+                        <tr ng-repeat="url in selectedContest.standingsFiles track by $index"
+                            id="standingsFile{{$index}}">
                             <td class="col-sm-9">
                                 <input type="text" class="form-control" id="universityName + $index"
                                        ng-model="selectedContest.standingsFiles[$index].link"
