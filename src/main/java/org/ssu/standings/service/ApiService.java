@@ -61,8 +61,8 @@ public class ApiService {
 
     @Transactional
     public ContestDAO saveContest(ContestDAO contest) {
-        if(contest.getId() != null)
-            contestRepository.delete(contest.getId());
+//        if(contest.getId() != null)
+//            contestRepository.delete(contest.getId());
         return contestRepository.save(contest);
 //        contestRepository.flush();
 //        return contest;

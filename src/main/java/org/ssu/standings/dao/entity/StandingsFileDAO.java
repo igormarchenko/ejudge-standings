@@ -22,7 +22,7 @@ public class StandingsFileDAO {
 
 
     @ManyToOne
-    @JoinColumn(name = "contest_id", nullable = false)
+    @JoinColumn(name = "contest_id")
     @JsonProperty("contest_id")
     @JsonBackReference
     private ContestDAO contest;
@@ -34,12 +34,12 @@ public class StandingsFileDAO {
     public StandingsFileDAO() {
     }
 
-//    private StandingsFileDAO(Builder builder) {
-//        id = builder.id;
-//        link = builder.link;
-//        contest = builder.contest;
-//        isFrozen = builder.isFrozen;
-//    }
+    private StandingsFileDAO(Builder builder) {
+        id = builder.id;
+        link = builder.link;
+        contest = builder.contest;
+        isFrozen = builder.isFrozen;
+    }
 
     public Long getId() {
         return id;
@@ -83,44 +83,44 @@ public class StandingsFileDAO {
     }
 
 
-//    public static final class Builder {
-//        private Long id;
-//        private String link;
-//        private ContestDAO contest;
-//        private Boolean isFrozen;
-//
-//        public Builder() {
-//        }
-//
-//        public Builder(StandingsFileDAO copy) {
-//            this.id = copy.id;
-//            this.link = copy.link;
-//            this.contest = copy.contest;
-//            this.isFrozen = copy.isFrozen;
-//        }
-//
-//        public Builder withId(Long id) {
-//            this.id = id;
-//            return this;
-//        }
-//
-//        public Builder withLink(String link) {
-//            this.link = link;
-//            return this;
-//        }
-//
-//        public Builder withContestId(ContestDAO contest) {
-//            this.contest = contest;
-//            return this;
-//        }
-//
-//        public Builder withIsFrozen(Boolean isFrozen) {
-//            this.isFrozen = isFrozen;
-//            return this;
-//        }
-//
-//        public StandingsFileDAO build() {
-//            return new StandingsFileDAO(this);
-//        }
-//    }
+    public static final class Builder {
+        private Long id;
+        private String link;
+        private ContestDAO contest;
+        private Boolean isFrozen;
+
+        public Builder() {
+        }
+
+        public Builder(StandingsFileDAO copy) {
+            this.id = copy.id;
+            this.link = copy.link;
+            this.contest = copy.contest;
+            this.isFrozen = copy.isFrozen;
+        }
+
+        public Builder withId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withLink(String link) {
+            this.link = link;
+            return this;
+        }
+
+        public Builder withContestId(ContestDAO contest) {
+            this.contest = contest;
+            return this;
+        }
+
+        public Builder withIsFrozen(Boolean isFrozen) {
+            this.isFrozen = isFrozen;
+            return this;
+        }
+
+        public StandingsFileDAO build() {
+            return new StandingsFileDAO(this);
+        }
+    }
 }

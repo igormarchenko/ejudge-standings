@@ -24,7 +24,7 @@ public class ContestDAO {
     @JsonProperty("is_final")
     private Boolean isFinal;
 
-    @OneToMany(mappedBy = "contest")
+    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL)
     @JsonProperty("standingsFiles")
     private List<StandingsFileDAO> standingsFiles = new ArrayList<>();
 
