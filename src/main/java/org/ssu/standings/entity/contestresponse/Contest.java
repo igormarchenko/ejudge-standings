@@ -139,10 +139,6 @@ public class Contest {
             contest.getSubmissions().forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
         }
 
-        public Builder withSubmissions(List<SubmissionNode> submissions) {
-            submissions.forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
-            return this;
-        }
         public Builder(Contest contest) {
             this.contestId = contest.contestId;
             this.name = contest.name;
@@ -154,6 +150,46 @@ public class Contest {
             this.unfogTime = contest.unfogTime;
             this.tasks = new ArrayList<>(contest.tasks);
             this.results = contest.results.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue().clone() ));
+        }
+
+//        public Builder withSubmissions(List<SubmissionNode> submissions) {
+//            submissions.forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
+//            return this;
+//        }
+
+        public Builder withTasks(List<Task> tasks) {
+            this.tasks = tasks.stream().map(task -> new Task.Builder(task).build()).collect(Collectors.toList());
+            return this;
+        }
+
+        public Builder withStopTime(LocalDateTime time) {
+            this.stopTime = time;
+            return this;
+        }
+
+        public Builder withStartTime(LocalDateTime time) {
+            this.startTime = time;
+            return this;
+        }
+
+        public Builder withCurrentTime(LocalDateTime time) {
+            this.currentTime = time;
+            return this;
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withFogTime(Long fogTime) {
+            this.fogTime = fogTime;
+            return this;
+        }
+
+        public Builder withUnFogTime(Long unFogTime) {
+            this.unfogTime = unFogTime;
+            return this;
         }
 
         public Contest build() {

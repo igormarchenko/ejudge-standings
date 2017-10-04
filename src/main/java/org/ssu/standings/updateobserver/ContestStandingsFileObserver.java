@@ -24,12 +24,18 @@ public class ContestStandingsFileObserver {
         }
     }
 
-    public void update() throws IOException {
-        Response response = watcher.getUpdates();
+    public String update() {
+        Response response = null;
+        try {
+            response = watcher.getUpdates();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (response.getLastModified() > lastModified) {
             lastModified = response.getLastModified();
             content = response.getContent();
         }
+        return content;
     }
 
     public String getContent() {
