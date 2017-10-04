@@ -5,6 +5,30 @@
         font-size: 13pt;
     }
 </style>
+
+
+<div class="modal" id="deleteTeamModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete team
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure to delete {{selectedTeam.name}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" ng-click="removeTeam(selectedTeam.id)">Delete team</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <table datatable="ng" dt-options="" dt-column-defs="dtColumnDefs" class="row-border hover">
     <thead>
     <tr>
@@ -15,21 +39,22 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="teamDAO in teamDAOS track by $index">
-        <td>{{teamDAO.id}}</td>
-        <td>{{teamDAO.name}}</td>
-        <td>{{teamDAO.universityDAO.name}}</td>
+    <tr ng-repeat="team in teams track by $index">
+        <td>{{team.id}}</td>
+        <td>{{team.name}}</td>
+        <td>{{team.university.name}}</td>
         <td>
-            <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editTeam(teamDAO.id)"></span>
-            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true" ng-click="removeTeam(teamDAO.id)"></span>
+            <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editTeam(team.id)"></span>
+            <span class="glyphicon glyphicon-remove glyph" aria-hidden="true"
+                  ng-click="showModalDialogForTeam(team.id)"></span>
         </td>
     </tr>
     </tbody>
 </table>
 
 
-<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editTeam">
-    Add new teamDAO
+<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editTeam" ng-click="clearSelectedTeam()">
+    Add new team
 </button>
 
 
@@ -37,32 +62,36 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="editTeamLabel">User Edit</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" name="teamForm">
                     <div class="form-group">
                         <label for="teamName" class="col-sm-2 control-label">Team Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="teamName" ng-model = "selectedTeam.name" name="teamName" placeholder="Team Name">
+                            <input type="text" class="form-control" id="teamName" ng-model="selectedTeam.name"
+                                   name="teamName" placeholder="Team Name" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="universityDAO" class="col-sm-2 control-label">University</label>
+                        <label for="university" class="col-sm-2 control-label">University</label>
                         <div class="col-sm-10">
-                            <select id="universityDAO" class="form-control" ng-model="selectedTeam.universityDAO"
-                                    ng-options="universityDAO.name for universityDAO in universities track by universityDAO.id">
-                        </select>
+                            <select id="university" class="form-control" ng-model="selectedTeam.university"
+                                    ng-options="university.name for university in displayedUniversities | orderBy :'name' track by university.id">
+                            </select>
                         </div>
                     </div>
 
                 </form>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-disabled="teamForm.$invalid"
+                        ng-click="saveSelectedTeam()">Save changes
+                </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="saveSelectedTeam()">Save changes</button>
             </div>
         </div>
     </div>

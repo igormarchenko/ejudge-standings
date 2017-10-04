@@ -13,6 +13,7 @@ public class UniversityDAO implements Cloneable {
     @SequenceGenerator(initialValue = 200, name = "universities_seq_id", sequenceName = "universities_seq_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "universities_seq_id")
     @Column(name = "university_id")
+    @JsonProperty("id")
     private Long id;
 
     @Column(name = "university_name")

@@ -1,6 +1,6 @@
 package org.ssu.standings.dao.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -21,11 +21,12 @@ public class StandingsFileDAO {
     private String link;
 
     @Column(name = "contest_id")
-    @JsonIgnore
+    @JsonProperty("contest_id")
+    @JsonBackReference
     private Long contestId;
 
     @Column(name = "is_frozen", nullable = false)
-    @JsonIgnore
+    @JsonProperty("frozen")
     private Boolean isFrozen;
 
     public StandingsFileDAO() {
@@ -106,7 +107,7 @@ public class StandingsFileDAO {
             return this;
         }
 
-        public Builder withContestId(Long contestId) {
+        public Builder withContest(Long contestId) {
             this.contestId = contestId;
             return this;
         }

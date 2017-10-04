@@ -125,7 +125,7 @@ public class ParticipantResultTest {
         ObjectMapper mapper = new ObjectMapper();
         String actualJson = mapper.writeValueAsString(result);
 
-        Assert.assertThat(mapper.readTree(actualJson).size(), is(4));
+        Assert.assertThat(mapper.readTree(actualJson).size(), is(5));
 
         Assert.assertNotNull(mapper.readTree(actualJson).get("participant"));
         Assert.assertNotNull(mapper.readTree(actualJson).get("results"));

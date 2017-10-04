@@ -114,8 +114,11 @@
             </md-dialog-content>
 
             <md-dialog-actions layout="row">
-                <md-button ng-click="applyFilter()">
+                <md-button ng-click="applyFilter()" class="md-primary">
                     Apply filter
+                </md-button>
+                <md-button ng-click="discardFilter()" class="md-warn">
+                    Clear filter
                 </md-button>
             </md-dialog-actions>
         </form>

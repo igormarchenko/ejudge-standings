@@ -17,6 +17,7 @@ public class UserDAO {
     @Column(name = "pass")
     private String password;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "role")
     private UserRole role;
 

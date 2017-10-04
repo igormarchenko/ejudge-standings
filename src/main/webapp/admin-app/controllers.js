@@ -3,6 +3,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         $scope.teams = initTeams();
         $scope.universities = universityList();
         $scope.selectedTeam = {};
+        $scope.displayedUniversities = [];
 
         var emptyTeam = {
             'name': null,
@@ -23,6 +24,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
                 $scope.universities = {};
                 angular.forEach(response.data, function (university) {
                     $scope.universities[university.id] = university;
+                    $scope.displayedUniversities.push(university);
                 });
             });
 
@@ -35,15 +37,22 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
             DTColumnDefBuilder.newColumnDef(4).notSortable()
         ];
 
+        $scope.clearSelectedTeam = function () {
+            $scope.selectedTeam = {};
+        };
         $scope.editTeam = function (teamId) {
             angular.copy($scope.teams[teamId], $scope.selectedTeam);
             $('#editTeam').modal('show');
         };
 
-
+        $scope.showModalDialogForTeam = function (teamId) {
+            angular.copy($scope.teams[teamId], $scope.selectedTeam);
+            $('#deleteTeamModal').modal('show');
+        };
         $scope.removeTeam = function (teamId) {
-            ejudgeStandingsApiService.removeTeam(teamId).success(function () {
+            ejudgeStandingsApiService.removeTeam(teamId).then(function () {
                 delete $scope.teams[teamId];
+                $('#deleteTeamModal').modal('hide');
             });
         };
 
@@ -59,6 +68,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
     .controller('universityController', function ($scope, ejudgeStandingsApiService, DTOptionsBuilder, DTColumnDefBuilder) {
         $scope.universities = universityList();
         $scope.selectedUniversity = {};
+
         var emptyUniversity = {
             'name': null,
             'region': null,
@@ -74,6 +84,14 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
             });
         }
 
+        $scope.clearSelectedUniversity = function () {
+            $scope.selectedUniversity = {};
+        };
+
+        $scope.showModalDialogForUniversity = function (universityId) {
+            angular.copy($scope.universities[universityId], $scope.selectedUniversity);
+            $('#deleteUniversityModal').modal('show');
+        };
         $scope.editUniversity = function (universityId) {
             angular.copy($scope.universities[universityId], $scope.selectedUniversity);
             $('#editUniversity').modal('show');
@@ -91,13 +109,14 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         $scope.removeUniversity = function (universityId) {
             ejudgeStandingsApiService.removeUniversity(universityId).then(function () {
                 delete $scope.universities[universityId];
+                $('#deleteUniversityModal').modal('hide');
             });
         };
 
     })
     .controller('contestsEditorController', function ($scope, ejudgeStandingsApiService, DTOptionsBuilder, DTColumnDefBuilder) {
         $scope.contests = contestList();
-        $scope.selectedContest = {'is_final': false, 'external_files': []};
+        $scope.selectedContest = {'is_final': false, 'standingsFiles': []};
 
         function contestList() {
             ejudgeStandingsApiService.contestList().then(function (response) {
@@ -108,19 +127,26 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
             });
         }
 
+        $scope.showModalDialogForContest = function (contestId) {
+            angular.copy($scope.contests[contestId], $scope.selectedContest);
+            $('#deleteContestModal').modal('show');
+        };
+
+        $scope.clearContest = function () {
+            $scope.selectedContest = {};
+        };
         $scope.editContest = function (contestId) {
             angular.copy($scope.contests[contestId], $scope.selectedContest);
             $('#editContest').modal('show');
         };
 
         $scope.removeURL = function (index) {
-            delete $scope.selectedContest.external_files[index];
+            $scope.selectedContest.standingsFiles.splice(index, 1);
         };
 
         $scope.addUrl = function () {
-            $scope.selectedContest.external_files.push({
-                'is_final': $scope.selectedContest.is_final,
-                'contest_id': $scope.selectedContest.id
+            $scope.selectedContest.standingsFiles.push({
+                'frozen': $scope.selectedContest.is_final
             });
         };
 
@@ -129,13 +155,14 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
                 $scope.contests[response.data.id] = {};
                 angular.copy(response.data, $scope.contests[response.data.id]);
                 $('#editContest').modal('hide');
-                angular.copy({'is_final': false, 'external_files': []}, $scope.selectedContest);
+                angular.copy({'is_final': false, 'standingsFiles': []}, $scope.selectedContest);
             });
         };
 
         $scope.removeContest = function (contestId) {
             ejudgeStandingsApiService.removeContest(contestId).then(function () {
                 delete $scope.contests[contestId];
+                $('#deleteContestModal').modal('hide');
             });
         };
 

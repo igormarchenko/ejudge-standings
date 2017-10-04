@@ -17,9 +17,6 @@ angular.module('ejudgeStandings',
     }).when("/contest/:contestId", {
         templateUrl: "/views/contest-result.jsp",
         controller: "resultsController"
-    }).when("/socket/:contestId", {
-        templateUrl: "/views/socket.html",
-        controller: "webSocketController"
     }).when("/baylor-export/:contestId", {
         templateUrl: "/views/baylor.html",
         controller: "baylorExportController"
