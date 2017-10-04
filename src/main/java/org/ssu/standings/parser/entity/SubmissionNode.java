@@ -50,6 +50,10 @@ public class SubmissionNode implements Cloneable{
         passedMode = builder.passedMode;
     }
 
+    public void setProblemId(Long problemId) {
+        this.problemId = problemId;
+    }
+
     public Long getId() {
         return id;
     }

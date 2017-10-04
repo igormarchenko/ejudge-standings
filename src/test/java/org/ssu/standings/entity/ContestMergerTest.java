@@ -22,11 +22,6 @@ public class ContestMergerTest {
                     "<user id=\"16\" name=\"KNEU_Binary\"/>\n" +
                     "<user id=\"17\" name=\"KISIT_DEV\"/>\n" +
                     "<user id=\"18\" name=\"TLKPI_BUGS\"/>\n" +
-                    "<user id=\"23\" name=\"TLKPI_LOREM_IPSUM\"/>\n" +
-                    "<user id=\"34\" name=\"KNEU_VARD\"/>\n" +
-                    "<user id=\"43\" name=\"KNEU_Dreamteam\"/>\n" +
-                    "<user id=\"47\" name=\"KISIT_code_villain\"/>\n" +
-                    "<user id=\"48\" name=\"KISIT_Dwa_bayta\"/>\n" +
                     "</users>\n" +
                     "<problems>\n" +
                     "<problem id=\"1\" short_name=\"A\" long_name=\"task 1\"/>\n" +
@@ -39,14 +34,14 @@ public class ContestMergerTest {
                     "<language id=\"2\" short_name=\"gcc\" long_name=\"GNU C 4.9.2\"/>\n" +
                     "</languages>\n" +
                     "<runs>\n" +
-                    "<run run_id=\"24\" time=\"13\" run_uuid=\"886355de-c5d9-4efc-a347-15f161fd0799\" status=\"SE\" user_id=\"16\" prob_id=\"1\" lang_id=\"3\" test=\"0\" nsec=\"673947000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"24\" time=\"13\" run_uuid=\"886355de-c5d9-4efc-a347-15f161fd0799\" status=\"SE\" user_id=\"16\" prob_id=\"2\" lang_id=\"3\" test=\"0\" nsec=\"673947000\" passed_mode=\"yes\"/>\n" +
                     "<run run_id=\"25\" time=\"24\" run_uuid=\"9ce4c377-cd8c-470f-8099-79ddae86d828\" status=\"WA\" user_id=\"17\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"394133000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"26\" time=\"30\" run_uuid=\"8c99b7ba-645a-4fc2-8c23-f3fc6b7922eb\" status=\"OK\" user_id=\"34\" prob_id=\"1\" lang_id=\"3\" test=\"12\" nsec=\"399036000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"27\" time=\"33\" run_uuid=\"4261b31e-69c3-4061-b38a-c5a57b48c47f\" status=\"WA\" user_id=\"18\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"138566000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"28\" time=\"42\" run_uuid=\"0726b0d8-69a8-44c6-8b91-b83bb1e41874\" status=\"WA\" user_id=\"43\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"102742000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"29\" time=\"51\" run_uuid=\"25a79043-d404-40ce-b757-fb25fcedee44\" status=\"CE\" user_id=\"47\" prob_id=\"1\" lang_id=\"3\" test=\"0\" nsec=\"964440000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"30\" time=\"55\" run_uuid=\"7ca22388-5907-4ea8-80b9-308e57e66feb\" status=\"CE\" user_id=\"23\" prob_id=\"1\" lang_id=\"3\" test=\"0\" nsec=\"42306000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"31\" time=\"56\" run_uuid=\"7fb57089-435d-45f5-94d2-b195e139a0ce\" status=\"WA\" user_id=\"48\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"86718000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"26\" time=\"30\" run_uuid=\"8c99b7ba-645a-4fc2-8c23-f3fc6b7922eb\" status=\"OK\" user_id=\"18\" prob_id=\"2\" lang_id=\"3\" test=\"12\" nsec=\"399036000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"27\" time=\"33\" run_uuid=\"4261b31e-69c3-4061-b38a-c5a57b48c47f\" status=\"WA\" user_id=\"16\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"138566000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"28\" time=\"42\" run_uuid=\"0726b0d8-69a8-44c6-8b91-b83bb1e41874\" status=\"WA\" user_id=\"18\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"102742000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"29\" time=\"51\" run_uuid=\"25a79043-d404-40ce-b757-fb25fcedee44\" status=\"WA\" user_id=\"18\" prob_id=\"1\" lang_id=\"3\" test=\"0\" nsec=\"964440000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"30\" time=\"55\" run_uuid=\"7ca22388-5907-4ea8-80b9-308e57e66feb\" status=\"OK\" user_id=\"16\" prob_id=\"1\" lang_id=\"3\" test=\"0\" nsec=\"42306000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"31\" time=\"56\" run_uuid=\"7fb57089-435d-45f5-94d2-b195e139a0ce\" status=\"OK\" user_id=\"18\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"86718000\" passed_mode=\"yes\"/>\n" +
                     "</runs>\n" +
                     "</runlog>\n",
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -56,11 +51,6 @@ public class ContestMergerTest {
                     "<user id=\"16\" name=\"KNEU_Binary\"/>\n" +
                     "<user id=\"17\" name=\"KISIT_DEV\"/>\n" +
                     "<user id=\"18\" name=\"TLKPI_BUGS\"/>\n" +
-                    "<user id=\"23\" name=\"TLKPI_LOREM_IPSUM\"/>\n" +
-                    "<user id=\"34\" name=\"KNEU_VARD\"/>\n" +
-                    "<user id=\"43\" name=\"KNEU_Dreamteam\"/>\n" +
-                    "<user id=\"47\" name=\"KISIT_code_villain\"/>\n" +
-                    "<user id=\"48\" name=\"KISIT_Dwa_bayta\"/>\n" +
                     "</users>\n" +
                     "<problems>\n" +
                     "<problem id=\"1\" short_name=\"A\" long_name=\"task 1-1\"/>\n" +
@@ -73,14 +63,14 @@ public class ContestMergerTest {
                     "<language id=\"2\" short_name=\"gcc\" long_name=\"GNU C 4.9.2\"/>\n" +
                     "</languages>\n" +
                     "<runs>\n" +
-                    "<run run_id=\"24\" time=\"13\" run_uuid=\"886355de-c5d9-4efc-a347-15f161fd0799\" status=\"SE\" user_id=\"16\" prob_id=\"1\" lang_id=\"3\" test=\"0\" nsec=\"673947000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"25\" time=\"24\" run_uuid=\"9ce4c377-cd8c-470f-8099-79ddae86d828\" status=\"WA\" user_id=\"17\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"394133000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"26\" time=\"30\" run_uuid=\"8c99b7ba-645a-4fc2-8c23-f3fc6b7922eb\" status=\"WA\" user_id=\"34\" prob_id=\"1\" lang_id=\"3\" test=\"12\" nsec=\"399036000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"27\" time=\"33\" run_uuid=\"4261b31e-69c3-4061-b38a-c5a57b48c47f\" status=\"OK\" user_id=\"18\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"138566000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"28\" time=\"42\" run_uuid=\"0726b0d8-69a8-44c6-8b91-b83bb1e41874\" status=\"WA\" user_id=\"43\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"102742000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"29\" time=\"51\" run_uuid=\"25a79043-d404-40ce-b757-fb25fcedee44\" status=\"CE\" user_id=\"47\" prob_id=\"1\" lang_id=\"3\" test=\"0\" nsec=\"964440000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"30\" time=\"55\" run_uuid=\"7ca22388-5907-4ea8-80b9-308e57e66feb\" status=\"OK\" user_id=\"23\" prob_id=\"1\" lang_id=\"3\" test=\"0\" nsec=\"42306000\" passed_mode=\"yes\"/>\n" +
-                    "<run run_id=\"31\" time=\"56\" run_uuid=\"7fb57089-435d-45f5-94d2-b195e139a0ce\" status=\"WA\" user_id=\"48\" prob_id=\"1\" lang_id=\"3\" test=\"7\" nsec=\"86718000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"24\" time=\"13\" run_uuid=\"886355de-c5d9-4efc-a347-15f161fd0799\" status=\"OK\" user_id=\"16\" prob_id=\"1\" lang_id=\"3\" test=\"0\" nsec=\"673947000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"25\" time=\"24\" run_uuid=\"9ce4c377-cd8c-470f-8099-79ddae86d828\" status=\"OK\" user_id=\"17\" prob_id=\"2\" lang_id=\"3\" test=\"7\" nsec=\"394133000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"26\" time=\"30\" run_uuid=\"8c99b7ba-645a-4fc2-8c23-f3fc6b7922eb\" status=\"WA\" user_id=\"18\" prob_id=\"1\" lang_id=\"3\" test=\"12\" nsec=\"399036000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"27\" time=\"33\" run_uuid=\"4261b31e-69c3-4061-b38a-c5a57b48c47f\" status=\"OK\" user_id=\"16\" prob_id=\"2\" lang_id=\"3\" test=\"7\" nsec=\"138566000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"28\" time=\"42\" run_uuid=\"0726b0d8-69a8-44c6-8b91-b83bb1e41874\" status=\"WA\" user_id=\"18\" prob_id=\"3\" lang_id=\"3\" test=\"7\" nsec=\"102742000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"29\" time=\"51\" run_uuid=\"25a79043-d404-40ce-b757-fb25fcedee44\" status=\"WA\" user_id=\"16\" prob_id=\"3\" lang_id=\"3\" test=\"0\" nsec=\"964440000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"30\" time=\"55\" run_uuid=\"7ca22388-5907-4ea8-80b9-308e57e66feb\" status=\"WA\" user_id=\"18\" prob_id=\"2\" lang_id=\"3\" test=\"0\" nsec=\"42306000\" passed_mode=\"yes\"/>\n" +
+                    "<run run_id=\"31\" time=\"56\" run_uuid=\"7fb57089-435d-45f5-94d2-b195e139a0ce\" status=\"WA\" user_id=\"17\" prob_id=\"3\" lang_id=\"3\" test=\"7\" nsec=\"86718000\" passed_mode=\"yes\"/>\n" +
                     "</runs>\n" +
                     "</runlog>\n");
 
@@ -117,6 +107,17 @@ public class ContestMergerTest {
         Assert.assertThat(result.getFogTime(), is(720L));
         Assert.assertThat(result.getUnfogTime(), is(7200L));
 
+        Assert.assertThat(result.getResults().get(0).solvedProblems(), is(3));
+        Assert.assertThat(result.getResults().get(0).getResults().size(), is(5));
+        Assert.assertThat(result.getResults().get(0).getParticipant().getId(), is(16L));
+
+        Assert.assertThat(result.getResults().get(1).solvedProblems(), is(2));
+        Assert.assertThat(result.getResults().get(1).getResults().size(), is(5));
+        Assert.assertThat(result.getResults().get(1).getParticipant().getId(), is(18L));
+
+        Assert.assertThat(result.getResults().get(2).solvedProblems(), is(1));
+        Assert.assertThat(result.getResults().get(2).getResults().size(), is(3));
+        Assert.assertThat(result.getResults().get(2).getParticipant().getId(), is(17L));
 //        Assert.assertThat(result.getResults().size(), is(8));
 
     }

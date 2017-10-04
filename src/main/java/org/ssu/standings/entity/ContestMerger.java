@@ -5,11 +5,13 @@ import org.ssu.standings.dao.entity.TeamDAO;
 import org.ssu.standings.entity.contestresponse.Contest;
 import org.ssu.standings.entity.contestresponse.Task;
 import org.ssu.standings.parser.entity.ContestNode;
+import org.ssu.standings.parser.entity.SubmissionNode;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -33,6 +35,18 @@ public class ContestMerger {
         Long fogTime = currentContest.getFogTime();
         Long unFogTime = currentContest.getUnfogTime();
 
+        Function<Contest, List<SubmissionNode>> getParticipantResultsFromContest = (contest) -> contest
+                .getResults()
+                .stream()
+                .flatMap(result -> result.getResults().values().stream())
+                .flatMap(taskResult -> taskResult.getSubmissions().stream())
+                .peek(submit -> submit.setProblemId(contest.getContestId() * 100 + submit.getProblemId()))
+                .collect(Collectors.toList());
+
+        List<SubmissionNode> submissions = contestList.stream().flatMap(contest -> getParticipantResultsFromContest.apply(contest).stream()).collect(Collectors.toList());
+
+//        contestList.get(0).getResults().get(0).getResults().values().stream().collect(Collectors.toList()).get(0).getSubmissions();
+
         return new Contest.Builder(contests.get(0), teams)
                 .withName(name)
                 .withTasks(tasks)
@@ -41,6 +55,7 @@ public class ContestMerger {
                 .withCurrentTime(currentTime)
                 .withFogTime(fogTime)
                 .withUnFogTime(unFogTime)
+                .withSubmissions(submissions)
                 .build();
     }
 }

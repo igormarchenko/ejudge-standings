@@ -152,10 +152,10 @@ public class Contest {
             this.results = contest.results.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue().clone() ));
         }
 
-//        public Builder withSubmissions(List<SubmissionNode> submissions) {
-//            submissions.forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
-//            return this;
-//        }
+        public Builder withSubmissions(List<SubmissionNode> submissions) {
+            submissions.forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
+            return this;
+        }
 
         public Builder withTasks(List<Task> tasks) {
             this.tasks = tasks.stream().map(task -> new Task.Builder(task).build()).collect(Collectors.toList());
