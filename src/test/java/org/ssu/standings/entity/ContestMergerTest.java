@@ -118,7 +118,6 @@ public class ContestMergerTest {
         Assert.assertThat(result.getResults().get(2).solvedProblems(), is(1));
         Assert.assertThat(result.getResults().get(2).getResults().size(), is(3));
         Assert.assertThat(result.getResults().get(2).getParticipant().getId(), is(17L));
-//        Assert.assertThat(result.getResults().size(), is(8));
 
     }
 

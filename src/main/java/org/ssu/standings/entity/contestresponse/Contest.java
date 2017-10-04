@@ -58,11 +58,18 @@ public class Contest {
                 .collect(Collectors.toList());
     }
 
-
+    @JsonIgnore
     public Map<Long, ParticipantResult> getTeamsResults(Collection<Long> teams) {
         return teams.stream().map(teamId -> results.get(teamId)).collect(Collectors.toMap(team -> team.getParticipant().getId(), team -> team));
     }
 
+    @JsonIgnore
+    public List<SubmissionNode> getSubmissions() {
+        return results.values().stream()
+                .flatMap(participantResult -> participantResult.getResults().values().stream())
+                .flatMap(taskResult -> taskResult.getSubmissions().stream())
+                .collect(Collectors.toList());
+    }
     public Contest updateSubmissions(List<SubmissionNode> newSubmissions) {
         newSubmissions.forEach(submit -> {
             results.get(submit.getUserId()).pushSubmit(submit);

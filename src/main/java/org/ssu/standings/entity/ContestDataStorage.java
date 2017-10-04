@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -46,35 +47,31 @@ public class ContestDataStorage {
     }
 
     private ContestSubmissionsChanges getDifferenceWithContest(Long contestId, Contest contest) {
-        return new ContestSubmissionsChanges(new ArrayList<>(), new ArrayList<>());
+        Map<String, SubmissionNode> submissions = getContestSubmissions(contestId).stream().collect(Collectors.toMap(submit -> submit.getRunUuid(), submit -> submit));
 
-//        Map<String, SubmissionNode> submissions = getContestSubmissions(contestId);
-//        Function<Predicate<SubmissionNode>, List<SubmissionNode>> filterSubmissions = (predicate) -> contest.getSubmissions()
-//                .stream()
-//                .filter(predicate)
-//                .collect(Collectors.toList());
-//
-//        List<SubmissionNode> newSubmissions = filterSubmissions.apply(submit -> !submissions.containsKey(submit.getRunUuid()));
-//        List<SubmissionNode> rejudgedSubmissions = filterSubmissions.apply(submit -> submissions.containsKey(submit.getRunUuid()) &&
-//                !submit.equals(submissions.get(submit.getRunUuid())));
-//
-//        return new ContestSubmissionsChanges(newSubmissions, rejudgedSubmissions);
+        Function<Predicate<SubmissionNode>, List<SubmissionNode>> filterSubmissions = (predicate) -> contest.getSubmissions()
+                .stream()
+                .filter(predicate)
+                .collect(Collectors.toList());
+
+        List<SubmissionNode> newSubmissions = filterSubmissions.apply(submit -> !submissions.containsKey(submit.getRunUuid()));
+        List<SubmissionNode> rejudgedSubmissions = filterSubmissions.apply(submit -> submissions.containsKey(submit.getRunUuid()) &&
+                !submit.equals(submissions.get(submit.getRunUuid())));
+
+        return new ContestSubmissionsChanges(newSubmissions, rejudgedSubmissions);
     }
 
     private void addContest(Long contestId, Contest contest) {
         contestData.put(contestId, new Contest.Builder(contest).build());
     }
 
-    private Map<String, SubmissionNode> getContestSubmissions(Long contestId) {
-        return contestData.get(contestId).getResults()
-                .stream()
-                .flatMap(result -> result.getResults().values().stream().flatMap(res -> res.getSubmissions().stream()))
-                .collect(Collectors.toMap(SubmissionNode::getRunUuid, Function.identity()));
+    private List<SubmissionNode> getContestSubmissions(Long contestId) {
+        return contestData.get(contestId).getSubmissions();
     }
 
     public List<SubmissionNode> getFrozenSubmits(Long contestId) {
         Contest contest = contestData.get(contestId);
-        return getContestSubmissions(contestId).values().stream()
+        return getContestSubmissions(contestId).stream()
                 .filter(submit -> isSubmitFrozen.test(contest, submit))
                 .collect(Collectors.toList());
     }
@@ -85,7 +82,7 @@ public class ContestDataStorage {
         Contest.Builder contest = new Contest.Builder(storedContest);
 
         if (isContestFrozen.get(contestId)) {
-            List<SubmissionNode> nodes = getContestSubmissions(contestId).values().stream()
+            List<SubmissionNode> nodes = getContestSubmissions(contestId).stream()
                     .filter(submit -> isSubmitFrozen.test(storedContest, submit))
 //                    .map(submit -> new SubmissionNode.Builder(submit).withStatus(SubmissionStatus.FROZEN).build())
 //                    .map(SubmissionNode::clone)

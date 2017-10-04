@@ -36,17 +36,37 @@ public class ContestDataStorageTest {
         return new DefaultObjects().getDefaultMockedContestBuilder();
     }
 
+    private ContestDataStorage createStorage() {
+        ContestDataStorage storage = new ContestDataStorage();
+        Class aClass = ContestDataStorage.class;
+        Field mergerField = null;
+        try {
+            mergerField = aClass.getDeclaredField("contestMerger");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        mergerField.setAccessible(true);
+        try {
+            mergerField.set(storage, new ContestMerger());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return storage;
+    }
+
     @Test
     public void addNewContestTest() throws NoSuchFieldException, IllegalAccessException {
 
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
+        Class aClass = ContestDataStorage.class;
+
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         Assert.assertNull(storage.getContestData(contest.getContestId()));
         storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
         Assert.assertNotNull(storage.getContestData(contest.getContestId()));
 
-        Class aClass = ContestDataStorage.class;
+
 
         Field contestInStorageField = aClass.getDeclaredField("contestData");
         contestInStorageField.setAccessible(true);
@@ -66,10 +86,10 @@ public class ContestDataStorageTest {
     @Test
     public void setContestFrozenStatusTest() throws NoSuchFieldException, IllegalAccessException {
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
-        storage.setTeams(new MockedObjectGenerator().getTeamList());
+        ContestDataStorage storage = createStorage();
         Class aClass = ContestDataStorage.class;
 
+        storage.setTeams(new MockedObjectGenerator().getTeamList());
         Field contestInStorageField = aClass.getDeclaredField("contestData");
         contestInStorageField.setAccessible(true);
         Field isContestFrozenField = aClass.getDeclaredField("isContestFrozen");
@@ -92,9 +112,10 @@ public class ContestDataStorageTest {
     }
 
     @Test
-    public void updateContestNameTest() {
+    public void updateContestNameTest() throws IllegalAccessException, NoSuchFieldException {
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
+
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withName("Test contest updated title").build();
@@ -103,9 +124,10 @@ public class ContestDataStorageTest {
     }
 
     @Test
-    public void updateContestFogTimeTest() {
+    public void updateContestFogTimeTest() throws IllegalAccessException, NoSuchFieldException {
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
+
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withFogTime(110L).build();
@@ -115,9 +137,10 @@ public class ContestDataStorageTest {
     }
 
     @Test
-    public void updateContestDurationTest() {
+    public void updateContestDurationTest() throws IllegalAccessException, NoSuchFieldException {
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
+
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withDuration(1100L).build();
@@ -127,9 +150,11 @@ public class ContestDataStorageTest {
     }
 
     @Test
-    public void updateContestUnfogTimeTest() {
+    public void updateContestUnfogTimeTest() throws IllegalAccessException, NoSuchFieldException {
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
+        Class aClass = ContestDataStorage.class;
+
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withUnfogTime(310L).build();
@@ -142,7 +167,7 @@ public class ContestDataStorageTest {
     @Test
     public void updateContestCurrentTimeTest() {
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withCurrentTime(LocalDateTime.of(2013, 2, 15, 4, 57, 10)).build();
@@ -154,7 +179,7 @@ public class ContestDataStorageTest {
     @Test
     public void updateContestStartTimeTest() {
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withStartTime(LocalDateTime.of(2017, 3, 25, 2, 57, 10)).build();
@@ -166,7 +191,7 @@ public class ContestDataStorageTest {
     @Test
     public void updateContestStopTimeTest() {
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withStopTime(LocalDateTime.of(2017, 3, 25, 12, 57, 10)).build();
@@ -181,7 +206,7 @@ public class ContestDataStorageTest {
         doNothing().when(eventHandler).publishEvent(any());
 
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         Class aClass = ContestDataStorage.class;
         Field field = aClass.getDeclaredField("contestUpdatesEventProducer");
         field.setAccessible(true);
@@ -212,7 +237,7 @@ public class ContestDataStorageTest {
         doNothing().when(eventHandler).publishEvent(any());
 
         ContestNode contest = getContestNode();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         Class aClass = ContestDataStorage.class;
         Field field = aClass.getDeclaredField("contestUpdatesEventProducer");
         field.setAccessible(true);
@@ -238,7 +263,7 @@ public class ContestDataStorageTest {
     @Test
     public void updateTeamInfoTest() {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
         Assert.assertThat(storage.getContestData(contestNode.getContestId()).getResults().size(), is(new DefaultObjects().getParticipantNodes().size()));
@@ -256,7 +281,7 @@ public class ContestDataStorageTest {
     @Test
     public void addNewTeamTest() {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
         Assert.assertThat(storage.getContestData(contestNode.getContestId()).getResults().size(), is(new DefaultObjects().getParticipantNodes().size()));
@@ -271,7 +296,7 @@ public class ContestDataStorageTest {
     @Test
     public void updateProblemInfoTest() {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
         List<ProblemNode> problemNodes = contestNode.getProblems();
@@ -287,7 +312,7 @@ public class ContestDataStorageTest {
     @Test
     public void addNewProblemTest() {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
         List<ProblemNode> problemNodes = new ArrayList<>(contestNode.getProblems());
@@ -306,7 +331,7 @@ public class ContestDataStorageTest {
     @Ignore
     public void getFrozenResultsOnFrozenContestTest() {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
 
@@ -328,7 +353,7 @@ public class ContestDataStorageTest {
     @Test
     public void getFrozenResultsOnUnfrozenContestTest() {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
-        ContestDataStorage storage = new ContestDataStorage();
+        ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), false);
         Assert.assertThat(storage.getFrozenSubmits(1L).size(), is(3));
