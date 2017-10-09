@@ -18,11 +18,11 @@ public class DefaultObjects {
     );
 
     private List<ParticipantNode> participantNodes = Arrays.asList(
-            new MockedObjectGenerator().defaultParticipantNode().withId(1L).withName("Test team 1").build(),
-            new MockedObjectGenerator().defaultParticipantNode().withId(2L).withName("Test team 2").build(),
-            new MockedObjectGenerator().defaultParticipantNode().withId(3L).withName("Test team 3").build(),
-            new MockedObjectGenerator().defaultParticipantNode().withId(4L).withName("Test team 4").build(),
-            new MockedObjectGenerator().defaultParticipantNode().withId(5L).withName("Test team 5").build()
+            new MockedObjectGenerator().defaultParticipantNode().withId(1L).withName("team 1").build(),
+            new MockedObjectGenerator().defaultParticipantNode().withId(2L).withName("team 2").build(),
+            new MockedObjectGenerator().defaultParticipantNode().withId(3L).withName("team 3").build(),
+            new MockedObjectGenerator().defaultParticipantNode().withId(4L).withName("team 4").build(),
+            new MockedObjectGenerator().defaultParticipantNode().withId(5L).withName("team 5").build()
     );
 
 

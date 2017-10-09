@@ -32,18 +32,18 @@ public class BaylorExportServiceTest {
 
     @Before
     public void setUp() {
-        Contest contest = new Contest.Builder(new DefaultObjects().getContestNode(), new MockedObjectGenerator().getTeamList()).build();
+        Contest contest = new Contest.Builder(new DefaultObjects().getContestNode()).withTeamInfo(new MockedObjectGenerator().getTeamList()).build();
         when(storage.getContestData(anyLong())).thenReturn(contest);
     }
 
     @Test
     public void getBaylorResultsForContest() throws NoSuchFieldException, IllegalAccessException {
         String baylorFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><icpc>\n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291576\" TotalTime=\"\" TeamName=\"Test team 1\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291517\" TotalTime=\"\" TeamName=\"Test team 2\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291528\" TotalTime=\"\" TeamName=\"Test team 3\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290491\" TotalTime=\"\" TeamName=\"Test team 4\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290492\" TotalTime=\"\" TeamName=\"Test team 5\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291576\" TotalTime=\"\" TeamName=\"team 1\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291517\" TotalTime=\"\" TeamName=\"team 2\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291528\" TotalTime=\"\" TeamName=\"team 3\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290491\" TotalTime=\"\" TeamName=\"team 4\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290492\" TotalTime=\"\" TeamName=\"team 5\" /> \n" +
                 "</icpc>";
         Long contestId = 1L;
 
@@ -52,11 +52,11 @@ public class BaylorExportServiceTest {
         Field teams = aClass.getDeclaredField("teams");
         teams.setAccessible(true);
         List<TeamResultsInBaylor> results = (List<TeamResultsInBaylor>) teams.get(baylorResults);
-        Assert.assertThat(results.get(0).getTeamName(), is("Test team 4"));
-        Assert.assertThat(results.get(1).getTeamName(), is("Test team 5"));
-        Assert.assertThat(results.get(2).getTeamName(), is("Test team 2"));
-        Assert.assertThat(results.get(3).getTeamName(), isOneOf("Test team 1", "Test team 3"));
-        Assert.assertThat(results.get(4).getTeamName(), isOneOf("Test team 1", "Test team 3"));
+        Assert.assertThat(results.get(0).getTeamName(), is("team 4"));
+        Assert.assertThat(results.get(1).getTeamName(), is("team 5"));
+        Assert.assertThat(results.get(2).getTeamName(), is("team 2"));
+        Assert.assertThat(results.get(3).getTeamName(), isOneOf("team 1", "team 3"));
+        Assert.assertThat(results.get(4).getTeamName(), isOneOf("team 1", "team 3"));
     }
 
 
@@ -64,12 +64,12 @@ public class BaylorExportServiceTest {
     public void baylorTeamAbsentInEjudgeTest() throws NoSuchFieldException, IllegalAccessException {
 
         String baylorFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><icpc>\n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291576\" TotalTime=\"\" TeamName=\"Test team 1\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291517\" TotalTime=\"\" TeamName=\"Test team 2\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291528\" TotalTime=\"\" TeamName=\"Test team 3\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290491\" TotalTime=\"\" TeamName=\"Test team 4\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290492\" TotalTime=\"\" TeamName=\"Test team 5\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290492\" TotalTime=\"\" TeamName=\"Test team 6\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291576\" TotalTime=\"\" TeamName=\"team 1\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291517\" TotalTime=\"\" TeamName=\"team 2\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291528\" TotalTime=\"\" TeamName=\"team 3\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290491\" TotalTime=\"\" TeamName=\"team 4\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290492\" TotalTime=\"\" TeamName=\"team 5\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290492\" TotalTime=\"\" TeamName=\"team 6\" /> \n" +
                 "</icpc>";
         Long contestId = 1L;
 
@@ -79,19 +79,19 @@ public class BaylorExportServiceTest {
         teams.setAccessible(true);
         List<TeamResultsInBaylor> results = (List<TeamResultsInBaylor>) teams.get(baylorResults);
         Assert.assertThat(results.size(), is(5));
-        Assert.assertThat(results.get(0).getTeamName(), is("Test team 4"));
-        Assert.assertThat(results.get(1).getTeamName(), is("Test team 5"));
-        Assert.assertThat(results.get(2).getTeamName(), is("Test team 2"));
-        Assert.assertThat(results.get(3).getTeamName(), isOneOf("Test team 1", "Test team 3"));
-        Assert.assertThat(results.get(4).getTeamName(), isOneOf("Test team 1", "Test team 3"));
+        Assert.assertThat(results.get(0).getTeamName(), is("team 4"));
+        Assert.assertThat(results.get(1).getTeamName(), is("team 5"));
+        Assert.assertThat(results.get(2).getTeamName(), is("team 2"));
+        Assert.assertThat(results.get(3).getTeamName(), isOneOf("team 1", "team 3"));
+        Assert.assertThat(results.get(4).getTeamName(), isOneOf("team 1", "team 3"));
     }
 
     @Test
     public void ejudgeTeamAbsentInBaylor() throws IllegalAccessException, NoSuchFieldException {
         String baylorFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><icpc>\n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291517\" TotalTime=\"\" TeamName=\"Test team 2\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291528\" TotalTime=\"\" TeamName=\"Test team 3\" /> \n" +
-                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290491\" TotalTime=\"\" TeamName=\"Test team 4\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291517\" TotalTime=\"\" TeamName=\"team 2\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"291528\" TotalTime=\"\" TeamName=\"team 3\" /> \n" +
+                "  <Standing LastProblemTime=\"\" ProblemsSolved=\"\" Rank=\"\" TeamID=\"290491\" TotalTime=\"\" TeamName=\"team 4\" /> \n" +
                 "</icpc>";
         Long contestId = 1L;
 
@@ -101,9 +101,9 @@ public class BaylorExportServiceTest {
         teams.setAccessible(true);
         List<TeamResultsInBaylor> results = (List<TeamResultsInBaylor>) teams.get(baylorResults);
         Assert.assertThat(results.size(), is(3));
-        Assert.assertThat(results.get(0).getTeamName(), is("Test team 4"));
-        Assert.assertThat(results.get(1).getTeamName(), is("Test team 2"));
-        Assert.assertThat(results.get(2).getTeamName(), is("Test team 3"));
+        Assert.assertThat(results.get(0).getTeamName(), is("team 4"));
+        Assert.assertThat(results.get(1).getTeamName(), is("team 2"));
+        Assert.assertThat(results.get(2).getTeamName(), is("team 3"));
     }
 
     @Test

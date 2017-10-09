@@ -2,16 +2,18 @@ package org.ssu.standings.entity;
 
 import org.springframework.stereotype.Component;
 import org.ssu.standings.dao.entity.TeamDAO;
+import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.entity.contestresponse.Contest;
+import org.ssu.standings.entity.contestresponse.Participant;
 import org.ssu.standings.entity.contestresponse.Task;
 import org.ssu.standings.parser.entity.ContestNode;
+import org.ssu.standings.parser.entity.ParticipantNode;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -19,24 +21,47 @@ import java.util.stream.IntStream;
 @Component
 public class ContestMerger {
     public Contest mergeContests(List<ContestNode> contests, Map<String, TeamDAO> teams) {
-        List<Contest> contestList = contests.stream().map(contest -> new Contest.Builder(contest, teams).build()).collect(Collectors.toList());
-
-        List<Task> tasks = (contestList.size() > 1) ? IntStream.range(0, contestList.size())
-                .boxed()
-                .flatMap(index -> contestList.get(index).getTasks().stream()
-                        .map(task -> new Task.Builder(task).withId(contestList.get(index).getContestId() * 100 + task.getId()).withShortName(task.getShortName() + Integer.toString(index + 1)).build()))
-                .collect(Collectors.toList()) : new ArrayList<>(contestList.get(0).getTasks());
+        List<Contest> contestList = contests.stream().map(contest -> new Contest.Builder(contest).build()).collect(Collectors.toList());
 
         Contest currentContest = contestList.stream().sorted(Comparator.comparing(Contest::getStartTime)).reduce((a, b) -> b).get();
 
-        LocalDateTime startTime = currentContest.getStartTime();
-        LocalDateTime stopTime = currentContest.getStopTime();
-        LocalDateTime currentTime = currentContest.getCurrentTime();
+        return new Contest.Builder()
+                .withId(currentContest.getContestId())
+                .withDuration(currentContest.getDuration())
+                .withName(currentContest.getName())
+                .withTasks(createTaskList(contests))
+                .withTeams(createParticipantList(contests, teams))
+                .withTeamInfo(teams)
+                .withStartTime(currentContest.getStartTime())
+                .withStopTime(currentContest.getStopTime())
+                .withCurrentTime(currentContest.getCurrentTime())
+                .withFogTime(currentContest.getFogTime())
+                .withUnFogTime(currentContest.getUnfogTime())
+                .withSubmissions(getSubmissions(contestList))
+                .build();
+    }
 
-        String name = currentContest.getName();
-        Long fogTime = currentContest.getFogTime();
-        Long unFogTime = currentContest.getUnfogTime();
+    private Map<String, Participant> createParticipantList(List<ContestNode> contests, Map<String, TeamDAO> teams) {
+        Function<String, UniversityDAO> findUniversityForTeam = (team) -> teams.getOrDefault(team, new TeamDAO()).getUniversity();
 
+        return contests
+                .stream()
+                .flatMap(contest -> contest.getParticipants().stream())
+                .collect(Collectors.toMap(ParticipantNode::getName, team -> new Participant.Builder().withId(team.getId()).withName(team.getName()).withUniversity(findUniversityForTeam.apply(team.getName())).build(), (a, b) -> a));
+    }
+
+    private List<Task> createTaskList(List<ContestNode> contests) {
+        List<Contest> contestList = contests.stream().map(contest -> new Contest.Builder(contest).build()).collect(Collectors.toList());
+        BiFunction<Task, Integer, String> transformTaskTitle = (task, index) -> (contests.size() > 1) ? task.getShortName() + Integer.toString(index + 1) : task.getShortName();
+        return IntStream.range(0, contestList.size())
+                .boxed()
+                .flatMap(index -> contestList.get(index).getTasks().stream()
+                        .map(task -> new Task.Builder(task).withId(contestList.get(index).getContestId() * 100 + task.getId()).withShortName(transformTaskTitle.apply(task, index)).build())
+                )
+                .collect(Collectors.toList());
+    }
+
+    private List<SubmissionNode> getSubmissions(List<Contest> contestList) {
         Function<Contest, List<SubmissionNode>> getParticipantResultsFromContest = (contest) -> contest
                 .getResults()
                 .stream()
@@ -45,17 +70,6 @@ public class ContestMerger {
                 .peek(submit -> submit.setProblemId(contest.getContestId() * 100 + submit.getProblemId()))
                 .collect(Collectors.toList());
 
-        List<SubmissionNode> submissions = contestList.stream().flatMap(contest -> getParticipantResultsFromContest.apply(contest).stream()).collect(Collectors.toList());
-
-        return new Contest.Builder(contests.get(0), teams)
-                .withName(name)
-                .withTasks(tasks)
-                .withStartTime(startTime)
-                .withStopTime(stopTime)
-                .withCurrentTime(currentTime)
-                .withFogTime(fogTime)
-                .withUnFogTime(unFogTime)
-                .withSubmissions(submissions)
-                .build();
+        return contestList.stream().flatMap(contest -> getParticipantResultsFromContest.apply(contest).stream()).collect(Collectors.toList());
     }
 }

@@ -3,13 +3,12 @@ package org.ssu.standings.entity.contestresponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.dao.entity.TeamDAO;
-import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.parser.entity.ContestNode;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -31,10 +30,11 @@ public class Contest {
     @JsonProperty("unfogTime")
     private Long unfogTime;
     @JsonIgnore
-    private Map<Long, ParticipantResult> results;
+    private Map<String, ParticipantResult> results;
     @JsonProperty("tasks")
     private List<Task> tasks;
-
+    @JsonIgnore
+    private Map<Long, String> teamId2TeamNameMapping = new HashMap<>();
 
     public Contest(Builder builder) {
         contestId = builder.contestId;
@@ -47,6 +47,7 @@ public class Contest {
         unfogTime = builder.unfogTime;
         results = builder.results;
         tasks = builder.tasks;
+        teamId2TeamNameMapping = builder.teamId2TeamNameMapping;
 
     }
 
@@ -60,7 +61,7 @@ public class Contest {
 
     @JsonIgnore
     public Map<Long, ParticipantResult> getTeamsResults(Collection<Long> teams) {
-        return teams.stream().map(teamId -> results.get(teamId)).collect(Collectors.toMap(team -> team.getParticipant().getId(), team -> team));
+        return teams.stream().map(teamId -> results.get(teamId2TeamNameMapping.get(teamId))).collect(Collectors.toMap(team -> team.getParticipant().getId(), team -> team));
     }
 
     @JsonIgnore
@@ -70,9 +71,10 @@ public class Contest {
                 .flatMap(taskResult -> taskResult.getSubmissions().stream())
                 .collect(Collectors.toList());
     }
+
     public Contest updateSubmissions(List<SubmissionNode> newSubmissions) {
         newSubmissions.forEach(submit -> {
-            results.get(submit.getUserId()).pushSubmit(submit);
+            results.get(teamId2TeamNameMapping.get(submit.getUserId())).pushSubmit(submit);
         });
         return this;
     }
@@ -123,11 +125,11 @@ public class Contest {
         private Long fogTime;
         private Long unfogTime;
         private List<Task> tasks;
-        private Map<Long, ParticipantResult> results;
+        private Map<String, ParticipantResult> results = new HashMap<>();
+        private Map<Long, String> teamId2TeamNameMapping = new HashMap<>();
 
+        public Builder(ContestNode contest) {
 
-        public Builder(ContestNode contest, Map<String, TeamDAO> teams) {
-            Function<String, UniversityDAO> getUniversityForTeam = teamName -> Optional.ofNullable(teams.get(teamName)).map(TeamDAO::getUniversity).orElse(null);
             contestId = contest.getContestId();
             name = contest.getName();
             duration = contest.getDuration();
@@ -138,12 +140,10 @@ public class Contest {
             unfogTime = contest.getUnfogTime();
             tasks = contest.getProblems().stream().map(Task::new).collect(Collectors.toList());
 
-            results = contest.getParticipants()
-                    .stream()
-                    .map(team -> new Participant.Builder(team, getUniversityForTeam.apply(team.getName())).build())
-                    .collect(Collectors.toMap(Participant::getId, team -> new ParticipantResult.Builder().withParticipant(team).build()));
+            contest.getParticipants().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
+            contest.getParticipants().forEach(team -> teamId2TeamNameMapping.put(team.getId(), team.getName()));
 
-            contest.getSubmissions().forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
+            contest.getSubmissions().forEach(submit -> results.get(teamId2TeamNameMapping.get(submit.getUserId())).pushSubmit(submit));
         }
 
         public Builder(Contest contest) {
@@ -156,11 +156,17 @@ public class Contest {
             this.fogTime = contest.fogTime;
             this.unfogTime = contest.unfogTime;
             this.tasks = new ArrayList<>(contest.tasks);
-            this.results = contest.results.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue().clone() ));
+            this.results = contest.results.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue().clone()));
+            this.teamId2TeamNameMapping = new HashMap<>(contest.teamId2TeamNameMapping);
         }
 
+        public Builder() {
+
+        }
+
+
         public Builder withSubmissions(List<SubmissionNode> submissions) {
-            submissions.forEach(submit -> results.get(submit.getUserId()).pushSubmit(submit));
+            submissions.forEach(submit -> results.get(teamId2TeamNameMapping.get(submit.getUserId())).pushSubmit(submit));
             return this;
         }
 
@@ -199,8 +205,38 @@ public class Contest {
             return this;
         }
 
+        public Builder withTeams(Map<String, Participant> teams) {
+            teams.values().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
+            teams.values().forEach(team -> teamId2TeamNameMapping.put(team.getId(), team.getName()));
+            return this;
+        }
+
         public Contest build() {
             return new Contest(this);
+        }
+
+        public Builder withTeamInfo(Map<String, TeamDAO> teamList) {
+            BiFunction<ParticipantResult, TeamDAO, ParticipantResult> updateteamInfo = (result, info) -> new ParticipantResult
+                    .Builder(result)
+                    .withParticipant(new Participant.Builder()
+                            .withId(result.getParticipant().getId())
+                            .withName(info.getName())
+                            .withUniversity(info.getUniversity())
+                            .build())
+                    .build();
+
+            teamList.entrySet().forEach(team -> results.computeIfPresent(team.getKey(), (key, value) -> updateteamInfo.apply(results.get(key), team.getValue())));
+            return this;
+        }
+
+        public Builder withId(Long contestId) {
+            this.contestId = contestId;
+            return this;
+        }
+
+        public Builder withDuration(Long duration) {
+            this.duration = duration;
+            return this;
         }
     }
 }

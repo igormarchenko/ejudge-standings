@@ -306,7 +306,7 @@ public class ContestDataStorageTest {
 
         Assert.assertThat(storage.getContestData(1L).getTasks().get(1).getShortName(), is("B"));
         Assert.assertThat(storage.getContestData(1L).getTasks().get(1).getLongName(), is("Test task 2 changed"));
-        Assert.assertThat(storage.getContestData(1L).getTasks().get(1).getId(), is(2L));
+        Assert.assertThat(storage.getContestData(1L).getTasks().get(1).getId(), is(102L));
     }
 
     @Test
@@ -324,7 +324,7 @@ public class ContestDataStorageTest {
         Assert.assertThat(storage.getContestData(1L).getTasks().size(), is(4));
         Assert.assertThat(storage.getContestData(1L).getTasks().get(3).getShortName(), is("E"));
         Assert.assertThat(storage.getContestData(1L).getTasks().get(3).getLongName(), is("Test task 4"));
-        Assert.assertThat(storage.getContestData(1L).getTasks().get(3).getId(), is(4L));
+        Assert.assertThat(storage.getContestData(1L).getTasks().get(3).getId(), is(104L));
     }
 
     @Test

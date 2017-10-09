@@ -30,11 +30,11 @@ public class ContestTest {
         );
 
         List<ParticipantNode> participantNodes = Arrays.asList(
-                new MockedObjectGenerator().defaultParticipantNode().withId(1L).withName("Test team 1").build(),
-                new MockedObjectGenerator().defaultParticipantNode().withId(2L).withName("Test team 2").build(),
-                new MockedObjectGenerator().defaultParticipantNode().withId(3L).withName("Test team 3").build(),
-                new MockedObjectGenerator().defaultParticipantNode().withId(4L).withName("Test team 4").build(),
-                new MockedObjectGenerator().defaultParticipantNode().withId(5L).withName("Test team 5").build()
+                new MockedObjectGenerator().defaultParticipantNode().withId(1L).withName("team 1").build(),
+                new MockedObjectGenerator().defaultParticipantNode().withId(2L).withName("team 2").build(),
+                new MockedObjectGenerator().defaultParticipantNode().withId(3L).withName("team 3").build(),
+                new MockedObjectGenerator().defaultParticipantNode().withId(4L).withName("team 4").build(),
+                new MockedObjectGenerator().defaultParticipantNode().withId(5L).withName("team 5").build()
         );
 
 
@@ -64,9 +64,9 @@ public class ContestTest {
                         .withSubmissions(submissionNodes)
                         .withParticipants(participantNodes)
                         .withProblems(problemNodes)
-                        .build(),
-                new MockedObjectGenerator().getTeamList()
-        ).build();
+                        .build())
+                .withTeamInfo(new MockedObjectGenerator().getTeamList())
+        .build();
     }
 
 
@@ -215,15 +215,15 @@ public class ContestTest {
         Field field = aClass.getDeclaredField("results");
         field.setAccessible(true);
 
-        Map<Long, ParticipantResult> resultsFromOriginal = (Map<Long, ParticipantResult>) field.get(contest);
-        Map<Long, ParticipantResult> resultsFromCopy = (Map<Long, ParticipantResult>) field.get(copy);
+        Map<String, ParticipantResult> resultsFromOriginal = (Map<String, ParticipantResult>) field.get(contest);
+        Map<String, ParticipantResult> resultsFromCopy = (Map<String, ParticipantResult>) field.get(copy);
 
         Assert.assertNotSame(resultsFromCopy, resultsFromOriginal);
-        Assert.assertNotSame(resultsFromCopy.get(1L), resultsFromOriginal.get(1L));
-        Assert.assertNotSame(resultsFromCopy.get(2L), resultsFromOriginal.get(2L));
-        Assert.assertNotSame(resultsFromCopy.get(3L), resultsFromOriginal.get(3L));
-        Assert.assertNotSame(resultsFromCopy.get(4L), resultsFromOriginal.get(4L));
-        Assert.assertNotSame(resultsFromCopy.get(5L), resultsFromOriginal.get(5L));
+        Assert.assertNotSame(resultsFromCopy.get("team 1"), resultsFromOriginal.get("team 1"));
+        Assert.assertNotSame(resultsFromCopy.get("team 2"), resultsFromOriginal.get("team 2"));
+        Assert.assertNotSame(resultsFromCopy.get("team 3"), resultsFromOriginal.get("team 3"));
+        Assert.assertNotSame(resultsFromCopy.get("team 4"), resultsFromOriginal.get("team 4"));
+        Assert.assertNotSame(resultsFromCopy.get("team 5"), resultsFromOriginal.get("team 5"));
     }
 
 
