@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.*;
 
@@ -110,6 +111,10 @@ public class MockedObjectGenerator {
 
         public MockedContestNodeBuilder withSubmissions(List<SubmissionNode> value) {
             when(contestNode.getSubmissions()).thenReturn(value);
+            Map<Long, String> collect = value.stream().collect(Collectors.toMap(item -> item.getUserId(), item -> item.getUsername(), (a, b) -> a));
+            for(Map.Entry<Long, String> node : collect.entrySet()) {
+                when(contestNode.getTeamNameById(node.getKey())).thenReturn(node.getValue());
+            }
             return this;
         }
 
