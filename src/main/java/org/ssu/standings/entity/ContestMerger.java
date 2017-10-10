@@ -21,7 +21,9 @@ import java.util.stream.IntStream;
 @Component
 public class ContestMerger {
     public Contest mergeContests(List<ContestNode> contests, Map<String, TeamDAO> teams) {
-        List<Contest> contestList = contests.stream().map(contest -> new Contest.Builder(contest).build()).collect(Collectors.toList());
+        List<Contest> contestList = contests.stream().map(contest -> new Contest.Builder(contest)
+                .withSubmissions(contest.getSubmissions().stream().map(submit -> new SubmissionNode.Builder(submit).withUsername(contest.getTeamNameById(submit.getUserId())).build()).collect(Collectors.toList()))
+                .build()).collect(Collectors.toList());
 
         Contest currentContest = contestList.stream().sorted(Comparator.comparing(Contest::getStartTime)).reduce((a, b) -> b).get();
 

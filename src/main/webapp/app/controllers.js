@@ -135,17 +135,19 @@ angular.module('ejudgeStandings.controllers', [])
             array[index - 1] = temp;
         };
 
-        teamUp = function (index, teamId) {
+        teamUp = function (index) {
             if (index > 0 && index < $scope.display.length)
                 slideUp($scope.display, index);
         };
 
-        slideTeam = function (teamId, startPos, endPos) {
+        slideTeam = function (startPos, endPos) {
+            console.log("from " + startPos);
+            console.log("to " + endPos);
             if (startPos != endPos) {
                 var index = startPos;
                 var interval = setInterval(function () {
                     $scope.$apply(function () {
-                        teamUp(index, teamId);
+                        teamUp(index);
                     });
                     index--;
                     if (index <= endPos) clearInterval(interval);
@@ -177,8 +179,9 @@ angular.module('ejudgeStandings.controllers', [])
 
         WebSocketService.receive().then(null, null, function (response) {
             angular.forEach(response.updates, function (team) {
+                console.log(team);
                 $scope.display[team.previousPlace] = team.result;
-                slideTeam(team.id, team.previousPlace, team.currentPlace);
+                slideTeam(team.previousPlace, team.currentPlace);
 
             });
         });

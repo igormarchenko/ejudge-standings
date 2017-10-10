@@ -139,8 +139,6 @@ task installPlugins() {
 assemble.dependsOn.add(installPlugins)
 
 dependencies {
-
-
     def springVersion = '4.3.11.RELEASE'
     def springSecurityVersion = '4.2.3.RELEASE'
     def jacksonVersion = '2.9.1'

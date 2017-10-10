@@ -39,16 +39,16 @@ public class ContestTest {
 
 
         List<SubmissionNode> submissionNodes = Arrays.asList(
-                new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(1L).withRunUuid("1").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(2L).build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(1L).withRunUuid("1").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(2L).withUserName("team 2").build(),
 
-                new MockedObjectGenerator().defaultSubmissionNode().withId(2L).withProblemId(1L).withRunUuid("2").withStatus(SubmissionStatus.WA).withTime(60 * 100L).withUserId(3L).build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(2L).withProblemId(1L).withRunUuid("2").withStatus(SubmissionStatus.WA).withTime(60 * 100L).withUserId(3L).withUserName("team 3").build(),
 
-                new MockedObjectGenerator().defaultSubmissionNode().withId(3L).withProblemId(1L).withRunUuid("3").withStatus(SubmissionStatus.WA).withTime(60 * 20L).withUserId(4L).build(),
-                new MockedObjectGenerator().defaultSubmissionNode().withId(4L).withProblemId(1L).withRunUuid("4").withStatus(SubmissionStatus.OK).withTime(60 * 80L).withUserId(4L).build(),
-                new MockedObjectGenerator().defaultSubmissionNode().withId(5L).withProblemId(2L).withRunUuid("5").withStatus(SubmissionStatus.OK).withTime(60 * 100L).withUserId(4L).build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(3L).withProblemId(1L).withRunUuid("3").withStatus(SubmissionStatus.WA).withTime(60 * 20L).withUserId(4L).withUserName("team 4").build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(4L).withProblemId(1L).withRunUuid("4").withStatus(SubmissionStatus.OK).withTime(60 * 80L).withUserId(4L).withUserName("team 4").build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(5L).withProblemId(2L).withRunUuid("5").withStatus(SubmissionStatus.OK).withTime(60 * 100L).withUserId(4L).withUserName("team 4").build(),
 
-                new MockedObjectGenerator().defaultSubmissionNode().withId(6L).withProblemId(1L).withRunUuid("6").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).build(),
-                new MockedObjectGenerator().defaultSubmissionNode().withId(7L).withProblemId(2L).withRunUuid("7").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).build()
+                new MockedObjectGenerator().defaultSubmissionNode().withId(6L).withProblemId(1L).withRunUuid("6").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).withUserName("team 5").build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(7L).withProblemId(2L).withRunUuid("7").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).withUserName("team 5").build()
         );
 
         return new Contest.Builder(
@@ -86,17 +86,17 @@ public class ContestTest {
     @Test
     public void getTeamsResults() throws Exception {
         Contest contest = getContest();
-        Map<Long, ParticipantResult> results = contest.getTeamsResults(Arrays.asList(1L, 2L, 5L));
+        Map<String, ParticipantResult> results = contest.getTeamsResults(Arrays.asList("team 1", "team 2", "team 5"));
         Assert.assertThat(results.size(), is(3));
-        Assert.assertThat(results.get(1L).getResults().size(), is(0));
-        Assert.assertThat(results.get(2L).getResults().size(), is(1));
-        Assert.assertThat(results.get(5L).getResults().size(), is(2));
+        Assert.assertThat(results.get("team 1").getResults().size(), is(0));
+        Assert.assertThat(results.get("team 2").getResults().size(), is(1));
+        Assert.assertThat(results.get("team 5").getResults().size(), is(2));
     }
 
     @Test
     public void getTeamsResultsOnEmptyList() throws Exception {
         Contest contest = getContest();
-        Map<Long, ParticipantResult> results = contest.getTeamsResults(Arrays.asList());
+        Map<String, ParticipantResult> results = contest.getTeamsResults(Arrays.asList());
         Assert.assertNotNull(results);
         Assert.assertThat(results.size(), is(0));
     }
@@ -107,7 +107,7 @@ public class ContestTest {
         Contest contest = getContest();
         Contest copy = new Contest.Builder(contest).build();
 
-        SubmissionNode submissionNode = new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(1L).withRunUuid("1").withStatus(SubmissionStatus.OK).withTime(60 * 250L).withUserId(1L).build();
+        SubmissionNode submissionNode = new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(1L).withRunUuid("1").withStatus(SubmissionStatus.OK).withTime(60 * 250L).withUserId(1L).withUserName("team 1").build();
         copy.updateSubmissions(Arrays.asList(submissionNode));
         Assert.assertThat(copy.getResults().get(3).getParticipant().getId(), is(1L));
     }
@@ -117,7 +117,7 @@ public class ContestTest {
         Contest contest = getContest();
         Contest copy = new Contest.Builder(contest).build();
 
-        SubmissionNode submissionNode = new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(2L).withRunUuid("1").withStatus(SubmissionStatus.WA).withTime(60 * 250L).withUserId(1L).build();
+        SubmissionNode submissionNode = new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(2L).withRunUuid("1").withStatus(SubmissionStatus.WA).withTime(60 * 250L).withUserId(1L).withUserName("team 1").build();
         copy.updateSubmissions(Arrays.asList(submissionNode));
         Assert.assertThat(copy.getResults().get(3).getParticipant().getId(), is(1L));
     }
@@ -128,7 +128,7 @@ public class ContestTest {
         Contest contest = getContest();
         Contest copy = new Contest.Builder(contest).build();
 
-        SubmissionNode submissionNode = new MockedObjectGenerator().defaultSubmissionNode().withId(2L).withProblemId(1L).withRunUuid("2").withStatus(SubmissionStatus.OK).withTime(60 * 100L).withUserId(3L).build();
+        SubmissionNode submissionNode = new MockedObjectGenerator().defaultSubmissionNode().withId(2L).withProblemId(1L).withRunUuid("2").withStatus(SubmissionStatus.OK).withTime(60 * 100L).withUserId(3L).withUserName("team 3").build();
         copy.updateSubmissions(Arrays.asList(submissionNode));
         Assert.assertThat(copy.getResults().get(2).getParticipant().getId(), is(3L));
     }
@@ -136,10 +136,10 @@ public class ContestTest {
     @Test
     public void addSubmissionList() throws Exception {
         Contest contest = getContest();
-        List<SubmissionNode> nodes = Arrays.asList(new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(1L).withRunUuid("12").withStatus(SubmissionStatus.OK).withTime(60 * 250L).withUserId(3L).build(),
-                new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(2L).withRunUuid("13").withStatus(SubmissionStatus.WA).withTime(60 * 250L).withUserId(3L).build(),
-                new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(2L).withRunUuid("14").withStatus(SubmissionStatus.OK).withTime(60 * 250L).withUserId(3L).build(),
-                new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(3L).withRunUuid("15").withStatus(SubmissionStatus.OK).withTime(60 * 250L).withUserId(3L).build());
+        List<SubmissionNode> nodes = Arrays.asList(new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(1L).withRunUuid("12").withStatus(SubmissionStatus.OK).withTime(60 * 250L).withUserId(3L).withUserName("team 3").build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(2L).withRunUuid("13").withStatus(SubmissionStatus.WA).withTime(60 * 250L).withUserId(3L).withUserName("team 3").build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(2L).withRunUuid("14").withStatus(SubmissionStatus.OK).withTime(60 * 250L).withUserId(3L).withUserName("team 3").build(),
+                new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(3L).withRunUuid("15").withStatus(SubmissionStatus.OK).withTime(60 * 250L).withUserId(3L).withUserName("team 3").build());
 
         contest.updateSubmissions(nodes);
         Assert.assertThat(contest.getResults().get(0).getParticipant().getId(), is(3L));

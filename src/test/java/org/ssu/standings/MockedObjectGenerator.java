@@ -198,6 +198,11 @@ public class MockedObjectGenerator {
             return this;
         }
 
+        public MockedSubmissionNodeBuilder withUserName(String username) {
+            when(mockedSubmissionNode.getUsername()).thenReturn(username);
+            return this;
+        }
+
         public MockedSubmissionNodeBuilder withUserId(Long userId) {
             when(mockedSubmissionNode.getUserId()).thenReturn(userId);
             return this;

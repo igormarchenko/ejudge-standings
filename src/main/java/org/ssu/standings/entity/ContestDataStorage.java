@@ -47,7 +47,7 @@ public class ContestDataStorage {
     }
 
     private ContestSubmissionsChanges getDifferenceWithContest(Long contestId, Contest contest) {
-        Map<String, SubmissionNode> submissions = getContestSubmissions(contestId).stream().collect(Collectors.toMap(submit -> submit.getRunUuid(), submit -> submit));
+        Map<String, SubmissionNode> submissions = getContestSubmissions(contestId).stream().collect(Collectors.toMap(submit -> submit.getRunUuid(), submit -> submit, (a, b) -> a));
 
         Function<Predicate<SubmissionNode>, List<SubmissionNode>> filterSubmissions = (predicate) -> contest.getSubmissions()
                 .stream()
@@ -56,7 +56,7 @@ public class ContestDataStorage {
 
         List<SubmissionNode> newSubmissions = filterSubmissions.apply(submit -> !submissions.containsKey(submit.getRunUuid()));
         List<SubmissionNode> rejudgedSubmissions = filterSubmissions.apply(submit -> submissions.containsKey(submit.getRunUuid()) &&
-                !submit.equals(submissions.get(submit.getRunUuid())));
+                submit.getStatus() != submissions.get(submit.getRunUuid()).getStatus());
 
         return new ContestSubmissionsChanges(newSubmissions, rejudgedSubmissions);
     }
@@ -109,22 +109,22 @@ public class ContestDataStorage {
 
             List<ParticipantResult> resultsBeforeUpdate = contestData.get(contestId).getResults();
 
-            getContestData(contestId).updateSubmissions(contestSubmissionsChanges.getNewSubmissions());
+            contestData.get(contestId).updateSubmissions(contestSubmissionsChanges.getNewSubmissions());
             List<ParticipantResult> resultsAfterUpdate = contestData.get(contestId).getResults();
 
-            Set<Long> affectedTeamsIds = contestSubmissionsChanges.getNewSubmissions().stream().map(SubmissionNode::getUserId).collect(Collectors.toSet());
+            Set<String> affectedTeamsIds = contestSubmissionsChanges.getNewSubmissions().stream().map(SubmissionNode::getUsername).collect(Collectors.toSet());
 
-            Function<List<ParticipantResult>, Map<Long, Integer>> getTeamPlaces = (results) -> IntStream.range(0, results.size())
+            Function<List<ParticipantResult>, Map<String, Integer>> getTeamPlaces = (results) -> IntStream.range(0, results.size())
                     .boxed()
-                    .filter(index -> affectedTeamsIds.contains(results.get(index).getParticipant().getId()))
-                    .collect(Collectors.toMap(index -> results.get(index).getParticipant().getId(), index -> index));
+                    .filter(index -> affectedTeamsIds.contains(results.get(index).getParticipant().getName()))
+                    .collect(Collectors.toMap(index -> results.get(index).getParticipant().getName(), index -> index));
 
-            Map<Long, Integer> placesBeforeUpdate = getTeamPlaces.apply(resultsBeforeUpdate);
-            Map<Long, Integer> placesAfterUpdate = getTeamPlaces.apply(resultsAfterUpdate);
+            Map<String, Integer> placesBeforeUpdate = getTeamPlaces.apply(resultsBeforeUpdate);
+            Map<String, Integer> placesAfterUpdate = getTeamPlaces.apply(resultsAfterUpdate);
 
-            Map<Long, ParticipantResult> affectedTeamsResults = getContestData(contestId).getTeamsResults(affectedTeamsIds);
+            Map<String, ParticipantResult> affectedTeamsResults = getContestData(contestId).getTeamsResults(affectedTeamsIds);
 
-            Map<Long, ParticipantUpdates> updatedResults = affectedTeamsIds.stream()
+            Map<String, ParticipantUpdates> updatedResults = affectedTeamsIds.stream()
                     .map(teamId -> new ParticipantUpdates(teamId, affectedTeamsResults.get(teamId), placesBeforeUpdate.get(teamId), placesAfterUpdate.get(teamId)))
                     .collect(Collectors.toMap(ParticipantUpdates::getTeamId, team -> team));
 

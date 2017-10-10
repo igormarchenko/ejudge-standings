@@ -169,7 +169,7 @@
                infinite-scroll-distance="50"
                infinite-scroll-use-document-bottom="true">
 
-        <tr ng-repeat="team in display | filter:teamDisplay track by team.participant.id"
+        <tr ng-repeat="team in display | filter:teamDisplay track by $index"
             id="teamrow-{{team.participant.id}}"
             class="animate-repeat">
             <td width="40px">

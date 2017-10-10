@@ -33,8 +33,6 @@ public class Contest {
     private Map<String, ParticipantResult> results;
     @JsonProperty("tasks")
     private List<Task> tasks;
-    @JsonIgnore
-    private Map<Long, String> teamId2TeamNameMapping = new HashMap<>();
 
     public Contest(Builder builder) {
         contestId = builder.contestId;
@@ -47,8 +45,6 @@ public class Contest {
         unfogTime = builder.unfogTime;
         results = builder.results;
         tasks = builder.tasks;
-        teamId2TeamNameMapping = builder.teamId2TeamNameMapping;
-
     }
 
     @JsonProperty("results")
@@ -60,8 +56,8 @@ public class Contest {
     }
 
     @JsonIgnore
-    public Map<Long, ParticipantResult> getTeamsResults(Collection<Long> teams) {
-        return teams.stream().map(teamId -> results.get(teamId2TeamNameMapping.get(teamId))).collect(Collectors.toMap(team -> team.getParticipant().getId(), team -> team));
+    public Map<String, ParticipantResult> getTeamsResults(Collection<String> teams) {
+        return teams.stream().map(teamId -> results.get(teamId)).collect(Collectors.toMap(team -> team.getParticipant().getName(), team -> team));
     }
 
     @JsonIgnore
@@ -74,7 +70,7 @@ public class Contest {
 
     public Contest updateSubmissions(List<SubmissionNode> newSubmissions) {
         newSubmissions.forEach(submit -> {
-            results.get(teamId2TeamNameMapping.get(submit.getUserId())).pushSubmit(submit);
+            results.get(submit.getUsername()).pushSubmit(submit);
         });
         return this;
     }
@@ -126,7 +122,6 @@ public class Contest {
         private Long unfogTime;
         private List<Task> tasks;
         private Map<String, ParticipantResult> results = new HashMap<>();
-        private Map<Long, String> teamId2TeamNameMapping = new HashMap<>();
 
         public Builder(ContestNode contest) {
 
@@ -141,9 +136,10 @@ public class Contest {
             tasks = contest.getProblems().stream().map(Task::new).collect(Collectors.toList());
 
             contest.getParticipants().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
-            contest.getParticipants().forEach(team -> teamId2TeamNameMapping.put(team.getId(), team.getName()));
-
-            contest.getSubmissions().forEach(submit -> results.get(teamId2TeamNameMapping.get(submit.getUserId())).pushSubmit(submit));
+            for (SubmissionNode submit : contest.getSubmissions()) {
+                results.putIfAbsent(submit.getUsername(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(submit.getUserId()).withName(submit.getUsername()).build()).build());
+                results.get(submit.getUsername()).pushSubmit(submit);
+            }
         }
 
         public Builder(Contest contest) {
@@ -157,16 +153,19 @@ public class Contest {
             this.unfogTime = contest.unfogTime;
             this.tasks = new ArrayList<>(contest.tasks);
             this.results = contest.results.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue().clone()));
-            this.teamId2TeamNameMapping = new HashMap<>(contest.teamId2TeamNameMapping);
         }
 
         public Builder() {
 
         }
 
-
         public Builder withSubmissions(List<SubmissionNode> submissions) {
-            submissions.forEach(submit -> results.get(teamId2TeamNameMapping.get(submit.getUserId())).pushSubmit(submit));
+            results = new HashMap<>();
+            for (SubmissionNode submit : submissions) {
+                results.putIfAbsent(submit.getUsername(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(submit.getUserId()).withName(submit.getUsername()).build()).build());
+                results.get(submit.getUsername()).pushSubmit(submit);
+            }
+//            submissions.forEach(submit -> results.get(teamId2TeamNameMapping.get(submit.getUserId())).pushSubmit(submit));
             return this;
         }
 
@@ -207,7 +206,6 @@ public class Contest {
 
         public Builder withTeams(Map<String, Participant> teams) {
             teams.values().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
-            teams.values().forEach(team -> teamId2TeamNameMapping.put(team.getId(), team.getName()));
             return this;
         }
 

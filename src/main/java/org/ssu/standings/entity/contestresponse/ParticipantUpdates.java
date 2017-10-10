@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ParticipantUpdates {
     @JsonProperty("id")
-    private Long teamId;
+    private String teamId;
     @JsonProperty("result")
     private ParticipantResult result;
     @JsonProperty("previousPlace")
@@ -12,14 +12,14 @@ public class ParticipantUpdates {
     @JsonProperty("currentPlace")
     private Integer currentPlace;
 
-    public ParticipantUpdates(Long teamId, ParticipantResult result, Integer previousPlace, Integer currentPlace) {
+    public ParticipantUpdates(String teamId, ParticipantResult result, Integer previousPlace, Integer currentPlace) {
         this.teamId = teamId;
         this.result = result;
         this.previousPlace = previousPlace;
         this.currentPlace = currentPlace;
     }
 
-    public Long getTeamId() {
+    public String getTeamId() {
         return teamId;
     }
 

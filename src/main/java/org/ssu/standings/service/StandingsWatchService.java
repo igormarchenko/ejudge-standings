@@ -50,9 +50,16 @@ public class StandingsWatchService {
         if (contests == null) {
             initContestDataFlow();
         }
+
         Function<List<StandingsFileDAO>, List<ContestNode>> updateContestData = files -> files.stream().map(file -> parser.parse(observers.get(file).update()).orElse(new ContestNode())).collect(Collectors.toList());
-        contests.entrySet().forEach(contest ->
-                contestDataStorage.updateContest(contest.getKey(),updateContestData.apply(contest.getValue().getStandingsFiles()),contest.getValue().getFinal())
+        contests.entrySet().forEach(contest -> {
+                    List<ContestNode> data = updateContestData.apply(contest.getValue().getStandingsFiles());
+                    if (contest.getValue().getStandingsFiles().stream().anyMatch(file -> observers.get(file).getHasUpdates())) {
+                        contest.getValue().getStandingsFiles().forEach(file -> observers.get(file).getContent());
+                        contestDataStorage.updateContest(contest.getKey(), data, contest.getValue().getFinal());
+                    }
+                }
         );
     }
 }
+

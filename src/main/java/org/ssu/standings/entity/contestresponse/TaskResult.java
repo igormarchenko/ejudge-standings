@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.entity.SubmissionStatus;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -54,7 +51,6 @@ public class TaskResult implements Cloneable {
 
     @JsonProperty("status")
     public SubmissionStatus getStatus() {
-        if (submissions.isEmpty()) return SubmissionStatus.EMPTY;
         if (isProblemSolved()) return SubmissionStatus.OK;
         return submissions.stream()
                 .filter(submit -> submit.getStatus() != SubmissionStatus.CE)
@@ -74,15 +70,13 @@ public class TaskResult implements Cloneable {
 
     @JsonIgnore
     public Boolean isProblemSolved() {
-        return submissions.stream()
-                .filter(submit -> submit.getStatus() == SubmissionStatus.OK)
-                .count() > 0;
+        return submissions.stream().anyMatch(submit -> submit.getStatus() == SubmissionStatus.OK);
     }
 
     public void addSubmission(SubmissionNode submission) {
         submissions.removeIf(submit -> submit.getRunUuid().equals(submission.getRunUuid()));
         submissions.add(submission);
-        submissions = submissions.stream().sorted(Comparator.comparing(SubmissionNode::getTime)).collect(Collectors.toList());
+        submissions.sort(Comparator.comparing(SubmissionNode::getTime));
     }
 
     @Override
@@ -102,7 +96,7 @@ public class TaskResult implements Cloneable {
         }
 
         public Builder withSubmissions(List<SubmissionNode> submissions) {
-            this.submissions = submissions;
+            this.submissions = submissions.stream().map(SubmissionNode::clone).collect(Collectors.toList());
             return this;
         }
 

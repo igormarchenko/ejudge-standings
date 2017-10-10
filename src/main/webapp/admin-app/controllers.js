@@ -133,8 +133,9 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         };
 
         $scope.clearContest = function () {
-            $scope.selectedContest = {};
+            $scope.selectedContest = {'is_final': false, 'standingsFiles': []};
         };
+
         $scope.editContest = function (contestId) {
             angular.copy($scope.contests[contestId], $scope.selectedContest);
             $('#editContest').modal('show');

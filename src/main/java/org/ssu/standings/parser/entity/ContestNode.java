@@ -103,5 +103,9 @@ public class ContestNode {
     public List<SubmissionNode> getSubmissions() {
         return submissions;
     }
+
+    public String getTeamNameById(Long id) {
+        return participants.stream().filter(item -> item.getId().equals(id)).findFirst().map(team -> team.getName()).orElse(String.format("team%d", id));
+    }
 }
 
