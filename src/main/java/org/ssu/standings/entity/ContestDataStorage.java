@@ -18,6 +18,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Component
 public class ContestDataStorage {
@@ -111,7 +112,9 @@ public class ContestDataStorage {
             addContest(contestId, contest);
             List<ParticipantResult> resultsAfterUpdate = contestData.get(contestId).getResults();
 
-            Set<String> affectedTeamsIds = contestSubmissionsChanges.getNewSubmissions().stream().map(SubmissionNode::getUsername).collect(Collectors.toSet());
+            Set<String> affectedTeamsIds = Stream.concat(contestSubmissionsChanges.getNewSubmissions().stream(), contestSubmissionsChanges.getChangedSubmissions().stream())
+                            .map(SubmissionNode::getUsername)
+                            .collect(Collectors.toSet());
 
             Function<List<ParticipantResult>, Map<String, Integer>> getTeamPlaces = (results) -> IntStream.range(0, results.size())
                     .boxed()
