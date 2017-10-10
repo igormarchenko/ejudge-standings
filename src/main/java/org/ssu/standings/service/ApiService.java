@@ -28,9 +28,6 @@ public class ApiService {
     @Resource
     private StandingsFilesRepository standingsFilesRepository;
 
-    @Resource
-    private StandingsWatchService watchService;
-
     public List<TeamDAO> teamList() {
         return teamRepository.findAll();
     }
@@ -56,7 +53,6 @@ public class ApiService {
         teamRepository.save(updatedteamList);
 
         universityRepository.delete(universityId);
-        watchService.initContestDataFlow();
     }
 
     public UniversityDAO saveUniversity(UniversityDAO universityDAO) {

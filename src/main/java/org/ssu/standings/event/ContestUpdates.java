@@ -10,9 +10,9 @@ public class ContestUpdates {
     @JsonIgnore
     private Long contestId;
     @JsonProperty("updates")
-    private Map<Long, ParticipantUpdates> updatedResults;
+    private Map<String, ParticipantUpdates> updatedResults;
 
-    public ContestUpdates(Long contestId, Map<Long, ParticipantUpdates> updatedResults) {
+    public ContestUpdates(Long contestId, Map<String, ParticipantUpdates> updatedResults) {
         this.contestId = contestId;
         this.updatedResults = updatedResults;
     }

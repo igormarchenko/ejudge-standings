@@ -18,25 +18,25 @@ public class DefaultObjects {
     );
 
     private List<ParticipantNode> participantNodes = Arrays.asList(
-            new MockedObjectGenerator().defaultParticipantNode().withId(1L).withName("Test team 1").build(),
-            new MockedObjectGenerator().defaultParticipantNode().withId(2L).withName("Test team 2").build(),
-            new MockedObjectGenerator().defaultParticipantNode().withId(3L).withName("Test team 3").build(),
-            new MockedObjectGenerator().defaultParticipantNode().withId(4L).withName("Test team 4").build(),
-            new MockedObjectGenerator().defaultParticipantNode().withId(5L).withName("Test team 5").build()
+            new MockedObjectGenerator().defaultParticipantNode().withId(1L).withName("team 1").build(),
+            new MockedObjectGenerator().defaultParticipantNode().withId(2L).withName("team 2").build(),
+            new MockedObjectGenerator().defaultParticipantNode().withId(3L).withName("team 3").build(),
+            new MockedObjectGenerator().defaultParticipantNode().withId(4L).withName("team 4").build(),
+            new MockedObjectGenerator().defaultParticipantNode().withId(5L).withName("team 5").build()
     );
 
 
     private List<SubmissionNode> submissionNodes = Arrays.asList(
-            new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(1L).withRunUuid("1").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(2L).build(),
+            new MockedObjectGenerator().defaultSubmissionNode().withId(1L).withProblemId(1L).withRunUuid("1").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(2L).withUserName("team 2").build(),
 
-            new MockedObjectGenerator().defaultSubmissionNode().withId(2L).withProblemId(1L).withRunUuid("2").withStatus(SubmissionStatus.WA).withTime(60 * 100L).withUserId(3L).build(),
+            new MockedObjectGenerator().defaultSubmissionNode().withId(2L).withProblemId(1L).withRunUuid("2").withStatus(SubmissionStatus.WA).withTime(60 * 100L).withUserId(3L).withUserName("team 3").build(),
 
-            new MockedObjectGenerator().defaultSubmissionNode().withId(3L).withProblemId(1L).withRunUuid("3").withStatus(SubmissionStatus.WA).withTime(60 * 20L).withUserId(4L).build(),
-            new MockedObjectGenerator().defaultSubmissionNode().withId(4L).withProblemId(1L).withRunUuid("4").withStatus(SubmissionStatus.OK).withTime(60 * 80L).withUserId(4L).build(),
-            new MockedObjectGenerator().defaultSubmissionNode().withId(5L).withProblemId(2L).withRunUuid("5").withStatus(SubmissionStatus.OK).withTime(60 * 100L).withUserId(4L).build(),
+            new MockedObjectGenerator().defaultSubmissionNode().withId(3L).withProblemId(1L).withRunUuid("3").withStatus(SubmissionStatus.WA).withTime(60 * 20L).withUserId(4L).withUserName("team 4").build(),
+            new MockedObjectGenerator().defaultSubmissionNode().withId(4L).withProblemId(1L).withRunUuid("4").withStatus(SubmissionStatus.OK).withTime(60 * 80L).withUserId(4L).withUserName("team 4").build(),
+            new MockedObjectGenerator().defaultSubmissionNode().withId(5L).withProblemId(2L).withRunUuid("5").withStatus(SubmissionStatus.OK).withTime(60 * 100L).withUserId(4L).withUserName("team 4").build(),
 
-            new MockedObjectGenerator().defaultSubmissionNode().withId(6L).withProblemId(1L).withRunUuid("6").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).build(),
-            new MockedObjectGenerator().defaultSubmissionNode().withId(7L).withProblemId(2L).withRunUuid("7").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).build()
+            new MockedObjectGenerator().defaultSubmissionNode().withId(6L).withProblemId(1L).withRunUuid("6").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).withUserName("team 5").build(),
+            new MockedObjectGenerator().defaultSubmissionNode().withId(7L).withProblemId(2L).withRunUuid("7").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).withUserName("team 5").build()
     );
 
     public MockedObjectGenerator.MockedContestNodeBuilder getDefaultMockedContestBuilder() {

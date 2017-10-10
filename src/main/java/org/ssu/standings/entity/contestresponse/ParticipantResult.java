@@ -68,6 +68,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
         private Integer place;
 
         public Builder() {
+            this.participant = new Participant.Builder().build();
         }
 
         public Builder(ParticipantResult copy) {

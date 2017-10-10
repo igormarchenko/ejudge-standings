@@ -14,6 +14,8 @@ public class ParticipantNode {
     }
 
     public String getName() {
+        if(name.equals(""))
+            return "team" + id.toString();
         return name;
     }
 }

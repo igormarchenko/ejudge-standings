@@ -26,6 +26,7 @@ public class HTTPFileHandler implements FileHandler {
 
     @Override
     public Response getUpdates() throws IOException {
+        reconnect(response.getURL());
         if (response.getResponseCode() != HttpURLConnection.HTTP_OK) {
             reconnect(response.getURL());
         }

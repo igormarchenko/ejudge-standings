@@ -34,6 +34,8 @@ public class SubmissionNode implements Cloneable{
     @JacksonXmlProperty(isAttribute = true, localName = "passed_mode")
     private String passedMode;
 
+    private String username;
+
     public SubmissionNode() {
     }
 
@@ -48,6 +50,11 @@ public class SubmissionNode implements Cloneable{
         test = builder.test;
         nsec = builder.nsec;
         passedMode = builder.passedMode;
+        username = builder.username;
+    }
+
+    public void setProblemId(Long problemId) {
+        this.problemId = problemId;
     }
 
     public Long getId() {
@@ -94,6 +101,10 @@ public class SubmissionNode implements Cloneable{
         this.status = status;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public SubmissionNode clone()  {
         return new SubmissionNode.Builder(this).build();
     }
@@ -110,21 +121,23 @@ public class SubmissionNode implements Cloneable{
         private Long test;
         private Long nsec;
         private String passedMode;
+        private String username;
 
         public Builder() {
         }
 
         public Builder(SubmissionNode copy) {
-            this.id = copy.id;
-            this.time = copy.time;
-            this.runUuid = copy.runUuid;
-            this.status = copy.status;
-            this.userId = copy.userId;
-            this.problemId = copy.problemId;
-            this.languageId = copy.languageId;
-            this.test = copy.test;
-            this.nsec = copy.nsec;
-            this.passedMode = copy.passedMode;
+            this.id = copy.getId();
+            this.time = copy.getTime();
+            this.runUuid = copy.getRunUuid();
+            this.status = copy.getStatus();
+            this.userId = copy.getUserId();
+            this.problemId = copy.getProblemId();
+            this.languageId = copy.getLanguageId();
+            this.test = copy.getTest();
+            this.nsec = copy.getNsec();
+            this.passedMode = copy.getPassedMode();
+            this.username = copy.getUsername();
         }
 
         public Builder withTime(Long time) {
@@ -147,6 +160,10 @@ public class SubmissionNode implements Cloneable{
             return this;
         }
 
+        public Builder withUsername(String name) {
+            this.username = name;
+            return this;
+        }
         public SubmissionNode build() {
             return new SubmissionNode(this);
         }
