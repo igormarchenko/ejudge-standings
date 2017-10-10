@@ -108,8 +108,7 @@ public class ContestDataStorage {
             ContestSubmissionsChanges contestSubmissionsChanges = getDifferenceWithContest(contestId, contest);
 
             List<ParticipantResult> resultsBeforeUpdate = contestData.get(contestId).getResults();
-
-            contestData.get(contestId).updateSubmissions(contestSubmissionsChanges.getNewSubmissions());
+            addContest(contestId, contest);
             List<ParticipantResult> resultsAfterUpdate = contestData.get(contestId).getResults();
 
             Set<String> affectedTeamsIds = contestSubmissionsChanges.getNewSubmissions().stream().map(SubmissionNode::getUsername).collect(Collectors.toSet());
@@ -128,7 +127,7 @@ public class ContestDataStorage {
                     .map(teamId -> new ParticipantUpdates(teamId, affectedTeamsResults.get(teamId), placesBeforeUpdate.get(teamId), placesAfterUpdate.get(teamId)))
                     .collect(Collectors.toMap(ParticipantUpdates::getTeamId, team -> team));
 
-            addContest(contestId, contest);
+
             if (!affectedTeamsIds.isEmpty())
                 contestUpdatesEventProducer.publishEvent(new ContestUpdates(contestId, updatedResults));
         }

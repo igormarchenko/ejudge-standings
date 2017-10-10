@@ -287,7 +287,7 @@ public class ContestDataStorageTest {
         Assert.assertThat(storage.getContestData(contestNode.getContestId()).getResults().size(), is(new DefaultObjects().getParticipantNodes().size()));
 
         ArrayList<ParticipantNode> participants = new ArrayList<>(new DefaultObjects().getParticipantNodes());
-        participants.add(new MockedObjectGenerator().defaultParticipantNode().withId(6L).withName("Test team 6").build());
+        participants.add(new MockedObjectGenerator().defaultParticipantNode().withId(6L).withName("team 6").build());
         ContestNode updatedContest = getDefaultMockedContestBuilder().withParticipants(participants).build();
         storage.updateContest(updatedContest.getContestId(), Arrays.asList(updatedContest), true);
         Assert.assertThat(storage.getContestData(updatedContest.getContestId()).getResults().size(), is(participants.size()));

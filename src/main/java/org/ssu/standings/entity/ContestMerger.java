@@ -40,6 +40,7 @@ public class ContestMerger {
                 .withFogTime(currentContest.getFogTime())
                 .withUnFogTime(currentContest.getUnfogTime())
                 .withSubmissions(getSubmissions(contestList))
+
                 .build();
     }
 

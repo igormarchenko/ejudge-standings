@@ -136,10 +136,7 @@ public class Contest {
             tasks = contest.getProblems().stream().map(Task::new).collect(Collectors.toList());
 
             contest.getParticipants().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
-            for (SubmissionNode submit : contest.getSubmissions()) {
-                results.putIfAbsent(submit.getUsername(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(submit.getUserId()).withName(submit.getUsername()).build()).build());
-                results.get(submit.getUsername()).pushSubmit(submit);
-            }
+            withSubmissions(contest.getSubmissions());
         }
 
         public Builder(Contest contest) {
@@ -160,10 +157,12 @@ public class Contest {
         }
 
         public Builder withSubmissions(List<SubmissionNode> submissions) {
-            results = new HashMap<>();
+//            results = new HashMap<>();
             for (SubmissionNode submit : submissions) {
-                results.putIfAbsent(submit.getUsername(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(submit.getUserId()).withName(submit.getUsername()).build()).build());
-                results.get(submit.getUsername()).pushSubmit(submit);
+                if(submit.getUsername() != null) {
+                    results.putIfAbsent(submit.getUsername(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(submit.getUserId()).withName(submit.getUsername()).build()).build());
+                    results.get(submit.getUsername()).pushSubmit(submit);
+                }
             }
 //            submissions.forEach(submit -> results.get(teamId2TeamNameMapping.get(submit.getUserId())).pushSubmit(submit));
             return this;
