@@ -1,6 +1,7 @@
 package org.ssu.standings.entity.contestresponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.ssu.standings.entity.score.ScoreCalculator;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
 import java.util.Comparator;
@@ -14,15 +15,17 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
     private Map<Long, TaskResult> results = new HashMap<>();
     @JsonProperty("place")
     private Integer place;
+    private ScoreCalculator calculator;
 
     private ParticipantResult(Builder builder) {
         participant = builder.participant;
         results = builder.results;
         place = builder.place;
+        calculator = builder.calculator;
     }
 
     public void pushSubmit(SubmissionNode submit) {
-        results.putIfAbsent(submit.getProblemId(), new TaskResult.Builder().build());
+        results.putIfAbsent(submit.getProblemId(), new TaskResult.Builder().withCalculator(calculator).build());
         results.get(submit.getProblemId()).addSubmission(submit);
     }
 
@@ -66,6 +69,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
         private Participant participant;
         private Map<Long, TaskResult> results  = new HashMap<>();
         private Integer place;
+        private ScoreCalculator calculator;
 
         public Builder() {
             this.participant = new Participant.Builder().build();
@@ -74,6 +78,8 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
         public Builder(ParticipantResult copy) {
             this.participant = (copy.participant == null) ? null : copy.participant.clone();
             this.results.putAll(copy.getResults());
+            this.calculator = copy.calculator;
+
         }
 
         public Builder withPlace(Integer place) {
@@ -83,6 +89,11 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
 
         public Builder withParticipant(Participant participant) {
             this.participant = participant;
+            return this;
+        }
+
+        public Builder withCalculator(ScoreCalculator calculator) {
+            this.calculator = calculator;
             return this;
         }
 

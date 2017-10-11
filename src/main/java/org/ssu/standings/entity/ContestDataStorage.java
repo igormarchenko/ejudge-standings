@@ -56,8 +56,7 @@ public class ContestDataStorage {
                 .collect(Collectors.toList());
 
         List<SubmissionNode> newSubmissions = filterSubmissions.apply(submit -> !submissions.containsKey(submit.getRunUuid()));
-        List<SubmissionNode> rejudgedSubmissions = filterSubmissions.apply(submit -> submissions.containsKey(submit.getRunUuid()) &&
-                submit.getStatus() != submissions.get(submit.getRunUuid()).getStatus());
+        List<SubmissionNode> rejudgedSubmissions = filterSubmissions.apply(submit -> submissions.containsKey(submit.getRunUuid()) && submit.getStatus() != submissions.get(submit.getRunUuid()).getStatus());
 
         return new ContestSubmissionsChanges(newSubmissions, rejudgedSubmissions);
     }
