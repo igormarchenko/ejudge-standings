@@ -6,6 +6,7 @@ import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.entity.contestresponse.Contest;
 import org.ssu.standings.entity.contestresponse.Participant;
 import org.ssu.standings.entity.contestresponse.Task;
+import org.ssu.standings.entity.score.ContestType;
 import org.ssu.standings.entity.score.ScoreCalculator;
 import org.ssu.standings.entity.score.ScoreCalculatorFactory;
 import org.ssu.standings.parser.entity.ContestNode;
@@ -78,7 +79,7 @@ public class ContestMerger {
         return contestList.stream().flatMap(contest -> getParticipantResultsFromContest.apply(contest).stream()).collect(Collectors.toList());
     }
 
-    private ScoreCalculator selectCalculator(List<SubmissionNode> submissions) {
+    private ContestType selectCalculator(List<SubmissionNode> submissions) {
         return ScoreCalculatorFactory.selectCalculator(submissions);
     }
 }

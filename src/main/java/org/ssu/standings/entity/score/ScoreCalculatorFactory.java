@@ -5,10 +5,10 @@ import org.ssu.standings.parser.entity.SubmissionNode;
 import java.util.List;
 
 public class ScoreCalculatorFactory {
-    public static ScoreCalculator selectCalculator(List<SubmissionNode> submission) {
+    public static ContestType selectCalculator(List<SubmissionNode> submission) {
         if(submission.stream().anyMatch(submit -> submit.getScore() != null))
-            return new KirovScoreCalculator();
+            return ContestType.KIROV;
         else
-            return new AcmScoreCalculator();
+            return ContestType.ACM;
     }
 }

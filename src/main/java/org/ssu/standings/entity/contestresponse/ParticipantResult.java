@@ -1,7 +1,7 @@
 package org.ssu.standings.entity.contestresponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.ssu.standings.entity.score.ScoreCalculator;
+import org.ssu.standings.entity.score.ContestType;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
 import java.util.Comparator;
@@ -15,7 +15,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
     private Map<Long, TaskResult> results = new HashMap<>();
     @JsonProperty("place")
     private Integer place;
-    private ScoreCalculator calculator;
+    private ContestType calculator;
 
     private ParticipantResult(Builder builder) {
         participant = builder.participant;
@@ -25,7 +25,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
     }
 
     public void pushSubmit(SubmissionNode submit) {
-        results.putIfAbsent(submit.getProblemId(), new TaskResult.Builder().withCalculator(calculator).build());
+        results.putIfAbsent(submit.getProblemId(), new TaskResult.Builder().withCalculator(calculator.getCalculator()).build());
         results.get(submit.getProblemId()).addSubmission(submit);
     }
 
@@ -54,10 +54,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
 
     @Override
     public int compare(ParticipantResult o1, ParticipantResult o2) {
-        if (!o1.solvedProblems().equals(o2.solvedProblems()))
-            return Long.valueOf(o2.solvedProblems() - o1.solvedProblems()).intValue();
-        else
-            return Long.valueOf(o1.getPenalty() - o2.getPenalty()).intValue();
+        return calculator.getComparator().compare(o1, o2);
     }
     @Override
     public ParticipantResult clone() {
@@ -69,7 +66,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
         private Participant participant;
         private Map<Long, TaskResult> results  = new HashMap<>();
         private Integer place;
-        private ScoreCalculator calculator;
+        private ContestType calculator;
 
         public Builder() {
             this.participant = new Participant.Builder().build();
@@ -92,7 +89,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
             return this;
         }
 
-        public Builder withCalculator(ScoreCalculator calculator) {
+        public Builder withCalculator(ContestType calculator) {
             this.calculator = calculator;
             return this;
         }

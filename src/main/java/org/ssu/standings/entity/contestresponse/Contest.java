@@ -3,8 +3,7 @@ package org.ssu.standings.entity.contestresponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.dao.entity.TeamDAO;
-import org.ssu.standings.entity.score.AcmScoreCalculator;
-import org.ssu.standings.entity.score.ScoreCalculator;
+import org.ssu.standings.entity.score.ContestType;
 import org.ssu.standings.parser.entity.ContestNode;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
@@ -35,7 +34,9 @@ public class Contest {
     private Map<String, ParticipantResult> results;
     @JsonProperty("tasks")
     private List<Task> tasks;
-    private ScoreCalculator calculator;
+
+    @JsonProperty("contestType")
+    private ContestType contestType;
 
     public Contest(Builder builder) {
         contestId = builder.contestId;
@@ -48,14 +49,14 @@ public class Contest {
         unfogTime = builder.unfogTime;
         results = builder.results;
         tasks = builder.tasks;
-        calculator = builder.calculator;
+        contestType = builder.contestType;
     }
 
     @JsonProperty("results")
     public List<ParticipantResult> getResults() {
         List<ParticipantResult> results = this.results.values().stream().sorted().collect(Collectors.toList());
         return IntStream.range(0, results.size())
-                .mapToObj(index -> new ParticipantResult.Builder(results.get(index)).withCalculator(calculator).withPlace(index + 1).build())
+                .mapToObj(index -> new ParticipantResult.Builder(results.get(index)).withCalculator(contestType).withPlace(index + 1).build())
                 .collect(Collectors.toList());
     }
 
@@ -126,8 +127,7 @@ public class Contest {
         private Long unfogTime;
         private List<Task> tasks;
         private Map<String, ParticipantResult> results = new HashMap<>();
-        private ScoreCalculator calculator;
-
+        private ContestType contestType;
 
         public Builder(ContestNode contest) {
 
@@ -163,10 +163,11 @@ public class Contest {
             this.unfogTime = contest.unfogTime;
             this.tasks = new ArrayList<>(contest.tasks);
             this.results = contest.results.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue().clone()));
+            this.contestType = contest.contestType;
         }
 
-        public Builder(Map<String, Participant> teams, Map<String, TeamDAO> teamList, ScoreCalculator calculator) {
-            this.calculator = calculator;
+        public Builder(Map<String, Participant> teams, Map<String, TeamDAO> teamList, ContestType calculator) {
+            this.contestType = calculator;
             teams.values().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withCalculator(calculator).withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
             BiFunction<ParticipantResult, TeamDAO, ParticipantResult> updateteamInfo = (result, info) -> new ParticipantResult
                     .Builder(result)
@@ -233,11 +234,11 @@ public class Contest {
         }
 
 
-        private ScoreCalculator getCalculator() {
-            if (calculator == null) {
-                calculator = new AcmScoreCalculator();
+        private ContestType getCalculator() {
+            if (contestType == null) {
+                contestType = ContestType.ACM;
             }
-            return calculator;
+            return contestType;
         }
 
         public Builder withDuration(Long duration) {
