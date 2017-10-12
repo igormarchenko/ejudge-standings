@@ -42,22 +42,7 @@ public class AcmScoreCalculator implements  ScoreCalculator{
     }
 
     @Override
-    public SubmissionStatus status(List<SubmissionNode> submissions) {
-        if (isProblemSolved(submissions)) return SubmissionStatus.OK;
-        return submissions.stream()
-                .filter(submit -> submit.getStatus() != SubmissionStatus.CE)
-                .map(SubmissionNode::getStatus)
-                .reduce((a, b) -> b)
-                .orElse(SubmissionStatus.EMPTY);
-    }
-
-    @Override
     public Long penalty(List<SubmissionNode> submissions) {
         return isProblemSolved(submissions) ? (Math.max(tries(submissions), 1) - 1) * 20L + acceptedTime(submissions) : 0L;
-    }
-
-    @Override
-    public Boolean isProblemSolved(List<SubmissionNode> submissions) {
-        return submissions.stream().anyMatch(submit -> submit.getStatus() == SubmissionStatus.OK);
     }
 }

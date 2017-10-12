@@ -169,17 +169,7 @@ public class Contest {
         public Builder(Map<String, Participant> teams, Map<String, TeamDAO> teamList, ContestType calculator) {
             this.contestType = calculator;
             teams.values().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withCalculator(calculator).withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
-            BiFunction<ParticipantResult, TeamDAO, ParticipantResult> updateteamInfo = (result, info) -> new ParticipantResult
-                    .Builder(result)
-                    .withParticipant(new Participant.Builder()
-                            .withId(result.getParticipant().getId())
-                            .withName(info.getName())
-                            .withUniversity(info.getUniversity())
-                            .build())
-                    .withCalculator(calculator)
-                    .build();
-
-            teamList.entrySet().forEach(team -> results.computeIfPresent(team.getKey(), (key, value) -> updateteamInfo.apply(results.get(key), team.getValue())));
+            withTeamInfo(teamList);
         }
 
 
@@ -243,6 +233,20 @@ public class Contest {
 
         public Builder withDuration(Long duration) {
             this.duration = duration;
+            return this;
+        }
+
+        public Builder withTeamInfo(Map<String, TeamDAO> teamList) {
+            BiFunction<ParticipantResult, TeamDAO, ParticipantResult> updateteamInfo = (result, info) -> new ParticipantResult
+                    .Builder(result)
+                    .withParticipant(new Participant.Builder()
+                            .withId(result.getParticipant().getId())
+                            .withName(info.getName())
+                            .withUniversity(info.getUniversity())
+                            .build())
+                    .build();
+
+            teamList.entrySet().forEach(team -> results.computeIfPresent(team.getKey(), (key, value) -> updateteamInfo.apply(results.get(key), team.getValue())));
             return this;
         }
 

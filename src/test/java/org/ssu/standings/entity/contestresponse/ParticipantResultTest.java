@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ssu.standings.entity.SubmissionStatus;
-import org.ssu.standings.entity.score.AcmScoreCalculator;
+import org.ssu.standings.entity.score.ContestType;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
 import java.io.IOException;
@@ -17,11 +17,11 @@ import static org.hamcrest.Matchers.*;
 public class ParticipantResultTest {
 
     List<SubmissionNode> submissions;
-    private ParticipantResult result = new ParticipantResult.Builder().withParticipant(null).withCalculator(new AcmScoreCalculator()).build();
+    private ParticipantResult result = new ParticipantResult.Builder().withParticipant(null).withCalculator(ContestType.ACM).build();
 
     @Before
     public void setUp() throws Exception {
-        result = new ParticipantResult.Builder().withParticipant(new Participant.Builder().build()).withCalculator(new AcmScoreCalculator()).build();
+        result = new ParticipantResult.Builder().withParticipant(new Participant.Builder().build()).withCalculator(ContestType.ACM).build();
         submissions = Arrays.asList(
                 new SubmissionNode.Builder().withRunUuid("1").withProblemId(1L).withTime(1L).withStatus(SubmissionStatus.CE).build(),
                 new SubmissionNode.Builder().withRunUuid("2").withProblemId(1L).withTime(10L).withStatus(SubmissionStatus.WA).build(),
@@ -58,7 +58,7 @@ public class ParticipantResultTest {
 
     @Test
     public void emptyResultPenaltyTest() throws Exception {
-        Assert.assertThat(new ParticipantResult.Builder().withParticipant(null).withCalculator(new AcmScoreCalculator()).build().getPenalty(), is(0L));
+        Assert.assertThat(new ParticipantResult.Builder().withParticipant(null).withCalculator(ContestType.ACM).build().getPenalty(), is(0L));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class ParticipantResultTest {
 
     @Test
     public void emptyResultSolvedProblemsTest() throws Exception {
-        Assert.assertThat(new ParticipantResult.Builder().withParticipant(null).withCalculator(new AcmScoreCalculator()).build().solvedProblems(), is(0));
+        Assert.assertThat(new ParticipantResult.Builder().withParticipant(null).withCalculator(ContestType.ACM).build().solvedProblems(), is(0));
     }
 
     @Test

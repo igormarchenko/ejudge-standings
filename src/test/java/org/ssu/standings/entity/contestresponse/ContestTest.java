@@ -232,7 +232,7 @@ public class ContestTest {
         ObjectMapper mapper = new ObjectMapper();
         Contest contest = getContest();
         String actualJson = mapper.writeValueAsString(contest);
-        Assert.assertThat(mapper.readTree(actualJson).size(), is(10));
+        Assert.assertThat(mapper.readTree(actualJson).size(), is(11));
 
         Assert.assertNotNull(mapper.readTree(actualJson).get("id"));
         Assert.assertNotNull(mapper.readTree(actualJson).get("name"));
@@ -244,6 +244,7 @@ public class ContestTest {
         Assert.assertNotNull(mapper.readTree(actualJson).get("unfogTime"));
         Assert.assertNotNull(mapper.readTree(actualJson).get("tasks"));
         Assert.assertNotNull(mapper.readTree(actualJson).get("results"));
+        Assert.assertNotNull(mapper.readTree(actualJson).get("contestType"));
 
         Assert.assertThat(mapper.readTree(actualJson).get("id").asInt(), is(1));
         Assert.assertThat(mapper.readTree(actualJson).get("name").asText(), is("Test contest"));

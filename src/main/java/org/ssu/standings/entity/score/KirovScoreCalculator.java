@@ -19,22 +19,7 @@ public class KirovScoreCalculator implements ScoreCalculator{
     }
 
     @Override
-    public SubmissionStatus status(List<SubmissionNode> submissions) {
-        if(isProblemSolved(submissions)) return SubmissionStatus.OK;
-        return submissions.stream()
-                .filter(submit -> submit.getStatus() != SubmissionStatus.CE)
-                .map(SubmissionNode::getStatus)
-                .reduce((a, b) -> b)
-                .orElse(SubmissionStatus.EMPTY);
-    }
-
-    @Override
     public Long penalty(List<SubmissionNode> submissions) {
         return submissions.stream().mapToLong(SubmissionNode::getScore).max().orElse(0L);
-    }
-
-    @Override
-    public Boolean isProblemSolved(List<SubmissionNode> submissions) {
-        return submissions.stream().anyMatch(submit -> submit.getStatus() == SubmissionStatus.OK);
     }
 }
