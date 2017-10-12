@@ -23,6 +23,9 @@
         background-color: #2e66b9;
     }
 
+    .cell-partial {
+        background-color: #eea236;
+    }
     .animate-repeat {
         line-height: 40px;
         border-bottom: 1px solid white;
@@ -183,13 +186,14 @@
             <td ng-repeat="task in ::contest.tasks track by $index"
                 width="50px"
                 valign="middle"
-                ng-class="{undefined : 'cell-empty', 'EMPTY' : 'cell-empty', 'OK' : 'cell-ok', 'UNKNOWN' : 'cell-unknown', 'WA' : 'cell-wrong', 'TL' : 'cell-wrong', 'RT' : 'cell-wrong', 'PE' : 'cell-wrong', 'ML' : 'cell-wrong', 'SE' : 'cell-wrong', 'FROZEN' : 'cell-frozen'}[team.results[task.id].status]"
+                ng-class="{undefined : 'cell-empty', 'EMPTY' : 'cell-empty', 'OK' : 'cell-ok', 'UNKNOWN' : 'cell-unknown', 'WA' : 'cell-wrong', 'TL' : 'cell-wrong', 'RT' : 'cell-wrong', 'PE' : 'cell-wrong', 'ML' : 'cell-wrong', 'SE' : 'cell-wrong', 'FROZEN' : 'cell-frozen', 'PT' : 'cell-partial'}[team.results[task.id].status]"
                 class="text-center">
                 <div ng-switch="team.results[task.id].status">
                     <div ng-switch-when="EMPTY|null|undefined" ng-switch-when-separator="|"></div>
-                    <div ng-switch-when="OK"><b>+ {{(team.results[task.id].tries - 1 > 0) ? team.results[task.id].tries
-                        :
-                        ''}} </b>
+                    <div ng-switch-when="OK">
+                        <b ng-if="contest.type == 'acm'">+ {{(team.results[task.id].tries - 1 > 0) ? team.results[task.id].tries:''}} </b>
+
+                        <b ng-if="contest.type == 'kirov'">{{team.results[task.id].penalty}} {{(team.results[task.id].tries - 1 > 0) ? '(' + team.results[task.id].tries + ')':''}} </b>
                         <br/>
                         <i>
                             <small> {{formatTime(team.results[task.id].acceptedTime)}}</small>
@@ -197,7 +201,15 @@
                     </div>
                     <div ng-switch-when="FROZEN"><b>?</b>
                     </div>
-                    <div ng-switch-default><b>-{{team.results[task.id].tries}}</b></div>
+                    <div ng-switch-default>
+                        <b ng-if="contest.type == 'acm'">-{{team.results[task.id].tries}}</b>
+                        <span ng-if="contest.type == 'kirov'">
+                            <b>{{team.results[task.id].penalty}} ({{team.results[task.id].tries}})</b>
+                            <i>
+                                <small> {{formatTime(team.results[task.id].acceptedTime)}}</small>
+                            </i>
+                        </span>
+                    </div>
                 </div>
 
 

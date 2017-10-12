@@ -96,12 +96,14 @@ angular.module('ejudgeStandings.controllers', [])
             ejudgeApiService.contestData($routeParams.contestId).then(function (response) {
                 data = response.data;
                 generateUniversityData(data);
+                console.log(data);
                 $scope.contest = {
                     'name': data.name,
                     'tasks': data.tasks,
                     'startTime': parseDate(data.startTime),
                     'stopTime': parseDate(data.stopTime),
-                    'currentTime': parseDate(data.currentTime)
+                    'currentTime': parseDate(data.currentTime),
+                    'type' : data.contestType
                 };
                 $scope.scrollDisabled = false;
             });
