@@ -204,7 +204,7 @@
                     <div ng-switch-default>
                         <b ng-if="contest.type == 'acm'">-{{team.results[task.id].tries}}</b>
                         <span ng-if="contest.type == 'kirov'">
-                            <b>{{team.results[task.id].penalty}} ({{team.results[task.id].tries}})</b>
+                            <b>{{team.results[task.id].penalty}} ({{team.results[task.id].tries}})</b> <br/>
                             <i>
                                 <small> {{formatTime(team.results[task.id].acceptedTime)}}</small>
                             </i>
