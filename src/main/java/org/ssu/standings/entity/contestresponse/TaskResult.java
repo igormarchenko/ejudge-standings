@@ -3,7 +3,7 @@ package org.ssu.standings.entity.contestresponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.entity.SubmissionStatus;
-import org.ssu.standings.entity.score.AcmScoreCalculator;
+import org.ssu.standings.entity.score.KirovScoreCalculator;
 import org.ssu.standings.entity.score.ScoreCalculator;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
@@ -86,7 +86,7 @@ public class TaskResult implements Cloneable {
 
     public static final class Builder {
         private List<SubmissionNode> submissions = new ArrayList<>();
-        private ScoreCalculator calculator = new AcmScoreCalculator();
+        private ScoreCalculator calculator = new KirovScoreCalculator();
 
         public Builder() {
         }

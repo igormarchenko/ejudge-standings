@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.dao.entity.TeamDAO;
 import org.ssu.standings.entity.score.AcmScoreCalculator;
 import org.ssu.standings.entity.score.ScoreCalculator;
-import org.ssu.standings.entity.score.ScoreCalculatorFactory;
 import org.ssu.standings.parser.entity.ContestNode;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
@@ -166,17 +165,25 @@ public class Contest {
             this.results = contest.results.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue().clone()));
         }
 
-        public Builder() {
+        public Builder(Map<String, Participant> teams, Map<String, TeamDAO> teamList, ScoreCalculator calculator) {
+            this.calculator = calculator;
+            teams.values().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withCalculator(calculator).withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
+            BiFunction<ParticipantResult, TeamDAO, ParticipantResult> updateteamInfo = (result, info) -> new ParticipantResult
+                    .Builder(result)
+                    .withParticipant(new Participant.Builder()
+                            .withId(result.getParticipant().getId())
+                            .withName(info.getName())
+                            .withUniversity(info.getUniversity())
+                            .build())
+                    .withCalculator(calculator)
+                    .build();
 
+            teamList.entrySet().forEach(team -> results.computeIfPresent(team.getKey(), (key, value) -> updateteamInfo.apply(results.get(key), team.getValue())));
         }
 
 
         public Builder withSubmissions(List<SubmissionNode> submissions) {
-
             for (SubmissionNode submit : submissions) {
-                if (calculator == null) {
-                    calculator = ScoreCalculatorFactory.selectCalculator(submissions.get(0));
-                }
                 if (submit.getUsername() != null) {
                     results.putIfAbsent(submit.getUsername(), new ParticipantResult.Builder().withCalculator(getCalculator()).withParticipant(new Participant.Builder().withId(submit.getUserId()).withName(submit.getUsername()).build()).build());
                     results.get(submit.getUsername()).pushSubmit(submit);
@@ -220,26 +227,6 @@ public class Contest {
             return this;
         }
 
-        public Builder withTeams(Map<String, Participant> teams) {
-            teams.values().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withCalculator(getCalculator()).withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
-            return this;
-        }
-
-        public Builder withTeamInfo(Map<String, TeamDAO> teamList) {
-            BiFunction<ParticipantResult, TeamDAO, ParticipantResult> updateteamInfo = (result, info) -> new ParticipantResult
-                    .Builder(result)
-                    .withParticipant(new Participant.Builder()
-                            .withId(result.getParticipant().getId())
-                            .withName(info.getName())
-                            .withUniversity(info.getUniversity())
-                            .build())
-                    .withCalculator(getCalculator())
-                    .build();
-
-            teamList.entrySet().forEach(team -> results.computeIfPresent(team.getKey(), (key, value) -> updateteamInfo.apply(results.get(key), team.getValue())));
-            return this;
-        }
-
         public Builder withId(Long contestId) {
             this.contestId = contestId;
             return this;
@@ -259,7 +246,6 @@ public class Contest {
         }
 
         public Contest build() {
-
             return new Contest(this);
         }
 
