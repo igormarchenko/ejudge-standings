@@ -118,8 +118,12 @@ angular.module('ejudgeStandings.controllers', [])
             angular.forEach(data.results, function (result) {
                 if (result.participant.university) {
                     universities.push(result.participant.university.name);
-                    regions.push(result.participant.university.region);
-                    universityTypes.push(result.participant.university.type);
+                    if(result.participant.university.region) {
+                        regions.push(result.participant.university.region);
+                    }
+                    if(result.participant.university.type) {
+                        universityTypes.push(result.participant.university.type);
+                    }
                 }
             });
             $scope.universities = $.unique(universities).sort();
