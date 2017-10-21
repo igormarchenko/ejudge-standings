@@ -3,65 +3,70 @@ package org.ssu.standings.entity.contestresponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.entity.SubmissionStatus;
+import org.ssu.standings.entity.score.AcmScoreCalculator;
+import org.ssu.standings.entity.score.ScoreCalculator;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class TaskResult implements Cloneable {
+    private ScoreCalculator calculator;
     @JsonIgnore
     private List<SubmissionNode> submissions = new ArrayList<>();
 
+    private Integer tries;
+    private Long acceptedTime;
+    private SubmissionStatus status;
+    private Long penalty;
+
     private TaskResult(Builder builder) {
         submissions = builder.submissions;
+        calculator = builder.calculator;
+        updateTaskData();
+    }
+
+    public TaskResult(ScoreCalculator calculator, List<SubmissionNode> submissions) {
+        this.calculator = calculator;
+        this.submissions = submissions.stream().filter(submit -> submit.getStatus() != SubmissionStatus.CE).map(SubmissionNode::clone).collect(Collectors.toList());
+        updateTaskData();
+    }
+
+    public void addSubmission(SubmissionNode submission) {
+        if(submission.getStatus() == SubmissionStatus.CE) return;
+        submissions.removeIf(submit -> submit.getRunUuid().equals(submission.getRunUuid()));
+        submissions.add(submission);
+        submissions.sort(Comparator.comparing(SubmissionNode::getTime));
+        updateTaskData();
+    }
+
+    private void updateTaskData() {
+        tries = calculator.tries(submissions);
+        acceptedTime = calculator.acceptedTime(submissions);
+        status = calculator.status(submissions);
+        penalty = calculator.penalty(submissions);
     }
 
     @JsonProperty("tries")
     public Integer submissionCount() {
-        List<SubmissionNode> nodes = submissions.stream().filter(submit -> submit.getStatus() != SubmissionStatus.CE).collect(Collectors.toList());
-
-        Map<Integer, SubmissionStatus> collect = IntStream.range(0, nodes.size())
-                .boxed()
-                .collect(Collectors.toMap(index -> index, index -> nodes.get(index).getStatus()))
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(item -> item.getKey() + 1, item -> item.getValue()));
-
-
-        return collect.entrySet()
-                .stream()
-                .filter(entry -> entry.getValue() == SubmissionStatus.OK)
-                .findFirst()
-                .map(Map.Entry::getKey)
-                .orElse(collect.size());
+        return tries;
     }
 
     @JsonProperty("acceptedTime")
     public Long getFirstAcceptedTime() {
-        Long seconds = submissions
-                .stream()
-                .filter(submission -> submission.getStatus() == SubmissionStatus.OK)
-                .map(SubmissionNode::getTime)
-                .sorted()
-                .findFirst()
-                .orElse(0L);
-        return (seconds > 0) ? (seconds + 60 - seconds % 60) / 60 : 0L;
+        return acceptedTime;
     }
 
     @JsonProperty("status")
     public SubmissionStatus getStatus() {
-        if (isProblemSolved()) return SubmissionStatus.OK;
-        return submissions.stream()
-                .filter(submit -> submit.getStatus() != SubmissionStatus.CE)
-                .map(SubmissionNode::getStatus)
-                .reduce((a, b) -> b)
-                .orElse(SubmissionStatus.EMPTY);
+        return status;
     }
 
     @JsonProperty("penalty")
     public Long getPenalty() {
-        return isProblemSolved() ? (Math.max(submissionCount(), 1) - 1) * 20L + getFirstAcceptedTime() : 0L;
+        return penalty;
     }
 
     public List<SubmissionNode> getSubmissions() {
@@ -70,33 +75,34 @@ public class TaskResult implements Cloneable {
 
     @JsonIgnore
     public Boolean isProblemSolved() {
-        return submissions.stream().anyMatch(submit -> submit.getStatus() == SubmissionStatus.OK);
+        return calculator.isProblemSolved(submissions);
     }
 
-    public void addSubmission(SubmissionNode submission) {
-        submissions.removeIf(submit -> submit.getRunUuid().equals(submission.getRunUuid()));
-        submissions.add(submission);
-        submissions.sort(Comparator.comparing(SubmissionNode::getTime));
-    }
 
     @Override
     public TaskResult clone() {
         return new TaskResult.Builder(this).build();
     }
 
-
     public static final class Builder {
         private List<SubmissionNode> submissions = new ArrayList<>();
+        private ScoreCalculator calculator = new AcmScoreCalculator();
 
         public Builder() {
         }
 
         public Builder(TaskResult copy) {
-            this.submissions = copy.submissions.stream().map(SubmissionNode::clone).collect(Collectors.toList());
+            this.submissions = copy.submissions.stream().filter(submit -> submit.getStatus() != SubmissionStatus.CE).map(SubmissionNode::clone).collect(Collectors.toList());
+            this.calculator = copy.calculator;
         }
 
         public Builder withSubmissions(List<SubmissionNode> submissions) {
-            this.submissions = submissions.stream().map(SubmissionNode::clone).collect(Collectors.toList());
+            this.submissions = submissions.stream().filter(submit -> submit.getStatus() != SubmissionStatus.CE).map(SubmissionNode::clone).collect(Collectors.toList());
+            return this;
+        }
+
+        public Builder withCalculator(ScoreCalculator calculator) {
+            this.calculator = calculator;
             return this;
         }
 

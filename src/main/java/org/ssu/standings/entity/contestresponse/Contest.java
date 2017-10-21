@@ -3,6 +3,7 @@ package org.ssu.standings.entity.contestresponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.dao.entity.TeamDAO;
+import org.ssu.standings.entity.score.ContestType;
 import org.ssu.standings.parser.entity.ContestNode;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
@@ -34,6 +35,9 @@ public class Contest {
     @JsonProperty("tasks")
     private List<Task> tasks;
 
+    @JsonProperty("contestType")
+    private ContestType contestType;
+
     public Contest(Builder builder) {
         contestId = builder.contestId;
         name = builder.name;
@@ -45,13 +49,14 @@ public class Contest {
         unfogTime = builder.unfogTime;
         results = builder.results;
         tasks = builder.tasks;
+        contestType = builder.contestType;
     }
 
     @JsonProperty("results")
     public List<ParticipantResult> getResults() {
         List<ParticipantResult> results = this.results.values().stream().sorted().collect(Collectors.toList());
         return IntStream.range(0, results.size())
-                .mapToObj(index -> new ParticipantResult.Builder(results.get(index)).withPlace(index + 1).build())
+                .mapToObj(index -> new ParticipantResult.Builder(results.get(index)).withCalculator(contestType).withPlace(index + 1).build())
                 .collect(Collectors.toList());
     }
 
@@ -122,6 +127,7 @@ public class Contest {
         private Long unfogTime;
         private List<Task> tasks;
         private Map<String, ParticipantResult> results = new HashMap<>();
+        private ContestType contestType;
 
         public Builder(ContestNode contest) {
 
@@ -134,9 +140,16 @@ public class Contest {
             fogTime = contest.getFogTime();
             unfogTime = contest.getUnfogTime();
             tasks = contest.getProblems().stream().map(Task::new).collect(Collectors.toList());
-
-            contest.getParticipants().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
+            contest.getParticipants().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder()
+                    .withCalculator(getCalculator())
+                    .withParticipant(new Participant
+                            .Builder()
+                            .withId(team.getId())
+                            .withName(team.getName())
+                            .build())
+                    .build()));
             withSubmissions(contest.getSubmissions());
+
         }
 
         public Builder(Contest contest) {
@@ -150,21 +163,23 @@ public class Contest {
             this.unfogTime = contest.unfogTime;
             this.tasks = new ArrayList<>(contest.tasks);
             this.results = contest.results.entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue().clone()));
+            this.contestType = contest.contestType;
         }
 
-        public Builder() {
-
+        public Builder(Map<String, Participant> teams, Map<String, TeamDAO> teamList, ContestType calculator) {
+            this.contestType = calculator;
+            teams.values().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withCalculator(calculator).withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
+            withTeamInfo(teamList);
         }
+
 
         public Builder withSubmissions(List<SubmissionNode> submissions) {
-//            results = new HashMap<>();
             for (SubmissionNode submit : submissions) {
-                if(submit.getUsername() != null) {
-                    results.putIfAbsent(submit.getUsername(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(submit.getUserId()).withName(submit.getUsername()).build()).build());
+                if (submit.getUsername() != null) {
+                    results.putIfAbsent(submit.getUsername(), new ParticipantResult.Builder().withCalculator(getCalculator()).withParticipant(new Participant.Builder().withId(submit.getUserId()).withName(submit.getUsername()).build()).build());
                     results.get(submit.getUsername()).pushSubmit(submit);
                 }
             }
-//            submissions.forEach(submit -> results.get(teamId2TeamNameMapping.get(submit.getUserId())).pushSubmit(submit));
             return this;
         }
 
@@ -203,13 +218,22 @@ public class Contest {
             return this;
         }
 
-        public Builder withTeams(Map<String, Participant> teams) {
-            teams.values().forEach(team -> results.put(team.getName(), new ParticipantResult.Builder().withParticipant(new Participant.Builder().withId(team.getId()).withName(team.getName()).build()).build()));
+        public Builder withId(Long contestId) {
+            this.contestId = contestId;
             return this;
         }
 
-        public Contest build() {
-            return new Contest(this);
+
+        private ContestType getCalculator() {
+            if (contestType == null) {
+                contestType = ContestType.ACM;
+            }
+            return contestType;
+        }
+
+        public Builder withDuration(Long duration) {
+            this.duration = duration;
+            return this;
         }
 
         public Builder withTeamInfo(Map<String, TeamDAO> teamList) {
@@ -226,14 +250,9 @@ public class Contest {
             return this;
         }
 
-        public Builder withId(Long contestId) {
-            this.contestId = contestId;
-            return this;
+        public Contest build() {
+            return new Contest(this);
         }
 
-        public Builder withDuration(Long duration) {
-            this.duration = duration;
-            return this;
-        }
     }
 }

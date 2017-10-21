@@ -51,6 +51,25 @@ public class ContestDataStorageTest {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
+
+        Field listenerField = null;
+        try {
+            listenerField = aClass.getDeclaredField("contestUpdatesEventProducer");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        listenerField.setAccessible(true);
+        ContestUpdatesEventProducer mockedProducer = mock(ContestUpdatesEventProducer.class);
+        doNothing().when(mockedProducer).publishEvent(any());
+
+        try {
+            listenerField.set(storage, mockedProducer);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         return storage;
     }
 

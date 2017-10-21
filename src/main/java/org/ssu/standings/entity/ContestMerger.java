@@ -6,6 +6,9 @@ import org.ssu.standings.dao.entity.UniversityDAO;
 import org.ssu.standings.entity.contestresponse.Contest;
 import org.ssu.standings.entity.contestresponse.Participant;
 import org.ssu.standings.entity.contestresponse.Task;
+import org.ssu.standings.entity.score.ContestType;
+import org.ssu.standings.entity.score.ScoreCalculator;
+import org.ssu.standings.entity.score.ScoreCalculatorFactory;
 import org.ssu.standings.parser.entity.ContestNode;
 import org.ssu.standings.parser.entity.ParticipantNode;
 import org.ssu.standings.parser.entity.SubmissionNode;
@@ -27,19 +30,19 @@ public class ContestMerger {
 
         Contest currentContest = contestList.stream().sorted(Comparator.comparing(Contest::getStartTime)).reduce((a, b) -> b).get();
 
-        return new Contest.Builder()
+        List<SubmissionNode> submissions = getSubmissions(contestList);
+
+        return new Contest.Builder(createParticipantList(contests, teams), teams, selectCalculator(submissions))
                 .withId(currentContest.getContestId())
                 .withDuration(currentContest.getDuration())
                 .withName(currentContest.getName())
                 .withTasks(createTaskList(contests))
-                .withTeams(createParticipantList(contests, teams))
-                .withTeamInfo(teams)
                 .withStartTime(currentContest.getStartTime())
                 .withStopTime(currentContest.getStopTime())
                 .withCurrentTime(currentContest.getCurrentTime())
                 .withFogTime(currentContest.getFogTime())
                 .withUnFogTime(currentContest.getUnfogTime())
-                .withSubmissions(getSubmissions(contestList))
+                .withSubmissions(submissions)
 
                 .build();
     }
@@ -74,5 +77,9 @@ public class ContestMerger {
                 .collect(Collectors.toList());
 
         return contestList.stream().flatMap(contest -> getParticipantResultsFromContest.apply(contest).stream()).collect(Collectors.toList());
+    }
+
+    private ContestType selectCalculator(List<SubmissionNode> submissions) {
+        return ScoreCalculatorFactory.selectCalculator(submissions);
     }
 }

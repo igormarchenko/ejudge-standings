@@ -3,7 +3,7 @@ package org.ssu.standings.parser.entity;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.ssu.standings.entity.SubmissionStatus;
 
-public class SubmissionNode implements Cloneable{
+public class SubmissionNode implements Cloneable {
     @JacksonXmlProperty(isAttribute = true, localName = "run_id")
     private Long id;
 
@@ -28,6 +28,9 @@ public class SubmissionNode implements Cloneable{
     @JacksonXmlProperty(isAttribute = true, localName = "test")
     private Long test;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "score")
+    private Long score;
+
     @JacksonXmlProperty(isAttribute = true, localName = "nsec")
     private Long nsec;
 
@@ -51,10 +54,7 @@ public class SubmissionNode implements Cloneable{
         nsec = builder.nsec;
         passedMode = builder.passedMode;
         username = builder.username;
-    }
-
-    public void setProblemId(Long problemId) {
-        this.problemId = problemId;
+        score = builder.score;
     }
 
     public Long getId() {
@@ -73,12 +73,20 @@ public class SubmissionNode implements Cloneable{
         return status;
     }
 
+    public void setStatus(SubmissionStatus status) {
+        this.status = status;
+    }
+
     public Long getUserId() {
         return userId;
     }
 
     public Long getProblemId() {
         return problemId;
+    }
+
+    public void setProblemId(Long problemId) {
+        this.problemId = problemId;
     }
 
     public Long getLanguageId() {
@@ -89,6 +97,10 @@ public class SubmissionNode implements Cloneable{
         return test;
     }
 
+    public Long getScore() {
+        return score;
+    }
+
     public Long getNsec() {
         return nsec;
     }
@@ -97,15 +109,11 @@ public class SubmissionNode implements Cloneable{
         return passedMode;
     }
 
-    public void setStatus(SubmissionStatus status) {
-        this.status = status;
-    }
-
     public String getUsername() {
         return username;
     }
 
-    public SubmissionNode clone()  {
+    public SubmissionNode clone() {
         return new SubmissionNode.Builder(this).build();
     }
 
@@ -122,6 +130,7 @@ public class SubmissionNode implements Cloneable{
         private Long nsec;
         private String passedMode;
         private String username;
+        private Long score;
 
         public Builder() {
         }
@@ -138,6 +147,7 @@ public class SubmissionNode implements Cloneable{
             this.nsec = copy.getNsec();
             this.passedMode = copy.getPassedMode();
             this.username = copy.getUsername();
+            this.score = copy.score;
         }
 
         public Builder withTime(Long time) {
@@ -164,6 +174,12 @@ public class SubmissionNode implements Cloneable{
             this.username = name;
             return this;
         }
+
+        public Builder withScore(Long score) {
+            this.score = score;
+            return this;
+        }
+
         public SubmissionNode build() {
             return new SubmissionNode(this);
         }

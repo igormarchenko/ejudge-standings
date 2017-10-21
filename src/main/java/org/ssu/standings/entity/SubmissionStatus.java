@@ -10,6 +10,7 @@ public enum SubmissionStatus {
     RT("Runtime Error"),
     ML("Memory Limit Exceed"),
     EMPTY("Empty"),
+    PT("Partial Solution"),
     FROZEN("Frozen");
 
     private String status;

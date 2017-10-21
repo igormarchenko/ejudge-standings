@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ssu.standings.entity.SubmissionStatus;
+import org.ssu.standings.entity.score.AcmScoreCalculator;
 import org.ssu.standings.parser.entity.SubmissionNode;
 
 import java.io.IOException;
@@ -34,9 +35,9 @@ public class TaskResultTest {
                 new SubmissionNode.Builder().withStatus(SubmissionStatus.RT).withTime(123L).build(),
                 new SubmissionNode.Builder().withStatus(SubmissionStatus.SE).withTime(123L).build()
         );
-        unsolvedTask = new TaskResult.Builder().withSubmissions(unsolvedProblemSubmissions).build();
+        unsolvedTask = new TaskResult.Builder().withSubmissions(unsolvedProblemSubmissions).withCalculator(new AcmScoreCalculator()).build();
 
-        emptySubmissionListTask = new TaskResult.Builder().withSubmissions(new ArrayList<>()).build();
+        emptySubmissionListTask = new TaskResult.Builder().withSubmissions(new ArrayList<>()).withCalculator(new AcmScoreCalculator()).build();
 
         List<SubmissionNode> solvedProblemSubmissions = Arrays.asList(
                 new SubmissionNode.Builder().withStatus(SubmissionStatus.CE).withTime(123L).build(),
@@ -46,7 +47,7 @@ public class TaskResultTest {
                 new SubmissionNode.Builder().withStatus(SubmissionStatus.OK).withTime(150L).build(),
                 new SubmissionNode.Builder().withStatus(SubmissionStatus.SE).withTime(1223L).build()
         );
-        solvedTask = new TaskResult.Builder().withSubmissions(solvedProblemSubmissions).build();
+        solvedTask = new TaskResult.Builder().withSubmissions(solvedProblemSubmissions).withCalculator(new AcmScoreCalculator()).build();
 
 
         List<SubmissionNode> solvedProblemWithoutCESubmissions = Arrays.asList(
@@ -56,12 +57,12 @@ public class TaskResultTest {
                 new SubmissionNode.Builder().withStatus(SubmissionStatus.OK).withTime(150L).build(),
                 new SubmissionNode.Builder().withStatus(SubmissionStatus.SE).withTime(1223L).build()
         );
-        solvedTaskWithoutCE = new TaskResult.Builder().withSubmissions(solvedProblemSubmissions).build();
+        solvedTaskWithoutCE = new TaskResult.Builder().withSubmissions(solvedProblemSubmissions).withCalculator(new AcmScoreCalculator()).build();
 
         List<SubmissionNode> solvedFirstAttemptProblemSubmissions = Arrays.asList(
                 new SubmissionNode.Builder().withStatus(SubmissionStatus.OK).withTime(1L).build()
         );
-        solvedFirstAttemptTask = new TaskResult.Builder().withSubmissions(solvedFirstAttemptProblemSubmissions).build();
+        solvedFirstAttemptTask = new TaskResult.Builder().withSubmissions(solvedFirstAttemptProblemSubmissions).withCalculator(new AcmScoreCalculator()).build();
     }
 
     @Test
