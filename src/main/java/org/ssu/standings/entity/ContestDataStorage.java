@@ -84,12 +84,12 @@ public class ContestDataStorage {
         if (isContestFrozen.get(contestId)) {
             List<SubmissionNode> nodes = getContestSubmissions(contestId).stream()
                     .filter(submit -> isSubmitFrozen.test(storedContest, submit))
-//                    .map(submit -> new SubmissionNode.Builder(submit).withStatus(SubmissionStatus.FROZEN).build())
+                    .map(submit -> new SubmissionNode.Builder(submit).withStatus(SubmissionStatus.FROZEN).build())
 //                    .map(SubmissionNode::clone)
-                    .peek(submit -> submit.setStatus(SubmissionStatus.FROZEN))
+//                    .peek(submit -> submit.setStatus(SubmissionStatus.FROZEN))
                     .collect(Collectors.toList());
 
-//            contest.withSubmissions(nodes);
+            contest.withSubmissions(nodes);
         }
         return contest.build();
     }
@@ -123,7 +123,7 @@ public class ContestDataStorage {
             Map<String, Integer> placesBeforeUpdate = getTeamPlaces.apply(resultsBeforeUpdate);
             Map<String, Integer> placesAfterUpdate = getTeamPlaces.apply(resultsAfterUpdate);
 
-            Map<String, ParticipantResult> affectedTeamsResults = getContestData(contestId).getTeamsResults(affectedTeamsIds);
+            Map<String, ParticipantResult> affectedTeamsResults = contestData.get(contestId).getTeamsResults(affectedTeamsIds);
 
             Map<String, ParticipantUpdates> updatedResults = affectedTeamsIds.stream()
                     .map(teamId -> new ParticipantUpdates(teamId, affectedTeamsResults.get(teamId), placesBeforeUpdate.get(teamId), placesAfterUpdate.get(teamId)))
