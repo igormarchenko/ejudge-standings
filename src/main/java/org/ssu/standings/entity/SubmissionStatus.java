@@ -11,6 +11,7 @@ public enum SubmissionStatus {
     ML("Memory Limit Exceed"),
     EMPTY("Empty"),
     PT("Partial Solution"),
+    WT("Wall Time Limit"),
     FROZEN("Frozen");
 
     private String status;
