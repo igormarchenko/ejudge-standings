@@ -177,7 +177,7 @@ public class Contest {
             for (SubmissionNode submit : submissions) {
                 if (submit.getUsername() != null) {
                     results.putIfAbsent(submit.getUsername(), new ParticipantResult.Builder().withCalculator(getCalculator()).withParticipant(new Participant.Builder().withId(submit.getUserId()).withName(submit.getUsername()).build()).build());
-                    results.get(submit.getUsername()).pushSubmit(submit);
+                    results.get(submit.getUsername()).pushSubmit(new SubmissionNode.Builder(submit).build());
                 }
             }
             return this;

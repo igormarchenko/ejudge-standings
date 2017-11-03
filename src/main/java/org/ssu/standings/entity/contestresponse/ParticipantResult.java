@@ -7,6 +7,7 @@ import org.ssu.standings.parser.entity.SubmissionNode;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ParticipantResult implements Comparator<ParticipantResult>, Comparable<ParticipantResult>, Cloneable {
     @JsonProperty("participant")
@@ -74,7 +75,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
 
         public Builder(ParticipantResult copy) {
             this.participant = (copy.participant == null) ? null : copy.participant.clone();
-            this.results.putAll(copy.getResults());
+            this.results = copy.getResults().entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> new TaskResult.Builder(item.getValue()).build()));
             this.calculator = copy.calculator;
 
         }

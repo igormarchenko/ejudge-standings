@@ -10,6 +10,7 @@ import org.ssu.standings.parser.entity.SubmissionNode;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TaskResult implements Cloneable {
@@ -28,14 +29,8 @@ public class TaskResult implements Cloneable {
         updateTaskData();
     }
 
-    public TaskResult(ScoreCalculator calculator, List<SubmissionNode> submissions) {
-        this.calculator = calculator;
-        this.submissions = submissions.stream().filter(submit -> submit.getStatus() != SubmissionStatus.CE).map(SubmissionNode::clone).collect(Collectors.toList());
-        updateTaskData();
-    }
-
     public void addSubmission(SubmissionNode submission) {
-        if(submission.getStatus() == SubmissionStatus.CE) return;
+        if(Objects.isNull(submission) || submission.getStatus() == SubmissionStatus.CE) return;
         submissions.removeIf(submit -> submit.getRunUuid().equals(submission.getRunUuid()));
         submissions.add(submission);
         submissions.sort(Comparator.comparing(SubmissionNode::getTime));
@@ -92,12 +87,12 @@ public class TaskResult implements Cloneable {
         }
 
         public Builder(TaskResult copy) {
-            this.submissions = copy.submissions.stream().filter(submit -> submit.getStatus() != SubmissionStatus.CE).map(SubmissionNode::clone).collect(Collectors.toList());
+            this.submissions = copy.submissions.stream().filter(submit -> Objects.nonNull(submit) && submit.getStatus() != SubmissionStatus.CE).map(item -> new SubmissionNode.Builder(item).build()).collect(Collectors.toList());
             this.calculator = copy.calculator;
         }
 
         public Builder withSubmissions(List<SubmissionNode> submissions) {
-            this.submissions = submissions.stream().filter(submit -> submit.getStatus() != SubmissionStatus.CE).map(SubmissionNode::clone).collect(Collectors.toList());
+            this.submissions = submissions.stream().filter(submit -> Objects.nonNull(submit) && submit.getStatus() != SubmissionStatus.CE).map(item -> new SubmissionNode.Builder(item).build()).collect(Collectors.toList());
             return this;
         }
 
