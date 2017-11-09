@@ -45,8 +45,8 @@ public class Contest {
         startTime = builder.startTime;
         stopTime = builder.stopTime;
         currentTime = builder.currentTime;
-        fogTime = builder.fogTime;
-        unfogTime = builder.unfogTime;
+        fogTime = Optional.ofNullable(builder.fogTime).orElse(3600L);
+        unfogTime = Optional.ofNullable(builder.unfogTime).orElse(7200L);
         results = builder.results;
         tasks = builder.tasks;
         contestType = builder.contestType;

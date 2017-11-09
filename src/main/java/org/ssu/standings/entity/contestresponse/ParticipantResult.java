@@ -1,5 +1,6 @@
 package org.ssu.standings.entity.contestresponse;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.entity.score.ContestType;
 import org.ssu.standings.parser.entity.SubmissionNode;
@@ -14,7 +15,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
     private Participant participant;
     @JsonProperty("results")
     private Map<Long, TaskResult> results = new HashMap<>();
-    @JsonProperty("place")
+    @JsonIgnore
     private Integer place;
     private ContestType calculator;
 
@@ -32,6 +33,11 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
 
     public Map<Long, TaskResult> getResults() {
         return results;
+    }
+
+    @JsonProperty("place")
+    public Integer getPlace() {
+        return place;
     }
 
     @JsonProperty("penalty")

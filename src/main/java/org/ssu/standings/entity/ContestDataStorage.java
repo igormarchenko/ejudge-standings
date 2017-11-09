@@ -69,11 +69,20 @@ public class ContestDataStorage {
         return contestData.get(contestId).getSubmissions();
     }
 
-    public List<SubmissionNode> getFrozenSubmits(Long contestId) {
-        Contest contest = contestData.get(contestId);
-        return getContestSubmissions(contestId).stream()
+    public List<ParticipantUpdates> getFrozenSubmits(Long contestId) {
+        Contest contest = new Contest.Builder(getContestData(contestId)).build();
+        List<SubmissionNode> frozenSubmits = getContestSubmissions(contestId).stream()
                 .filter(submit -> isSubmitFrozen.test(contest, submit))
                 .collect(Collectors.toList());
+
+        List<ParticipantUpdates> result = new ArrayList<>();
+        for(SubmissionNode submission : frozenSubmits) {
+            ParticipantResult resultsBeforeUpdate = contest.getResults().stream().filter(userResult -> userResult.getParticipant().getName().equals(submission.getUsername())).findFirst().get();
+            contest.updateSubmissions(Arrays.asList(submission));
+            ParticipantResult resultsAfterUpdate = contest.getResults().stream().filter(userResult -> userResult.getParticipant().getName().equals(submission.getUsername())).findFirst().get();
+            result.add(new ParticipantUpdates(submission.getUsername(), resultsAfterUpdate, resultsBeforeUpdate.getPlace(), resultsAfterUpdate.getPlace()));
+        }
+        return result;
     }
 
     public Contest getContestData(Long contestId) {
