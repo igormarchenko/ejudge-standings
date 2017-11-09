@@ -80,7 +80,7 @@ public class ContestDataStorage {
             ParticipantResult resultsBeforeUpdate = contest.getResults().stream().filter(userResult -> userResult.getParticipant().getName().equals(submission.getUsername())).findFirst().get();
             contest.updateSubmissions(Arrays.asList(submission));
             ParticipantResult resultsAfterUpdate = contest.getResults().stream().filter(userResult -> userResult.getParticipant().getName().equals(submission.getUsername())).findFirst().get();
-            result.add(new ParticipantUpdates(submission.getUsername(), resultsAfterUpdate, resultsBeforeUpdate.getPlace(), resultsAfterUpdate.getPlace()));
+            result.add(new ParticipantUpdates(submission.getUsername(), resultsAfterUpdate, resultsBeforeUpdate.getPlace() - 1, resultsAfterUpdate.getPlace() - 1));
         }
         return result;
     }

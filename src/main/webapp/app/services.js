@@ -16,6 +16,13 @@ angular.module('ejudgeStandings.services', [])
             });
         };
 
+        apiService.frozenSubmits = function (contestId) {
+            return $http({
+                method: 'GET',
+                url: '/api/frozen-submits/' + contestId
+            });
+        };
+
         apiService.sendBaylorFileContent = function (contestId, content) {
             return $http({
                 method: 'POST',

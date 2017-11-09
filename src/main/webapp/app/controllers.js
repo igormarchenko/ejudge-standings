@@ -79,7 +79,7 @@ angular.module('ejudgeStandings.controllers', [])
                 $scope.selectedRegions.length === 0 &&
                 $scope.selectedUniversities.length === 0);
 
-            if(!$scope.filterApplied){
+            if (!$scope.filterApplied) {
                 return true;
             }
             if (team.participant.university) {
@@ -103,7 +103,7 @@ angular.module('ejudgeStandings.controllers', [])
                     'startTime': parseDate(data.startTime),
                     'stopTime': parseDate(data.stopTime),
                     'currentTime': parseDate(data.currentTime),
-                    'type' : data.contestType
+                    'type': data.contestType
                 };
                 $scope.scrollDisabled = false;
             });
@@ -118,10 +118,10 @@ angular.module('ejudgeStandings.controllers', [])
             angular.forEach(data.results, function (result) {
                 if (result.participant.university) {
                     universities.push(result.participant.university.name);
-                    if(result.participant.university.region) {
+                    if (result.participant.university.region) {
                         regions.push(result.participant.university.region);
                     }
-                    if(result.participant.university.type) {
+                    if (result.participant.university.type) {
                         universityTypes.push(result.participant.university.type);
                     }
                 }
@@ -157,7 +157,7 @@ angular.module('ejudgeStandings.controllers', [])
                 var interval = setInterval(function () {
 
                     $scope.$apply(function () {
-                        if(startPos > endPos) {
+                        if (startPos > endPos) {
                             teamUp(index);
                             index--;
                         } else {
@@ -171,7 +171,24 @@ angular.module('ejudgeStandings.controllers', [])
             }
         };
 
+        var readyForUnfreeze = false;
+        var unfreezeResults = [];
+        $scope.unfreezeTable = function () {
+            var results = ejudgeApiService.frozenSubmits($routeParams.contestId).then(function (response) {
+                readyForUnfreeze = true;
+                angular.forEach(response.data, function (team) {
+                    unfreezeResults.push(team);
+                });
+            });
+        };
 
+        $scope.unfreezeNext = function () {
+            if (readyForUnfreeze && unfreezeResults.length) {
+                $scope.display[unfreezeResults[0].previousPlace] = unfreezeResults[0].result;
+                slideTeam(unfreezeResults[0].previousPlace, unfreezeResults[0].currentPlace);
+                unfreezeResults.splice(0, 1);
+            }
+        };
         $scope.hide = function () {
             $mdDialog.hide();
         };
@@ -200,4 +217,5 @@ angular.module('ejudgeStandings.controllers', [])
 
             });
         });
-    });
+    })
+;
