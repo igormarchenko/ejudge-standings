@@ -34,7 +34,7 @@ public class ContestDataStorage {
     private Map<Long, Contest> contestData = new HashMap<>();
     private Map<String, TeamDAO> teams;
     private Map<Long, Boolean> isContestFrozen = new HashMap<>();
-    private BiPredicate<Contest, SubmissionNode> isSubmitFrozen = (contest, submit) -> contest.getStartTime().plusSeconds(submit.getTime()).compareTo(contest.getStopTime().minusSeconds(contest.getFogTime())) > 0;
+    private BiPredicate<Contest, SubmissionNode> isSubmitFrozen = (contest, submit) -> contest.getStartTime().plusSeconds(submit.getTime()).compareTo(contest.getStopTime().minusSeconds(contest.getFogTime())) > 0 && isContestFrozen.get(submit.getProblemId() / 1_000_000);
 
     public void updateData() {
         teams = teamRepository.findAll()
@@ -90,14 +90,14 @@ public class ContestDataStorage {
         Contest storedContest = contestData.get(contestId);
         Contest.Builder contest = new Contest.Builder(storedContest);
 
-        if (isContestFrozen.get(contestId)) {
+//        if (isContestFrozen.get(contestId)) {
             List<SubmissionNode> nodes = getContestSubmissions(contestId).stream()
                     .filter(submit -> isSubmitFrozen.test(storedContest, submit))
                     .map(submit -> new SubmissionNode.Builder(submit).withStatus(SubmissionStatus.FROZEN).build())
                     .collect(Collectors.toList());
 
             contest.withSubmissions(nodes);
-        }
+//        }
         return contest.build();
     }
 
@@ -105,8 +105,8 @@ public class ContestDataStorage {
         return contestData.containsKey(contestId);
     }
 
-    public Contest updateContest(Long contestId, List<ContestNode> dataFromStandingsFile, Boolean isFrozen) {
-        isContestFrozen.put(contestId, isFrozen);
+    public Contest updateContest(Long contestId, List<ContestNode> dataFromStandingsFile, Map<Long, Boolean> frozenStatuses) {
+        isContestFrozen = new HashMap<>(frozenStatuses);
         Contest contest = contestMerger.mergeContests(dataFromStandingsFile, teams);
 
         if (!isContestPresent(contestId)) {

@@ -110,22 +110,22 @@ public class ContestMergerTest {
         ContestMerger merger = new ContestMerger();
         Contest result = merger.mergeContests(collect, new HashMap<>());
         Assert.assertThat(result.getTasks().size(), is(8));
-        Assert.assertThat(result.getTasks().get(0).getId(), is(211 * 100 + 1L));
+        Assert.assertThat(result.getTasks().get(0).getId(), is(211 * 1000000 + 1L));
         Assert.assertThat(result.getTasks().get(0).getShortName(), is("A1"));
-        Assert.assertThat(result.getTasks().get(1).getId(), is(211 * 100 + 2L));
+        Assert.assertThat(result.getTasks().get(1).getId(), is(211 * 1000000 + 2L));
         Assert.assertThat(result.getTasks().get(1).getShortName(), is("B1"));
-        Assert.assertThat(result.getTasks().get(2).getId(), is(211 * 100 + 3L));
+        Assert.assertThat(result.getTasks().get(2).getId(), is(211 * 1000000 + 3L));
         Assert.assertThat(result.getTasks().get(2).getShortName(), is("C1"));
-        Assert.assertThat(result.getTasks().get(3).getId(), is(211 * 100 + 4L));
+        Assert.assertThat(result.getTasks().get(3).getId(), is(211 * 1000000 + 4L));
         Assert.assertThat(result.getTasks().get(3).getShortName(), is("D1"));
 
-        Assert.assertThat(result.getTasks().get(4).getId(), is(212 * 100 + 1L));
+        Assert.assertThat(result.getTasks().get(4).getId(), is(212 * 1000000 + 1L));
         Assert.assertThat(result.getTasks().get(4).getShortName(), is("A2"));
-        Assert.assertThat(result.getTasks().get(5).getId(), is(212 * 100 + 2L));
+        Assert.assertThat(result.getTasks().get(5).getId(), is(212 * 1000000 + 2L));
         Assert.assertThat(result.getTasks().get(5).getShortName(), is("B2"));
-        Assert.assertThat(result.getTasks().get(6).getId(), is(212 * 100 + 3L));
+        Assert.assertThat(result.getTasks().get(6).getId(), is(212 * 1000000 + 3L));
         Assert.assertThat(result.getTasks().get(6).getShortName(), is("C2"));
-        Assert.assertThat(result.getTasks().get(7).getId(), is(212 * 100 + 4L));
+        Assert.assertThat(result.getTasks().get(7).getId(), is(212 * 1000000 + 4L));
         Assert.assertThat(result.getTasks().get(7).getShortName(), is("D2"));
 
         Assert.assertThat(result.getName(), is("ACM ICPC 2017 Stage I (25-03-2017) day two"));
@@ -158,13 +158,13 @@ public class ContestMergerTest {
         Contest result = merger.mergeContests(Arrays.asList(parser.parse(input.get(0)).get()), new HashMap<>());
 
         Assert.assertThat(result.getTasks().size(), is(4));
-        Assert.assertThat(result.getTasks().get(0).getId(), is(211 * 100 + 1L));
+        Assert.assertThat(result.getTasks().get(0).getId(), is(211 * 1000000 + 1L));
         Assert.assertThat(result.getTasks().get(0).getShortName(), is("A"));
-        Assert.assertThat(result.getTasks().get(1).getId(), is(211 * 100 + 2L));
+        Assert.assertThat(result.getTasks().get(1).getId(), is(211 * 1000000 + 2L));
         Assert.assertThat(result.getTasks().get(1).getShortName(), is("B"));
-        Assert.assertThat(result.getTasks().get(2).getId(), is(211 * 100 + 3L));
+        Assert.assertThat(result.getTasks().get(2).getId(), is(211 * 1000000 + 3L));
         Assert.assertThat(result.getTasks().get(2).getShortName(), is("C"));
-        Assert.assertThat(result.getTasks().get(3).getId(), is(211 * 100 + 4L));
+        Assert.assertThat(result.getTasks().get(3).getId(), is(211 * 1000000 + 4L));
         Assert.assertThat(result.getTasks().get(3).getShortName(), is("D"));
     }
 
@@ -177,22 +177,22 @@ public class ContestMergerTest {
 
 
         Assert.assertThat(result.getTasks().size(), is(8));
-        Assert.assertThat(result.getTasks().get(0).getId(), is(211 * 100 + 1L));
+        Assert.assertThat(result.getTasks().get(0).getId(), is(211 * 1000000 + 1L));
         Assert.assertThat(result.getTasks().get(0).getShortName(), is("A1"));
-        Assert.assertThat(result.getTasks().get(1).getId(), is(211 * 100 + 2L));
+        Assert.assertThat(result.getTasks().get(1).getId(), is(211 * 1000000 + 2L));
         Assert.assertThat(result.getTasks().get(1).getShortName(), is("B1"));
-        Assert.assertThat(result.getTasks().get(2).getId(), is(211 * 100 + 3L));
+        Assert.assertThat(result.getTasks().get(2).getId(), is(211 * 1000000 + 3L));
         Assert.assertThat(result.getTasks().get(2).getShortName(), is("C1"));
-        Assert.assertThat(result.getTasks().get(3).getId(), is(211 * 100 + 4L));
+        Assert.assertThat(result.getTasks().get(3).getId(), is(211 * 1000000 + 4L));
         Assert.assertThat(result.getTasks().get(3).getShortName(), is("D1"));
 
-        Assert.assertThat(result.getTasks().get(4).getId(), is(213 * 100 + 1L));
+        Assert.assertThat(result.getTasks().get(4).getId(), is(213 * 1000000 + 1L));
         Assert.assertThat(result.getTasks().get(4).getShortName(), is("A2"));
-        Assert.assertThat(result.getTasks().get(5).getId(), is(213 * 100 + 2L));
+        Assert.assertThat(result.getTasks().get(5).getId(), is(213 * 1000000 + 2L));
         Assert.assertThat(result.getTasks().get(5).getShortName(), is("B2"));
-        Assert.assertThat(result.getTasks().get(6).getId(), is(213 * 100 + 3L));
+        Assert.assertThat(result.getTasks().get(6).getId(), is(213 * 1000000 + 3L));
         Assert.assertThat(result.getTasks().get(6).getShortName(), is("C2"));
-        Assert.assertThat(result.getTasks().get(7).getId(), is(213 * 100 + 4L));
+        Assert.assertThat(result.getTasks().get(7).getId(), is(213 * 1000000 + 4L));
         Assert.assertThat(result.getTasks().get(7).getShortName(), is("D2"));
 
         Assert.assertThat(result.getName(), is("ACM ICPC 2017 Stage I (25-03-2017) day two"));

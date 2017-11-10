@@ -51,15 +51,20 @@ public class StandingsWatchService {
             initContestDataFlow();
         }
 
-        Function<List<StandingsFileDAO>, List<ContestNode>> updateContestData = files -> files.stream().map(file -> parser.parse(observers.get(file).update()).orElse(new ContestNode())).collect(Collectors.toList());
-        contests.entrySet().forEach(contest -> {
-                    List<ContestNode> data = updateContestData.apply(contest.getValue().getStandingsFiles());
-                    if (contest.getValue().getStandingsFiles().stream().anyMatch(file -> observers.get(file).getHasUpdates())) {
-                        contest.getValue().getStandingsFiles().forEach(file -> observers.get(file).getContent());
-                        contestDataStorage.updateContest(contest.getKey(), data, contest.getValue().getFinal());
-                    }
-                }
-        );
+        Function<StandingsFileDAO, ContestNode> parseFile = file -> parser.parse(observers.get(file).update()).orElse(new ContestNode());
+
+        Map<StandingsFileDAO, ContestNode> collect = contests.entrySet()
+                .stream()
+                .flatMap(entry -> entry.getValue().getStandingsFiles().stream())
+                .collect(Collectors.toMap(file -> file, parseFile::apply));
+
+        Map<Long, Boolean> contestStatuses = collect.entrySet().stream()
+                .collect(Collectors.toMap(item -> item.getValue().getContestId(), item -> item.getKey().getFrozen()));
+
+        Map<Long, List<ContestNode>> contestData = collect.entrySet().stream().collect(Collectors.groupingBy(item -> item.getKey().getContestId(), Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
+
+
+        contestData.entrySet().forEach(item -> contestDataStorage.updateContest(item.getKey(), item.getValue(), contestStatuses));
     }
 }
 
