@@ -302,7 +302,7 @@ public class AdminControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void saveContestForAdminUser() throws Exception {
-        ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withIsFinal(true).withStandingsFiles(new ArrayList<>()).withName("Test").build();
+        ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withStandingsFiles(new ArrayList<>()).withName("Test").build();
         Map<String, ContestDAO> data = new HashMap<>();
         data.put("data", contestDAO);
         String teamJSON = new ObjectMapper().writeValueAsString(data);
@@ -313,7 +313,7 @@ public class AdminControllerTest {
     @Test
     @WithMockUser(username = "observer", authorities = {"OBSERVER"})
     public void saveContestForObserverUser() throws Exception {
-        ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withIsFinal(true).withName("Test").build();
+        ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withName("Test").build();
         Map<String, ContestDAO> data = new HashMap<>();
         data.put("data", contestDAO);
         String teamJSON = new ObjectMapper().writeValueAsString(data);
@@ -324,7 +324,7 @@ public class AdminControllerTest {
     @Test
     @WithAnonymousUser
     public void saveContestForUnauthorizedUser() throws Exception {
-        ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withIsFinal(true).withName("Test").build();
+        ContestDAO contestDAO = new ContestDAO.Builder().withId(1L).withName("Test").build();
         Map<String, ContestDAO> data = new HashMap<>();
         data.put("data", contestDAO);
         String teamJSON = new ObjectMapper().writeValueAsString(data);

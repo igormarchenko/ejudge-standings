@@ -76,7 +76,7 @@ public class ContestDataStorage {
                 .collect(Collectors.toList());
 
         List<ParticipantUpdates> result = new ArrayList<>();
-        for(SubmissionNode submission : frozenSubmits) {
+        for (SubmissionNode submission : frozenSubmits) {
             ParticipantResult resultsBeforeUpdate = contest.getResults().stream().filter(userResult -> userResult.getParticipant().getName().equals(submission.getUsername())).findFirst().get();
             contest.updateSubmissions(Arrays.asList(submission));
             ParticipantResult resultsAfterUpdate = contest.getResults().stream().filter(userResult -> userResult.getParticipant().getName().equals(submission.getUsername())).findFirst().get();
@@ -90,14 +90,13 @@ public class ContestDataStorage {
         Contest storedContest = contestData.get(contestId);
         Contest.Builder contest = new Contest.Builder(storedContest);
 
-//        if (isContestFrozen.get(contestId)) {
-            List<SubmissionNode> nodes = getContestSubmissions(contestId).stream()
-                    .filter(submit -> isSubmitFrozen.test(storedContest, submit))
-                    .map(submit -> new SubmissionNode.Builder(submit).withStatus(SubmissionStatus.FROZEN).build())
-                    .collect(Collectors.toList());
+        List<SubmissionNode> nodes = getContestSubmissions(contestId).stream()
+                .filter(submit -> isSubmitFrozen.test(storedContest, submit))
+                .map(submit -> new SubmissionNode.Builder(submit).withStatus(SubmissionStatus.FROZEN).build())
+                .collect(Collectors.toList());
 
-            contest.withSubmissions(nodes);
-//        }
+        contest.withSubmissions(nodes);
+
         return contest.build();
     }
 
@@ -119,8 +118,8 @@ public class ContestDataStorage {
             List<ParticipantResult> resultsAfterUpdate = contestData.get(contestId).getResults();
 
             Set<String> affectedTeamsIds = Stream.concat(contestSubmissionsChanges.getNewSubmissions().stream(), contestSubmissionsChanges.getChangedSubmissions().stream())
-                            .map(SubmissionNode::getUsername)
-                            .collect(Collectors.toSet());
+                    .map(SubmissionNode::getUsername)
+                    .collect(Collectors.toSet());
 
             Function<List<ParticipantResult>, Map<String, Integer>> getTeamPlaces = (results) -> IntStream.range(0, results.size())
                     .boxed()
