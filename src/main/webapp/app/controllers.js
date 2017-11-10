@@ -182,11 +182,39 @@ angular.module('ejudgeStandings.controllers', [])
             });
         };
 
+        function nextTeamToUnfreeze() {
+            var result = 0;
+            for (var teamPlace = $scope.display.length - 1; teamPlace >= 0; teamPlace--) {
+                var teamName = $scope.display[teamPlace].participant.name;
+                for (var resultsIndex = 0; resultsIndex < unfreezeResults.length; resultsIndex++) {
+
+                    if (unfreezeResults[resultsIndex].id === teamName) {
+                        var destinationPos = teamPlace;
+                        var teamInfo = unfreezeResults[resultsIndex].result;
+                        while (destinationPos >= 0 && $scope.display[destinationPos].solved <= teamInfo.solved) {
+                            if ($scope.display[destinationPos].solved === teamInfo.solved && $scope.display[destinationPos].penalty < teamInfo.penalty) {
+                                break;
+                            }
+                            destinationPos--;
+                        }
+
+                        return {
+                            'positionInArray': resultsIndex,
+                            'previousPlace': teamPlace,
+                            'currentPlace': destinationPos + 1
+                        };
+                    }
+                }
+            }
+            return result;
+        }
+
         $scope.unfreezeNext = function () {
             if (readyForUnfreeze && unfreezeResults.length) {
-                $scope.display[unfreezeResults[0].previousPlace] = unfreezeResults[0].result;
-                slideTeam(unfreezeResults[0].previousPlace, unfreezeResults[0].currentPlace);
-                unfreezeResults.splice(0, 1);
+                var teamInfo = nextTeamToUnfreeze();
+                $scope.display[teamInfo.previousPlace] = unfreezeResults[teamInfo.positionInArray].result;
+                slideTeam(teamInfo.previousPlace, teamInfo.currentPlace);
+                unfreezeResults.splice(teamInfo.positionInArray, teamInfo.positionInArray);
             }
         };
         $scope.hide = function () {
