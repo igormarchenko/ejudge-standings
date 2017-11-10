@@ -34,7 +34,7 @@ public class ContestDataStorage {
     private Map<Long, Contest> contestData = new HashMap<>();
     private Map<String, TeamDAO> teams;
     private Map<Long, Boolean> isContestFrozen = new HashMap<>();
-    private BiPredicate<Contest, SubmissionNode> isSubmitFrozen = (contest, submit) -> contest.getStartTime().plusSeconds(submit.getTime()).compareTo(contest.getStopTime().minusSeconds(contest.getFogTime())) > 0;
+    private BiPredicate<Contest, SubmissionNode> isSubmitFrozen = (contest, submit) -> contest.getStartTime().plusSeconds(submit.getTime()).compareTo(contest.getStopTime().minusSeconds(contest.getFogTime())) > 0 && isContestFrozen.get(submit.getProblemId() / 1_000_000);
 
     public void updateData() {
         teams = teamRepository.findAll()
@@ -69,11 +69,20 @@ public class ContestDataStorage {
         return contestData.get(contestId).getSubmissions();
     }
 
-    public List<SubmissionNode> getFrozenSubmits(Long contestId) {
-        Contest contest = contestData.get(contestId);
-        return getContestSubmissions(contestId).stream()
+    public List<ParticipantUpdates> getFrozenSubmits(Long contestId) {
+        Contest contest = new Contest.Builder(getContestData(contestId)).build();
+        List<SubmissionNode> frozenSubmits = getContestSubmissions(contestId).stream()
                 .filter(submit -> isSubmitFrozen.test(contest, submit))
                 .collect(Collectors.toList());
+
+        List<ParticipantUpdates> result = new ArrayList<>();
+        for (SubmissionNode submission : frozenSubmits) {
+            ParticipantResult resultsBeforeUpdate = contest.getResults().stream().filter(userResult -> userResult.getParticipant().getName().equals(submission.getUsername())).findFirst().get();
+            contest.updateSubmissions(Arrays.asList(submission));
+            ParticipantResult resultsAfterUpdate = contest.getResults().stream().filter(userResult -> userResult.getParticipant().getName().equals(submission.getUsername())).findFirst().get();
+            result.add(new ParticipantUpdates(submission.getUsername(), resultsAfterUpdate, resultsBeforeUpdate.getPlace() - 1, resultsAfterUpdate.getPlace() - 1));
+        }
+        return result;
     }
 
     public Contest getContestData(Long contestId) {
@@ -81,16 +90,13 @@ public class ContestDataStorage {
         Contest storedContest = contestData.get(contestId);
         Contest.Builder contest = new Contest.Builder(storedContest);
 
-        if (isContestFrozen.get(contestId)) {
-            List<SubmissionNode> nodes = getContestSubmissions(contestId).stream()
-                    .filter(submit -> isSubmitFrozen.test(storedContest, submit))
-//                    .map(submit -> new SubmissionNode.Builder(submit).withStatus(SubmissionStatus.FROZEN).build())
-//                    .map(SubmissionNode::clone)
-                    .peek(submit -> submit.setStatus(SubmissionStatus.FROZEN))
-                    .collect(Collectors.toList());
+        List<SubmissionNode> nodes = getContestSubmissions(contestId).stream()
+                .filter(submit -> isSubmitFrozen.test(storedContest, submit))
+                .map(submit -> new SubmissionNode.Builder(submit).withStatus(SubmissionStatus.FROZEN).build())
+                .collect(Collectors.toList());
 
-//            contest.withSubmissions(nodes);
-        }
+        contest.withSubmissions(nodes);
+
         return contest.build();
     }
 
@@ -98,8 +104,8 @@ public class ContestDataStorage {
         return contestData.containsKey(contestId);
     }
 
-    public Contest updateContest(Long contestId, List<ContestNode> dataFromStandingsFile, Boolean isFrozen) {
-        isContestFrozen.put(contestId, isFrozen);
+    public Contest updateContest(Long contestId, List<ContestNode> dataFromStandingsFile, Map<Long, Boolean> frozenStatuses) {
+        isContestFrozen = new HashMap<>(frozenStatuses);
         Contest contest = contestMerger.mergeContests(dataFromStandingsFile, teams);
 
         if (!isContestPresent(contestId)) {
@@ -112,8 +118,8 @@ public class ContestDataStorage {
             List<ParticipantResult> resultsAfterUpdate = contestData.get(contestId).getResults();
 
             Set<String> affectedTeamsIds = Stream.concat(contestSubmissionsChanges.getNewSubmissions().stream(), contestSubmissionsChanges.getChangedSubmissions().stream())
-                            .map(SubmissionNode::getUsername)
-                            .collect(Collectors.toSet());
+                    .map(SubmissionNode::getUsername)
+                    .collect(Collectors.toSet());
 
             Function<List<ParticipantResult>, Map<String, Integer>> getTeamPlaces = (results) -> IntStream.range(0, results.size())
                     .boxed()
@@ -123,7 +129,7 @@ public class ContestDataStorage {
             Map<String, Integer> placesBeforeUpdate = getTeamPlaces.apply(resultsBeforeUpdate);
             Map<String, Integer> placesAfterUpdate = getTeamPlaces.apply(resultsAfterUpdate);
 
-            Map<String, ParticipantResult> affectedTeamsResults = getContestData(contestId).getTeamsResults(affectedTeamsIds);
+            Map<String, ParticipantResult> affectedTeamsResults = contestData.get(contestId).getTeamsResults(affectedTeamsIds);
 
             Map<String, ParticipantUpdates> updatedResults = affectedTeamsIds.stream()
                     .map(teamId -> new ParticipantUpdates(teamId, affectedTeamsResults.get(teamId), placesBeforeUpdate.get(teamId), placesAfterUpdate.get(teamId)))

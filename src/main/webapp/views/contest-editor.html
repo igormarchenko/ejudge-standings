@@ -36,7 +36,6 @@
         <th>ID</th>
         <th>Contest title</th>
         <th>External files</th>
-        <th>Is results final</th>
         <th></th>
     </tr>
     </thead>
@@ -47,7 +46,6 @@
         <td>
             <span ng-repeat="file in contest.standingsFiles track by $index">{{file.link}}<br/></span>
         </td>
-        <td>{{contest.is_final}}</td>
         <td>
             <span class="glyphicon glyphicon-pencil glyph" aria-hidden="true" ng-click="editContest(contest.id)"></span>
             <span class="glyphicon glyphicon-remove glyph" aria-hidden="true"
@@ -82,13 +80,6 @@
 
             <div class="modal-body">
                 <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="checkbox-inline" style="padding-left: 35px;">
-                            <input type="checkbox" id="is_final" ng-model="selectedContest.is_final" value="true"> Is
-                            contest results final?
-                        </label>
-                    </div>
-
                     <table>
                         <thead ng-if="selectedContest.standingsFiles.length">
                         <th class="text-center">URL</th>

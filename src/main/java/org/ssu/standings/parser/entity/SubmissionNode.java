@@ -147,7 +147,7 @@ public class SubmissionNode implements Cloneable {
             this.nsec = copy.getNsec();
             this.passedMode = copy.getPassedMode();
             this.username = copy.getUsername();
-            this.score = copy.score;
+            this.score = copy.getScore();
         }
 
         public Builder withTime(Long time) {

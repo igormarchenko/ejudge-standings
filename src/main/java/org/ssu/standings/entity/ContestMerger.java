@@ -7,7 +7,6 @@ import org.ssu.standings.entity.contestresponse.Contest;
 import org.ssu.standings.entity.contestresponse.Participant;
 import org.ssu.standings.entity.contestresponse.Task;
 import org.ssu.standings.entity.score.ContestType;
-import org.ssu.standings.entity.score.ScoreCalculator;
 import org.ssu.standings.entity.score.ScoreCalculatorFactory;
 import org.ssu.standings.parser.entity.ContestNode;
 import org.ssu.standings.parser.entity.ParticipantNode;
@@ -62,7 +61,7 @@ public class ContestMerger {
         return IntStream.range(0, contestList.size())
                 .boxed()
                 .flatMap(index -> contestList.get(index).getTasks().stream()
-                        .map(task -> new Task.Builder(task).withId(contestList.get(index).getContestId() * 100 + task.getId()).withShortName(transformTaskTitle.apply(task, index)).build())
+                        .map(task -> new Task.Builder(task).withId(contestList.get(index).getContestId() * 1000000 + task.getId()).withShortName(transformTaskTitle.apply(task, index)).build())
                 )
                 .collect(Collectors.toList());
     }
@@ -73,7 +72,7 @@ public class ContestMerger {
                 .stream()
                 .flatMap(result -> result.getResults().values().stream())
                 .flatMap(taskResult -> taskResult.getSubmissions().stream())
-                .peek(submit -> submit.setProblemId(contest.getContestId() * 100 + submit.getProblemId()))
+                .peek(submit -> submit.setProblemId(contest.getContestId() * 1000000 + submit.getProblemId()))
                 .collect(Collectors.toList());
 
         return contestList.stream().flatMap(contest -> getParticipantResultsFromContest.apply(contest).stream()).collect(Collectors.toList());

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.Properties;
 
 @Configuration
@@ -57,7 +58,7 @@ public class PersistenceConfig {
         sessionFactory.setHibernateProperties(new Properties() {{
             setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
             setProperty("hibernate.globally_quoted_identifiers", "true");
-            setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
+            setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql", "false"));
         }});
         return sessionFactory;
     }
@@ -75,7 +76,7 @@ public class PersistenceConfig {
         entityManager.setJpaProperties(new Properties() {{
             setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
             setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
-            setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
+            setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql","false"));
             setProperty("current_session_context_class", "thread");
             setProperty("hibernate.enable_lazy_load_no_trans", "true");
         }});

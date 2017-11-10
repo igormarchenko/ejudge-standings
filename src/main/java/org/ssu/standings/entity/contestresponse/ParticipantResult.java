@@ -1,5 +1,6 @@
 package org.ssu.standings.entity.contestresponse;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.ssu.standings.entity.score.ContestType;
 import org.ssu.standings.parser.entity.SubmissionNode;
@@ -7,13 +8,14 @@ import org.ssu.standings.parser.entity.SubmissionNode;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ParticipantResult implements Comparator<ParticipantResult>, Comparable<ParticipantResult>, Cloneable {
     @JsonProperty("participant")
     private Participant participant;
     @JsonProperty("results")
     private Map<Long, TaskResult> results = new HashMap<>();
-    @JsonProperty("place")
+    @JsonIgnore
     private Integer place;
     private ContestType calculator;
 
@@ -31,6 +33,11 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
 
     public Map<Long, TaskResult> getResults() {
         return results;
+    }
+
+    @JsonProperty("place")
+    public Integer getPlace() {
+        return place;
     }
 
     @JsonProperty("penalty")
@@ -74,7 +81,7 @@ public class ParticipantResult implements Comparator<ParticipantResult>, Compara
 
         public Builder(ParticipantResult copy) {
             this.participant = (copy.participant == null) ? null : copy.participant.clone();
-            this.results.putAll(copy.getResults());
+            this.results = copy.getResults().entrySet().stream().collect(Collectors.toMap(item -> item.getKey(), item -> new TaskResult.Builder(item.getValue()).build()));
             this.calculator = copy.calculator;
 
         }

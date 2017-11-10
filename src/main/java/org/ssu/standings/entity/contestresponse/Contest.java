@@ -45,8 +45,8 @@ public class Contest {
         startTime = builder.startTime;
         stopTime = builder.stopTime;
         currentTime = builder.currentTime;
-        fogTime = builder.fogTime;
-        unfogTime = builder.unfogTime;
+        fogTime = Optional.ofNullable(builder.fogTime).orElse(3600L);
+        unfogTime = Optional.ofNullable(builder.unfogTime).orElse(7200L);
         results = builder.results;
         tasks = builder.tasks;
         contestType = builder.contestType;
@@ -177,7 +177,7 @@ public class Contest {
             for (SubmissionNode submit : submissions) {
                 if (submit.getUsername() != null) {
                     results.putIfAbsent(submit.getUsername(), new ParticipantResult.Builder().withCalculator(getCalculator()).withParticipant(new Participant.Builder().withId(submit.getUserId()).withName(submit.getUsername()).build()).build());
-                    results.get(submit.getUsername()).pushSubmit(submit);
+                    results.get(submit.getUsername()).pushSubmit(new SubmissionNode.Builder(submit).build());
                 }
             }
             return this;

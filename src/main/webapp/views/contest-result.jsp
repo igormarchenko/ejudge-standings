@@ -26,6 +26,7 @@
     .cell-partial {
         background-color: #eea236;
     }
+
     .animate-repeat {
         line-height: 40px;
         border-bottom: 1px solid white;
@@ -70,6 +71,23 @@
     }
 
 </style>
+
+<script>
+    $(document).ready(function () {
+        $("body").keydown(function (event) {
+            if (event.which == 13) {
+                event.preventDefault();
+            }
+            if (event.which == 78) {
+
+                var scope = angular.element(document.getElementById("ng-view")).scope();
+                scope.$apply(function () {
+                    scope.unfreezeNext();
+                });
+            }
+        });
+    });
+</script>
 
 <script type="text/ng-template" id="dialog1.tmpl.html">
     <md-dialog
@@ -136,7 +154,8 @@
 
     <sec:authorize access="hasAnyAuthority('ADMIN', 'OBSERVER')">
         <div class="pull-right" style="margin-right:20px;">
-            <button type="button" class="btn btn-light" style="margin-top:30px; height: 40px;" ng-click="unfreeze()">
+            <button type="button" class="btn btn-light" style="margin-top:30px; height: 40px;"
+                    ng-click="unfreezeTable()">
                 <i class="fa fa-snowflake-o" style="font-size:24px; cursor: pointer;"></i>
             </button>
             <button type="button" class="btn btn-light" style="margin-top:30px; height: 40px;"
@@ -176,8 +195,8 @@
             id="teamrow-{{team.participant.id}}"
             class="animate-repeat">
             <td width="40px">
-                <h4 ng-if = "filterApplied">{{$index + 1}} <em>({{team.place}})</em></h4>
-                <h4 ng-if = "!filterApplied">{{$index + 1}}</h4>
+                <h4 ng-if="filterApplied">{{$index + 1}} <em>({{team.place}})</em></h4>
+                <h4 ng-if="!filterApplied">{{$index + 1}}</h4>
             </td>
             <td width="450px">
                 <b>{{team.participant.name}}</b> <br/>
@@ -191,9 +210,11 @@
                 <div ng-switch="team.results[task.id].status">
                     <div ng-switch-when="EMPTY|null|undefined" ng-switch-when-separator="|"></div>
                     <div ng-switch-when="OK">
-                        <b ng-if="contest.type == 'acm'">+ {{(team.results[task.id].tries - 1 > 0) ? team.results[task.id].tries:''}} </b>
+                        <b ng-if="contest.type == 'acm'">+ {{(team.results[task.id].tries - 1 > 0) ?
+                            team.results[task.id].tries:''}} </b>
 
-                        <b ng-if="contest.type == 'kirov'">{{team.results[task.id].penalty}} {{(team.results[task.id].tries - 1 > 0) ? '(' + team.results[task.id].tries + ')':''}} </b>
+                        <b ng-if="contest.type == 'kirov'">{{team.results[task.id].penalty}}
+                            {{(team.results[task.id].tries - 1 > 0) ? '(' + team.results[task.id].tries + ')':''}} </b>
                         <br/>
                         <i>
                             <small> {{formatTime(team.results[task.id].acceptedTime)}}</small>

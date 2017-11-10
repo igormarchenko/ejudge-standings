@@ -116,7 +116,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
     })
     .controller('contestsEditorController', function ($scope, ejudgeStandingsApiService, DTOptionsBuilder, DTColumnDefBuilder) {
         $scope.contests = contestList();
-        $scope.selectedContest = {'is_final': false, 'standingsFiles': []};
+        $scope.selectedContest = {'standingsFiles': []};
 
         function contestList() {
             ejudgeStandingsApiService.contestList().then(function (response) {
@@ -133,7 +133,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
         };
 
         $scope.clearContest = function () {
-            $scope.selectedContest = {'is_final': false, 'standingsFiles': []};
+            $scope.selectedContest = {'standingsFiles': []};
         };
 
         $scope.editContest = function (contestId) {
@@ -156,7 +156,7 @@ angular.module('ejudgeStandings.controllers', ['datatables'])
                 $scope.contests[response.data.id] = {};
                 angular.copy(response.data, $scope.contests[response.data.id]);
                 $('#editContest').modal('hide');
-                angular.copy({'is_final': false, 'standingsFiles': []}, $scope.selectedContest);
+                angular.copy({'standingsFiles': []}, $scope.selectedContest);
             });
         };
 

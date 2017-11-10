@@ -13,8 +13,6 @@
 </head>
 
 <body>
-<div id="content" style="margin: 0 15px;">
-    <ng-view></ng-view>
-</div>
+    <div ng-view id = "ng-view"></div ng-view>
 </body>
 </html>

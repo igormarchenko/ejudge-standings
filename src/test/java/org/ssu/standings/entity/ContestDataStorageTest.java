@@ -9,6 +9,7 @@ import org.ssu.standings.DefaultObjects;
 import org.ssu.standings.MockedObjectGenerator;
 import org.ssu.standings.entity.contestresponse.Contest;
 import org.ssu.standings.entity.contestresponse.ParticipantResult;
+import org.ssu.standings.entity.contestresponse.ParticipantUpdates;
 import org.ssu.standings.event.ContestUpdatesEventProducer;
 import org.ssu.standings.parser.entity.ContestNode;
 import org.ssu.standings.parser.entity.ParticipantNode;
@@ -21,7 +22,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -82,7 +82,9 @@ public class ContestDataStorageTest {
 
         storage.setTeams(new MockedObjectGenerator().getTeamList());
         Assert.assertNull(storage.getContestData(contest.getContestId()));
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
         Assert.assertNotNull(storage.getContestData(contest.getContestId()));
 
 
@@ -115,8 +117,12 @@ public class ContestDataStorageTest {
         isContestFrozenField.setAccessible(true);
 
         Assert.assertNull(storage.getContestData(contest.getContestId()));
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), false);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
+
+        status.put(contest.getContestId(), false);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
         Assert.assertNotNull(storage.getContestData(contest.getContestId()));
 
         Map<Long, Contest> contestsInStorage = (Map<Long, Contest>) contestInStorageField.get(storage);
@@ -136,9 +142,11 @@ public class ContestDataStorageTest {
         ContestDataStorage storage = createStorage();
 
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withName("Test contest updated title").build();
-        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), status);
         Assert.assertThat(storage.getContestData(contest.getContestId()).getName(), is("Test contest updated title"));
     }
 
@@ -148,9 +156,11 @@ public class ContestDataStorageTest {
         ContestDataStorage storage = createStorage();
 
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withFogTime(110L).build();
-        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), status);
 
         Assert.assertThat(storage.getContestData(contest.getContestId()).getFogTime(), is(110L));
     }
@@ -161,9 +171,11 @@ public class ContestDataStorageTest {
         ContestDataStorage storage = createStorage();
 
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withDuration(1100L).build();
-        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), status);
 
         Assert.assertThat(storage.getContestData(contest.getContestId()).getDuration(), is(1100L));
     }
@@ -175,9 +187,11 @@ public class ContestDataStorageTest {
         Class aClass = ContestDataStorage.class;
 
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withUnfogTime(310L).build();
-        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), status);
 
         Assert.assertThat(storage.getContestData(contest.getContestId()).getUnfogTime(), is(310L));
     }
@@ -188,9 +202,11 @@ public class ContestDataStorageTest {
         ContestNode contest = getContestNode();
         ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withCurrentTime(LocalDateTime.of(2013, 2, 15, 4, 57, 10)).build();
-        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), status);
 
         Assert.assertThat(storage.getContestData(contest.getContestId()).getCurrentTime(), is(LocalDateTime.of(2013, 2, 15, 4, 57, 10)));
     }
@@ -200,9 +216,11 @@ public class ContestDataStorageTest {
         ContestNode contest = getContestNode();
         ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withStartTime(LocalDateTime.of(2017, 3, 25, 2, 57, 10)).build();
-        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), status);
 
         Assert.assertThat(storage.getContestData(contest.getContestId()).getStartTime(), is(LocalDateTime.of(2017, 3, 25, 2, 57, 10)));
     }
@@ -212,9 +230,11 @@ public class ContestDataStorageTest {
         ContestNode contest = getContestNode();
         ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
         ContestNode updatedContest = getDefaultMockedContestBuilder().withStopTime(LocalDateTime.of(2017, 3, 25, 12, 57, 10)).build();
-        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), true);
+        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), status);
 
         Assert.assertThat(storage.getContestData(contest.getContestId()).getStopTime(), is(LocalDateTime.of(2017, 3, 25, 12, 57, 10)));
     }
@@ -232,21 +252,25 @@ public class ContestDataStorageTest {
         field.set(storage, eventHandler);
 
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), false);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), false);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
 
         List<SubmissionNode> updatedSubmissions = new ArrayList<>(new DefaultObjects().getSubmissionNodes());
         updatedSubmissions.add(new MockedObjectGenerator().defaultSubmissionNode().withId(2L).withProblemId(1L).withRunUuid("2").withStatus(SubmissionStatus.OK).withTime(60 * 250L).withUserId(3L).withUserName("team 3").build());
         ContestNode updatedContest = getDefaultMockedContestBuilder().withSubmissions(updatedSubmissions).build();
-        Assert.assertThat(storage.getContestData(contest.getContestId()).getTeamsResults(Arrays.asList("team 3")).get("team 3").getResults().get(101L).getStatus(), is(SubmissionStatus.WA));
+        Assert.assertThat(storage.getContestData(contest.getContestId()).getTeamsResults(Arrays.asList("team 3")).get("team 3").getResults().get(1000001L).getStatus(), is(SubmissionStatus.WA));
 
-        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), false);
+
+
+        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), status);
         Contest contestData = storage.getContestData(contest.getContestId());
         Map<String, ParticipantResult> teamResults = contestData.getTeamsResults(Arrays.asList("team 3"));
         Assert.assertThat(teamResults.get("team 3").solvedProblems(), is(1));
 
-        Assert.assertThat(teamResults.get("team 3").getResults().get(101L).getStatus(), is(SubmissionStatus.OK));
-        Assert.assertThat(teamResults.get("team 3").getResults().get(101L).getPenalty(), is(251L));
-        Assert.assertThat(teamResults.get("team 3").getResults().get(101L).submissionCount(), is(1));
+        Assert.assertThat(teamResults.get("team 3").getResults().get(1000001L).getStatus(), is(SubmissionStatus.OK));
+        Assert.assertThat(teamResults.get("team 3").getResults().get(1000001L).getPenalty(), is(251L));
+        Assert.assertThat(teamResults.get("team 3").getResults().get(1000001L).submissionCount(), is(1));
     }
 
     @Test
@@ -263,20 +287,22 @@ public class ContestDataStorageTest {
         field.set(storage, eventHandler);
 
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contest.getContestId(), Arrays.asList(contest), false);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contest.getContestId(), false);
+        storage.updateContest(contest.getContestId(), Arrays.asList(contest), status);
 
         List<SubmissionNode> updatedSubmissions = new ArrayList<>(new DefaultObjects().getSubmissionNodes());
         updatedSubmissions.add(new MockedObjectGenerator().defaultSubmissionNode().withId(8L).withProblemId(4L).withRunUuid("8").withStatus(SubmissionStatus.OK).withTime(60 * 150L).withUserId(5L).withUserName("team 5").build());
         ContestNode updatedContest = getDefaultMockedContestBuilder().withSubmissions(updatedSubmissions).build();
 
-        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), false);
+        storage.updateContest(contest.getContestId(), Arrays.asList(updatedContest), status);
         Contest contestData = storage.getContestData(contest.getContestId());
         Map<String, ParticipantResult> teamResults = contestData.getTeamsResults(Arrays.asList("team 5"));
         Assert.assertThat(teamResults.get("team 5").solvedProblems(), is(3));
 
-        Assert.assertThat(teamResults.get("team 5").getResults().get(104L).getStatus(), is(SubmissionStatus.OK));
-        Assert.assertThat(teamResults.get("team 5").getResults().get(104L).getPenalty(), is(151L));
-        Assert.assertThat(teamResults.get("team 5").getResults().get(104L).submissionCount(), is(1));
+        Assert.assertThat(teamResults.get("team 5").getResults().get(1000004L).getStatus(), is(SubmissionStatus.OK));
+        Assert.assertThat(teamResults.get("team 5").getResults().get(1000004L).getPenalty(), is(151L));
+        Assert.assertThat(teamResults.get("team 5").getResults().get(1000004L).submissionCount(), is(1));
     }
 
     @Test
@@ -284,13 +310,16 @@ public class ContestDataStorageTest {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
         ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contestNode.getContestId(), true);
+        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), status);
         Assert.assertThat(storage.getContestData(contestNode.getContestId()).getResults().size(), is(new DefaultObjects().getParticipantNodes().size()));
 
         ArrayList<ParticipantNode> participants = new ArrayList<>(new DefaultObjects().getParticipantNodes());
         participants.add(new MockedObjectGenerator().defaultParticipantNode().withId(6L).withName("Test team 6 updated").build());
         ContestNode updatedContest = getDefaultMockedContestBuilder().withParticipants(participants).build();
-        storage.updateContest(updatedContest.getContestId(), Arrays.asList(updatedContest), true);
+        status.put(updatedContest.getContestId(), true);
+        storage.updateContest(updatedContest.getContestId(), Arrays.asList(updatedContest), status);
         List<ParticipantResult> results = storage.getContestData(updatedContest.getContestId()).getResults();
         Optional<ParticipantResult> participantResult = results.stream().filter(result -> result.getParticipant().getId().equals(6L)).findFirst();
         Assert.assertThat(participantResult.isPresent(), is(true));
@@ -302,13 +331,16 @@ public class ContestDataStorageTest {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
         ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contestNode.getContestId(), true);
+        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), status);
         Assert.assertThat(storage.getContestData(contestNode.getContestId()).getResults().size(), is(new DefaultObjects().getParticipantNodes().size()));
 
         ArrayList<ParticipantNode> participants = new ArrayList<>(new DefaultObjects().getParticipantNodes());
         participants.add(new MockedObjectGenerator().defaultParticipantNode().withId(6L).withName("team 6").build());
         ContestNode updatedContest = getDefaultMockedContestBuilder().withParticipants(participants).build();
-        storage.updateContest(updatedContest.getContestId(), Arrays.asList(updatedContest), true);
+        status.put(updatedContest.getContestId(), true);
+        storage.updateContest(updatedContest.getContestId(), Arrays.asList(updatedContest), status);
         Assert.assertThat(storage.getContestData(updatedContest.getContestId()).getResults().size(), is(participants.size()));
     }
 
@@ -317,15 +349,17 @@ public class ContestDataStorageTest {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
         ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contestNode.getContestId(), true);
+        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), status);
         List<ProblemNode> problemNodes = contestNode.getProblems();
         problemNodes.set(1, new MockedObjectGenerator().defaultProblemNode().withId(2L).withLongName("Test task 2 changed").withShortName("B").build());
 
-        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
+        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), status);
 
         Assert.assertThat(storage.getContestData(1L).getTasks().get(1).getShortName(), is("B"));
         Assert.assertThat(storage.getContestData(1L).getTasks().get(1).getLongName(), is("Test task 2 changed"));
-        Assert.assertThat(storage.getContestData(1L).getTasks().get(1).getId(), is(102L));
+        Assert.assertThat(storage.getContestData(1L).getTasks().get(1).getId(), is(1000002L));
     }
 
     @Test
@@ -333,32 +367,32 @@ public class ContestDataStorageTest {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
         ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contestNode.getContestId(), true);
+        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), status);
         List<ProblemNode> problemNodes = new ArrayList<>(contestNode.getProblems());
 
         problemNodes.add(3, new MockedObjectGenerator().defaultProblemNode().withId(4L).withLongName("Test task 4").withShortName("E").build());
         contestNode = getDefaultMockedContestBuilder().withProblems(problemNodes).build();
 
-        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
+        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), status);
         Assert.assertThat(storage.getContestData(1L).getTasks().size(), is(4));
         Assert.assertThat(storage.getContestData(1L).getTasks().get(3).getShortName(), is("E"));
         Assert.assertThat(storage.getContestData(1L).getTasks().get(3).getLongName(), is("Test task 4"));
-        Assert.assertThat(storage.getContestData(1L).getTasks().get(3).getId(), is(104L));
+        Assert.assertThat(storage.getContestData(1L).getTasks().get(3).getId(), is(1000004L));
     }
 
     @Test
-    @Ignore
     public void getFrozenResultsOnFrozenContestTest() {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
         ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), true);
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contestNode.getContestId(), true);
+        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), status);
 
-        List<SubmissionNode> frozenSubmits = storage.getFrozenSubmits(1L);
+        List<ParticipantUpdates> frozenSubmits = storage.getFrozenSubmits(1L);
         Assert.assertThat(frozenSubmits.size(), is(3));
-        Assert.assertThat(frozenSubmits.get(0).getStatus(), not(SubmissionStatus.FROZEN));
-        Assert.assertThat(frozenSubmits.get(1).getStatus(), not(SubmissionStatus.FROZEN));
-        Assert.assertThat(frozenSubmits.get(2).getStatus(), not(SubmissionStatus.FROZEN));
 
         Contest contest = storage.getContestData(contestNode.getContestId());
         List<SubmissionNode> submissions = contest.getResults().stream()
@@ -374,8 +408,10 @@ public class ContestDataStorageTest {
         ContestNode contestNode = getDefaultMockedContestBuilder().build();
         ContestDataStorage storage = createStorage();
         storage.setTeams(new MockedObjectGenerator().getTeamList());
-        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), false);
-        Assert.assertThat(storage.getFrozenSubmits(1L).size(), is(3));
+        Map<Long, Boolean> status = new HashMap<>();
+        status.put(contestNode.getContestId(), false);
+        storage.updateContest(contestNode.getContestId(), Arrays.asList(contestNode), status);
+        Assert.assertThat(storage.getFrozenSubmits(1L).size(), is(0));
 
         Contest contest = storage.getContestData(contestNode.getContestId());
         List<SubmissionNode> submissions = contest.getResults().stream()
