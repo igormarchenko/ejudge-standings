@@ -171,13 +171,12 @@ public class ApiServiceTest{
     public void saveNewContestWithoutStandingsFilesTest() throws Exception {
         contestRepository.deleteAll();
         standingsFilesRepository.deleteAll();
-        ContestDAO contest = new ContestDAO.Builder().withIsFinal(false).withName("Test contest").build();
+        ContestDAO contest = new ContestDAO.Builder().withName("Test contest").build();
         apiService.saveContest(contest);
 
         Assert.assertNotNull(apiService.contestList());
         Assert.assertThat(apiService.contestList().size(), is(1));
 
-        Assert.assertThat(apiService.contestList().get(0).getFinal(), is(false));
         Assert.assertThat(apiService.contestList().get(0).getName(), is("Test contest"));
     }
 
@@ -186,7 +185,7 @@ public class ApiServiceTest{
     public void saveNewContestWithStandingsFilesTest() throws Exception {
         contestRepository.deleteAll();
         standingsFilesRepository.deleteAll();
-        ContestDAO contest = new ContestDAO.Builder().withIsFinal(false).withName("Test contest").build();
+        ContestDAO contest = new ContestDAO.Builder().withName("Test contest").build();
         StandingsFileDAO standingsFileDAOFirst = new StandingsFileDAO.Builder().withLink("test link 1").withIsFrozen(false).withContest(contest.getId()).build();
         StandingsFileDAO standingsFileDAOSecond = new StandingsFileDAO.Builder().withLink("test link 2").withIsFrozen(true).withContest(contest.getId()).build();
         Class clazz = contest.getClass();
@@ -222,7 +221,7 @@ public class ApiServiceTest{
         StandingsFileDAO updatedFirstFile = new StandingsFileDAO.Builder(standingsFiles.get(0)).withIsFrozen(false).withLink("updated link 1").build();
         StandingsFileDAO updatedSecondFile = new StandingsFileDAO.Builder(standingsFiles.get(1)).withIsFrozen(true).withLink("updated link 2").build();
 
-        contest = new ContestDAO.Builder(contest).withIsFinal(false).withName("Updated test contest").withStandingsFiles(Arrays.asList(updatedFirstFile, updatedSecondFile)).build();
+        contest = new ContestDAO.Builder(contest).withName("Updated test contest").withStandingsFiles(Arrays.asList(updatedFirstFile, updatedSecondFile)).build();
 
         apiService.saveContest(contest);
         Assert.assertThat(apiService.contestList().size(), is(1));
@@ -247,7 +246,7 @@ public class ApiServiceTest{
 
         StandingsFileDAO updatedFirstFile = new StandingsFileDAO.Builder(standingsFiles.get(0)).withIsFrozen(false).withLink("updated link 1").build();
 
-        contest = new ContestDAO.Builder(contest).withIsFinal(false).withName("Updated test contest").withStandingsFiles(Arrays.asList(updatedFirstFile)).build();
+        contest = new ContestDAO.Builder(contest).withName("Updated test contest").withStandingsFiles(Arrays.asList(updatedFirstFile)).build();
 
         apiService.saveContest(contest);
         Assert.assertThat(apiService.contestList().size(), is(1));
@@ -269,7 +268,6 @@ public class ApiServiceTest{
         Assert.assertNotNull(contests);
         Assert.assertThat(contests.size(), is(1));
 
-        Assert.assertThat(contests.get(0).getFinal(),is(true));
         Assert.assertThat(contests.get(0).getName(),is("Test contest"));
         Assert.assertNotNull(contests.get(0).getStandingsFiles());
         Assert.assertThat(contests.get(0).getStandingsFiles().size(),is(2));
