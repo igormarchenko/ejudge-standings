@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Standings</title>
+    <script src="../static/output.js"></script>
     <script src="../static/script.js"></script>
     <link rel="stylesheet" href="../static/style.css"/>
     <script src="../app/app.js"></script>

@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Login</title>
+    <script src="static/output.js"></script>
     <script src="static/script.js"></script>
     <link rel="stylesheet" href="static/style.css"/>
 </head>
