@@ -16,7 +16,7 @@
     }
 
     .cell-empty {
-        background-color: #8c8c8c;
+        background-color: #cccccc;
     }
 
     .cell-frozen {
@@ -28,7 +28,7 @@
     }
 
     .animate-repeat {
-        line-height: 40px;
+        line-height: 20px;
         border-bottom: 1px solid white;
         -webkit-transition: 1s linear all;
         transition: 1s linear all;
