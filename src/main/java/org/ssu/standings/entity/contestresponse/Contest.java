@@ -189,7 +189,7 @@ public class Contest {
         }
 
         public Builder withStopTime(LocalDateTime time) {
-            this.stopTime = time;
+            this.stopTime = Optional.ofNullable(time).orElse(LocalDateTime.MAX);
             return this;
         }
 
@@ -232,7 +232,7 @@ public class Contest {
         }
 
         public Builder withDuration(Long duration) {
-            this.duration = duration;
+            this.duration = Optional.ofNullable(duration).orElse(1L);
             return this;
         }
 

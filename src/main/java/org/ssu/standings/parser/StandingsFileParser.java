@@ -20,9 +20,6 @@ public class StandingsFileParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(result.isPresent() && result.get().getStopTime() == null && result.get().getDuration() == null) {
-            throw new IllegalArgumentException();
-        }
         return result;
     }
 }
