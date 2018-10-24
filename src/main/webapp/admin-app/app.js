@@ -2,7 +2,8 @@ angular.module('ejudgeStandings',
     ['ejudgeStandings.controllers',
         'ejudgeStandings.services',
         'ngRoute',
-        'ngSanitize'
+        'ngSanitize',
+        'datatables'
     ]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider.when("/admin/teams", {
         templateUrl: "/views/teams.html",
