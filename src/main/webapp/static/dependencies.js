@@ -1,4 +1,4 @@
-global.jQuery = require('jquery');
+global.$ = global.jQuery = require('jquery');
 global.angular = require('angular');
 require('angular-animate');
 require('bootstrap');
@@ -19,7 +19,7 @@ var ngSanitize = require('angular-sanitize');
 
 var sprintf = require("sprintf-js").sprintf;
 require('svg-assets-cache');
-
+// require('angular-datatables');
+// require('datatables.net-dt')( window, jQuery );
+require('ui-select');
 require('datatables.net')( window, jQuery );
-
-$ = jQuery;

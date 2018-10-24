@@ -26,18 +26,8 @@ repositories {
 bower {
     installBase = '/bower_components'
 
-//    'angular'('>=1.5.8') {
-//        source 'angular.js'
-//    }
-
-//    'angular-sanitize'('https://github.com/angular/bower-angular-sanitize.git')
-//    'angular-animate'()
     'angular-ui-select'('https://github.com/angular-ui/ui-select.git')
-//    'ui-router'('0.2.x')
 
-//    'angular-route'('>=1.5.8') {
-//        source 'angular-route.js' >> 'angular-route.js'
-//    }
 
     'bootstrap'() {
         source 'dist/css/*.min.css' >> 'styles/'
@@ -47,59 +37,8 @@ bower {
     'datatables.net'('1.10.12')
     'datatables.net-dt'('1.10.12')
     'angular-datatables'('0.5.5')
-//    'sprintf.js'("https://github.com/alexei/sprintf.js.git")
-//    'ngInfiniteScroll'('1.0.0')
-//    'angular-resource'()
-    'semantic-ui'()
-//    'sockjs'()
-//    'stomp-websocket'()
-//    'showdown'()
-//    'moment'()
-//    'angular-moment'()
-//    'angular-material'()
-//    'svg-assets-cache'()
+
 }
-
-def scriptFiles = [
-//        'bower_components/jquery/dist/jquery.min.js',
-//                   'bower_components/angular/angular.min.js',
-//                   'bower_components/bootstrap/dist/js/bootstrap.js',
-//                   'bower_components/angular-animate/angular-animate.js',
-//                   'bower_components/angular-resource/angular-resource.js',
-//'bower_components/sockjs/sockjs.js',
-//'bower_components/stomp-websocket/lib/stomp.js',
-//                   'bower_components/angular-resource/angular-resource.js',
-//                   'bower_components/showdown/dist/showdown.js',
-
-
-//                   'bower_components/moment/min/moment.min.js',
-//                   'bower_components/angular-moment/angular-moment.js',
-
-
-//                   'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js',
-//                   'bower_components/angular-sanitize/angular-sanitize.min.js',
-
-//                   'bower_components/angular-route/angular-route.min.js',
-
-
-'bower_components/angular-ui-select/dist/select.min.js',
-
-
-//
-//             'bower_components/ui-router/release/angular-ui-router.js',
-//                   'bower_components/sprintf.js/dist/sprintf.min.js',
-
-//                   'bower_components/datatables.net/js/jquery.dataTables.min.js',
-//                   "/bower_components/angular-aria/angular-aria.js",
-//                   "/bower_components/angular-messages/angular-messages.js",
-
-
-//"/bower_components/svg-assets-cache/svg-assets-cache.js",
-
-
-//                   "/bower_components/angular-material/angular-material.js",
-'bower_components/angular-datatables/dist/angular-datatables.min.js'
-]
 
 def styleFiles = ['bower_components/angular-ui-select/dist/select.min.css',
                   'bower_components/bootstrap/dist/css/bootstrap.min.css',
@@ -117,20 +56,7 @@ task copyDatatablesImages(type: Copy) {
     from 'bower_components/datatables.net-dt/images'
     into 'src/main/webapp/static/images'
 }
-combineJs {
-    encoding = "UTF-8"
-    source = scriptFiles
-    dest = file("src/main/webapp/static/script.js")
-}
 
-minifyJs {
-    source = combineJs
-    dest = file("src/main/webapp/static/script.js")
-    sourceMap = file("all.sourcemap.json")
-    closure {
-        warningLevel = 'QUIET'
-    }
-}
 
 combineCss {
     source = styleFiles
@@ -149,11 +75,10 @@ task installPlugins() {
     dependsOn.add(bowerRefresh)
     dependsOn.add(copyBootstrapFonts)
     dependsOn.add(copyDatatablesImages)
-    dependsOn.add(combineJs)
     dependsOn.add(minifyCss)
 }
 
-assemble.dependsOn.add(installPlugins)
+//assemble.dependsOn.add(installPlugins)
 
 dependencies {
     def springVersion = '4.3.11.RELEASE'
