@@ -1,9 +1,3 @@
-plugins {
-    id 'com.craigburke.bower-installer' version '2.5.1'
-    id "com.eriwen.gradle.js" version "2.14.1"
-    id "com.eriwen.gradle.css" version "2.14.0"
-}
-
 group 'org.ssu'
 version '1.1-SNAPSHOT'
 
@@ -14,7 +8,6 @@ task wrapper(type: Wrapper) {
 
 apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'css'
 
 sourceCompatibility = 1.8
 
@@ -22,63 +15,6 @@ repositories {
     jcenter()
     mavenCentral()
 }
-
-bower {
-    installBase = '/bower_components'
-
-    'angular-ui-select'('https://github.com/angular-ui/ui-select.git')
-
-
-    'bootstrap'() {
-        source 'dist/css/*.min.css' >> 'styles/'
-        source 'dist/fonts/**' >> 'fonts/'
-        excludes 'jquery'
-    }
-    'datatables.net'('1.10.12')
-    'datatables.net-dt'('1.10.12')
-    'angular-datatables'('0.5.5')
-
-}
-
-def styleFiles = ['bower_components/angular-ui-select/dist/select.min.css',
-                  'bower_components/bootstrap/dist/css/bootstrap.min.css',
-                  'bower_components/datatables.net-dt/css/jquery.dataTables.min.css',
-                  '/bower_components/angular-material/angular-material.css',
-                  'bower_components/angular-datatables/dist/css/angular-datatables.min.css']
-
-task copyBootstrapFonts(type: Copy) {
-    from 'bower_components/bootstrap/dist/fonts'
-    into 'src/main/webapp/static/fonts'
-}
-
-
-task copyDatatablesImages(type: Copy) {
-    from 'bower_components/datatables.net-dt/images'
-    into 'src/main/webapp/static/images'
-}
-
-
-combineCss {
-    source = styleFiles
-    dest = "${buildDir}/all.css"
-}
-
-minifyCss {
-    source = combineCss
-    dest = file("src/main/webapp/static/style.css")
-    yuicompressor {
-        lineBreakPos = -1
-    }
-}
-
-task installPlugins() {
-    dependsOn.add(bowerRefresh)
-    dependsOn.add(copyBootstrapFonts)
-    dependsOn.add(copyDatatablesImages)
-    dependsOn.add(minifyCss)
-}
-
-//assemble.dependsOn.add(installPlugins)
 
 dependencies {
     def springVersion = '4.3.11.RELEASE'
