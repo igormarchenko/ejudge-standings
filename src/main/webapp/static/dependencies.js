@@ -3,7 +3,7 @@ global.angular = require('angular');
 require('angular-animate');
 require('bootstrap');
 require('angular-resource');
-require('angular-route');
+var ngRoute = require('angular-route');
 
 global.moment = require('moment');
 require('angular-moment');
@@ -19,7 +19,5 @@ var ngSanitize = require('angular-sanitize');
 
 var sprintf = require("sprintf-js").sprintf;
 require('svg-assets-cache');
-// require('angular-datatables');
-// require('datatables.net-dt')( window, jQuery );
 require('ui-select');
 require('datatables.net')( window, jQuery );
