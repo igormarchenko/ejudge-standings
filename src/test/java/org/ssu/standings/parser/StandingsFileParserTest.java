@@ -138,7 +138,6 @@ public class StandingsFileParserTest {
         Assert.assertThat(contest.getStopTime(), is(LocalDateTime.of(2017, 3, 25, 8, 57, 10)));
     }
 
-    @Test(expected = IllegalArgumentException.class)
     public void parseFileWithoutStopTimeAndDurationTag() {
         String inputData = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<runlog contest_id=\"212\" start_time=\"2017/03/25 03:57:10\" current_time=\"2017/05/06 06:09:08\" fog_time=\"7200\" unfog_time=\"72000000\">\n" +
@@ -150,7 +149,7 @@ public class StandingsFileParserTest {
         Assert.assertThat(result.isPresent(), is(true));
         ContestNode contest = result.get();
 
-        Assert.assertThat(contest.getStopTime(), is(LocalDateTime.of(2017, 3, 25, 8, 57, 10)));
+        Assert.assertThat(contest.getStopTime(), is(LocalDateTime.MAX));
     }
 
 
