@@ -73,6 +73,8 @@ public class ContestNode {
     public LocalDateTime getStopTime() {
         if(stopTime== null && duration != null)
             return startTime.plusSeconds(duration);
+        if(stopTime== null && duration == null)
+            return LocalDateTime.MAX;
         return stopTime;
     }
 

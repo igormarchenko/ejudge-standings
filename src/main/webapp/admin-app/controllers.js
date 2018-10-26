@@ -1,4 +1,4 @@
-angular.module('ejudgeStandings.controllers', ['datatables'])
+angular.module('ejudgeStandings.controllers', [])
     .controller('teamsController', function ($scope, ejudgeStandingsApiService, DTOptionsBuilder, DTColumnDefBuilder) {
         $scope.teams = initTeams();
         $scope.universities = universityList();

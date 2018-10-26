@@ -126,9 +126,9 @@ angular.module('ejudgeStandings.controllers', [])
                     }
                 }
             });
-            $scope.universities = $.unique(universities).sort();
-            $scope.regions = $.unique(regions).sort();
-            $scope.universityTypes = $.unique(universityTypes).sort();
+            $scope.universities = jQuery.unique(universities).sort();
+            $scope.regions = jQuery.unique(regions).sort();
+            $scope.universityTypes = jQuery.unique(universityTypes).sort();
         }
 
         $scope.formatTime = function (minutes) {

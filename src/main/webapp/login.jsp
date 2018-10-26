@@ -3,8 +3,9 @@
 <html>
 <head>
     <title>Login</title>
-    <script src="static/script.js"></script>
-    <link rel="stylesheet" href="static/style.css"/>
+    <script src="static/output.js"></script>
+    <%--<link rel="stylesheet" href="static/style.css"/>--%>
+    <link rel="stylesheet" href="static/output.css"/>
 </head>
 <body>
 <div class="panel panel-default col-md-8 col-md-offset-2">
