@@ -19,6 +19,10 @@ public class ContestDAO {
     @JsonProperty("name")
     private String name;
 
+    @Column(name = "is_final")
+    @JsonProperty("is_final")
+    private Boolean isFinal;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id", name = "contest_id")
     @JsonProperty("standingsFiles")
@@ -46,11 +50,15 @@ public class ContestDAO {
         return standingsFiles;
     }
 
+    public Boolean getFinal() {
+        return isFinal;
+    }
 
     public static final class Builder {
         private Long id;
         private String name;
         private List<StandingsFileDAO> standingsFiles;
+        private Boolean isFinal;
 
         public Builder() {
         }
@@ -58,7 +66,7 @@ public class ContestDAO {
         public Builder(ContestDAO copy) {
             this.id = copy.id;
             this.name = copy.name;
-
+            this.isFinal = copy.isFinal;
             this.standingsFiles = copy.standingsFiles;
         }
 
@@ -77,6 +85,10 @@ public class ContestDAO {
             return this;
         }
 
+        public Builder withIsFinal(Boolean isFinal) {
+            this.isFinal = isFinal;
+            return this;
+        }
         public ContestDAO build() {
             return new ContestDAO(this);
         }
