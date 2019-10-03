@@ -5,7 +5,7 @@
     <title>Standings</title>
     <script src="/static/script.js"></script>
     <script src="/app/StandingsController.js"></script>
-    <link rel="stylesheet" href="/static/style.css"/>
+    <link rel="stylesheet" href="/static/styles.css"/>
     <style>
         .cell-ok {
             background-color: #2b9e2b;

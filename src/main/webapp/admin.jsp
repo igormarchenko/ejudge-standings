@@ -5,10 +5,10 @@
 <head>
     <title>Title</title>
 
-    <script src="../static/output.js"></script>
+    <script src="../static/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.3/angular-datatables.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.4/css/angular-datatables.min.css" />
-    <link rel="stylesheet" href="../static/output.css"/>
+    <link rel="stylesheet" href="../static/styles.css"/>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
     <script src="../admin-app/app.js"></script>
     <script src="../admin-app/services.js"></script>

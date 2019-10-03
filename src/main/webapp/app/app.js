@@ -9,7 +9,7 @@ angular.module('ejudgeStandings',
         'angularMoment',
         'ngMaterial',
         'ngMessages',
-        'svgAssetsCache'
+        'material.svgAssetsCache'
     ]).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider.when("/", {
         templateUrl: "/views/contest-list.html",
