@@ -67,4 +67,17 @@
                   separator=";"/>
     </changeSet>
 
+    <changeSet id="10" author="Igor Marchenko">
+        <loadData tableName="university"
+                  file="data/university2019.csv"
+                  separator=";"/>
+    </changeSet>
+
+    <changeSet id="11" author="Igor Marchenko">
+        <loadData tableName="teams"
+                  file="data/teams2019.csv"
+                  separator=";"/>
+    </changeSet>
+
+
 </databaseChangeLog>
